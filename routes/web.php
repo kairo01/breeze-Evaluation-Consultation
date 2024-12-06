@@ -42,9 +42,8 @@ use App\Http\Controllers\student\StudentController;
 use App\Http\Controllers\AdminConsultation\ApprovalController;
 
 Route::middleware(['auth', 'role:Guidance'])->group(function () {
-    Route::get('consultation/ctdashboard', [AdminConsultationController::class, 'index'])
-        ->name('consultation.ctdashboard');
-        Route::get('/ctdashboard', [AdminConsultationController::class, 'index'])->name('ctdashboard');
+    Route::get('Consultation.CtDashboard', [AdminConsultationController::class, 'index'])
+        ->name('Consultation.CtDashboard');
         Route::get('/ctapproval', [ApprovalController::class, 'index'])->name('ctapproval');
 });
 

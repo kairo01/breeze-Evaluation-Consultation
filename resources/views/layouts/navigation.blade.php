@@ -16,7 +16,7 @@
                                 <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                             </a>
                         @elseif(Auth::user()->role == 'Guidance')
-                        <a href="{{ ('consultation.ctdashboard') }}">
+                        <a href="{{ ('Consultation.CtDashboard') }}">
                                 <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                             </a>
                         @elseif(Auth::user()->role == 'ComputerDepartment')
@@ -51,7 +51,7 @@
                             </x-nav-link>
 
                         @elseif(Auth::user()->role == 'Guidance')
-                        <x-nav-link :href="('consultation.ctdashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
+                        <x-nav-link :href="('Consultation.CtDashboard')" :active="request()->routeIs('Consultation.CtDashboard')">
                                 {{ __('CtDashboard') }}
                             </x-nav-link>
                         @elseif(Auth::user()->role == 'ComputerDepartment')

@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
         $role = Auth::user()->role; // Ensure your `users` table has a `role` column
 
         if ($role === 'Guidance') {
-            return redirect()->route('consultation.ctdashboard');
+            return redirect()->route('Consultation.CtDashboard');
         } elseif ($role === 'ComputerDepartment') {
             return redirect()->route('departmenthead.dpdashboard');
         } elseif ($role === 'HumanResources') {
