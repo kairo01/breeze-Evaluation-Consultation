@@ -35,17 +35,17 @@
                     @if(Auth::check())
                         @if(Auth::user()->role == 'HumanResources')
                             <x-nav-link :href="route('Evaluation.HrDashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
-                                {{ __('Hr Dashboard') }}
+                                {{ __('Dashboard') }}
                             </x-nav-link>
                             <x-nav-link :href="route('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
-                                {{ __('Hr Calendar') }}
+                                {{ __(' Calendar') }}
                             </x-nav-link>
                         @elseif(Auth::user()->role == 'Student')
                             <x-nav-link :href="route('Student.StudentDashboard')" :active="request()->routeIs('Student.StudentDashboard')">
-                                {{ __('Student Dashboard') }}
+                                {{ __('Dashboard') }}
                             </x-nav-link>
                             <x-nav-link :href="route('Student.evaluation.evaluationform')" :active="request()->routeIs('Student.evaluation.evaluationform')">
-                                {{ __('Evaluation Form') }}
+                                {{ __('Evaluation') }}
                             </x-nav-link>
                         @elseif(Auth::user()->role == 'Guidance')
                             <x-nav-link :href="route('Consultation.CtDashboard')" :active="request()->routeIs('Consultation.CtDashboard')">
