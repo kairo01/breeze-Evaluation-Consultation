@@ -4,13 +4,41 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                    </a>
-                </div>
 
+                <div class="shrink-0 flex items-center">
+                    @auth
+                        @if(Auth::user()->usertype == 'HumanResources')
+                            <a href="{{ ('Evaluation.HrDashboard') }}">
+                                <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                            </a>
+                        @elseif(Auth::user()->usertype == 'student')
+                            
+                        @endif
+                    @else
+                        <a href="{{ route('welcome') }}">
+                            <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        </a>
+                    @endauth
+                </div>
+          
                 <!-- Navigation Links -->
+
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                @if(Auth::check())
+                        @if(Auth::user()->usertype == 'HumanResources')
+                            <x-nav-link :href="route('Evaluation.HrDashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
+                                {{ __('HrDashboard') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
+                                {{ __('HrCalendar') }}
+                            </x-nav-link>
+
+                        @elseif(Auth::user()->usertype == 'student')
+                            
+                        @endif
+                    @endif
+                </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
@@ -64,12 +92,21 @@
         </div>
     </div>
 
-    <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            @if(Auth::check())
+                @if(Auth::user()->usertype == 'HumanResources')
+                    <x-responsive-nav-link :href="('Evaluation.HrDasboard')" :active="request()->routeIs('Evaluation.HrDasboard')">
+                        {{ __('Hr Dashboard') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
+                        {{ __('HrCalendar') }}
+                    </x-responsive-nav-link>
+
+                @elseif(Auth::user()->usertype == 'student')
+           
+                @endif
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

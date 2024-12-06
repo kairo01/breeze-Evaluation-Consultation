@@ -3,7 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AdminEvaluation\HrCalendarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +56,8 @@ Route::middleware(['auth', 'role:ComputerDepartment'])->group(function () {
 Route::middleware(['auth', 'role:HumanResources'])->group(function () {
     Route::get('evaluation/hrdashboard', [AdminEvaluationController::class, 'index'])
         ->name('evaluation.hrdashboard');
+        Route::get('Evaluation.HrCalendar', [HrCalendarController::class, 'index'])
+        ->name('Evaluation.HrCalendar');
 });
 
 Route::middleware(['auth', 'role:student'])->group(function () {
