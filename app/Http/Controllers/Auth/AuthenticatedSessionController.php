@@ -35,13 +35,14 @@ class AuthenticatedSessionController extends Controller
         $role = Auth::user()->role; // Ensure your `users` table has a `role` column
 
         if ($role === 'Guidance') {
-            return redirect()->route('ctdashboard');
+            return redirect()->route('consultation.ctdashboard');
         } elseif ($role === 'ComputerDepartment') {
             return redirect()->route('departmenthead.dpdashboard');
         } elseif ($role === 'HumanResources') {
             return redirect()->route('Evaluation.HrDashboard');
         } elseif ($role === 'student') {
-            return redirect()->route('student.studentdashboard');
+            return redirect()->route('
+            ');
         }
 
         // Default redirection if role does not match
