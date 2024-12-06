@@ -4,7 +4,16 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminEvaluation\HrCalendarController;
-
+use App\Http\Controllers\AdminConsultation\AdminConsultationController;
+use App\Http\Controllers\AdminDepartment\AdminDpController;
+use App\Http\Controllers\AdminEvaluation\AdminEvaluationController;
+use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\AdminConsultation\AdminApprovalController;
+use App\Http\Controllers\AdminConsultation\AdminHistoryController;
+use App\Http\Controllers\AdminConsultation\AdminCalendarController;
+use App\Http\Controllers\AdminConsultation\AdminMessagesController;
+use App\Http\Controllers\Student\EvaluationFormController;
+use App\Http\Controllers\Student\AppointmentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -35,18 +44,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 require __DIR__.'/auth.php';
 
-use App\Http\Controllers\AdminConsultation\AdminConsultationController;
-use App\Http\Controllers\AdminDepartment\AdminDpController;
-use App\Http\Controllers\AdminEvaluation\AdminEvaluationController;
-use App\Http\Controllers\Student\StudentController;
-use App\Http\Controllers\AdminConsultation\AdminApprovalController;
-use App\Http\Controllers\AdminConsultation\AdminHistoryController;
-use App\Http\Controllers\AdminConsultation\AdminCalendarController;
-use App\Http\Controllers\AdminConsultation\AdminMessagesController;
-use App\Http\Controllers\Student\EvaluationFormController;
-use App\Http\Controllers\Student\AppointmentController;
 
 
+//GUIDANCE == CONSULTATION
 Route::middleware(['auth', 'role:Guidance'])->group(function () {
     Route::get('Consultation.CtDashboard', [AdminConsultationController::class, 'index'])
         ->name('Consultation.CtDashboard');
@@ -65,11 +65,13 @@ Route::middleware(['auth', 'role:Guidance'])->group(function () {
         
 });
 
+//DEPARTMENT HEAD == DP = CS X EVALS
 Route::middleware(['auth', 'role:ComputerDepartment'])->group(function () {
     Route::get('departmenthead/dpdashboard', [AdminDpController::class, 'index'])
         ->name('departmenthead.dpdashboard');
 });
 
+// HUMAN RESOURCES == EVALUATION
 Route::middleware(['auth', 'role:HumanResources'])->group(function () {
     Route::get('Evaluation.HrDashboard', [AdminEvaluationController::class, 'index'])
         ->name('Evaluation.HrDashboard');
@@ -78,22 +80,10 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
         ->name('Evaluation.HrCalendar');
 });
 
-Route::prefix('student')->middleware(['auth'])->group(function () {
-    Route::get('dashboard/{student_type}', [StudentController::class, 'studentDashboardByType'])->name('Student.StudentDashboardByType');
-// In routes/web.php
-
-Route::get('/student-dashboard/{student_type}', [StudentController::class, 'studentDashboardByType'])->name('Student.StudentDashboardByType');
-
-    // Student Dashboard Route
-    Route::get('/student/dashboard', [StudentController::class, 'index'])->name('Student.StudentDashboard');
-
-    // Evaluation Route
-    Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])->name('Student.evaluation.evaluationform');
-
-    // Appointment Route
-    Route::get('/student/appointment', [AppointmentController::class, 'index'])->name('Student.Consultation.Appointment');
-
-    // Conditional Routes based on Student Type (College or Highschool)
+        Route::prefix('student')->middleware(['auth'])->group(function () {
+        Route::get('/student-dashboard/{student_type}', [StudentController::class, 'studentDashboardByType'])->name('Student.StudentDashboardByType');
+        Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])->name('Student.evaluation.evaluationform');
+        Route::get('/student/appointment', [AppointmentController::class, 'index'])->name('Student.Consultation.Appointment');
     
 });
 

@@ -7,10 +7,7 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    public function index()
-    {
-        return view('Student.StudentDashboard');
-    }
+   
     public function collegeDashboard()
     {
         return view('Student.StudentCollegeDashboard'); // Adjusted to match the correct view path

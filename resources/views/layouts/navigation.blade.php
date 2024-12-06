@@ -151,6 +151,9 @@
                         <x-responsive-nav-link :href="route('Student.evaluation.evaluationform')" :active="request()->routeIs('Student.evaluation.evaluationform')">
                             {{ __('Evaluation') }}
                         </x-responsive-nav-link>
+                        <x-nav-link :href="route('Student.Consultation.Appointment')" :active="request()->routeIs('Student.Consultation.Appointment')">
+                                    {{ __('Appointment') }}
+                        </x-nav-link>
                     @endif
                 @elseif(Auth::user()->role == 'Guidance')
                     <x-responsive-nav-link :href="route('Consultation.CtDashboard')" :active="request()->routeIs('Consultation.CtDashboard')">
