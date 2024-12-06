@@ -23,7 +23,7 @@
         </a>
         <a href="{{ url('HrACT') }}">
             <div class="course-item" data-title="Associate in Computer Technology">
-                <img src="{{ asset('css/CoursePicture/Tesda.png') }}" alt="ACT">
+                <img src="{{ asset('css/CourseLogo/Tesda.png') }}" alt="ACT">
                 <span class="course-name">Associate in Computer Technology</span>
             </div>
         </a>
