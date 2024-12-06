@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     @auth
-                        @if(Auth::user()->role == 'Student')
+                        @if(Auth::user()->role == 'Student') 
                             <a href="{{ route('Student.StudentDashboard') }}">
                                 <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                             </a>
@@ -40,14 +40,25 @@
                             <x-nav-link :href="route('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
                                 {{ __(' Calendar') }}
                             </x-nav-link>
+
                             
                         @elseif(Auth::user()->role == 'Student')
+
+                        @elseif(Auth::user()->role == 'StudentCollege')
+
                             <x-nav-link :href="route('Student.StudentDashboard')" :active="request()->routeIs('Student.StudentDashboard')">
 
                                 {{ __('Dashboard') }}
                             </x-nav-link>
                             <x-nav-link :href="route('Student.evaluation.evaluationform')" :active="request()->routeIs('Student.evaluation.evaluationform')">
+
                                 {{ __('Evaluation') }}
+                            </x-nav-link>
+
+                                {{ __('Evaluation Form') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('Student.Consultation.CollegeAppointment')" :active="request()->routeIs('Student.Consultation.CollegeAppointment')">
+                                {{ __('College Appointment') }}
                             </x-nav-link>
 
                         @elseif(Auth::user()->role == 'Guidance')
@@ -128,11 +139,6 @@
                     <x-responsive-nav-link :href="route('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
                         {{ __('Hr Calendar') }}
                     </x-responsive-nav-link>
-                @elseif(Auth::user()->role == 'Student')
-                    <x-responsive-nav-link :href="route('Student.StudentDashboard')" :active="request()->routeIs('Student.StudentDashboard')">
-                        {{ __('Student Dashboard') }}
-                    </x-responsive-nav-link>
-
                 @elseif(Auth::user()->role == 'Student')
                     <x-responsive-nav-link :href="route('Student.StudentDashboard')" :active="request()->routeIs('Student.StudentDashboard')">
                         {{ __('Student Dashboard') }}

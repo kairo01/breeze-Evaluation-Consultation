@@ -39,8 +39,12 @@ use App\Http\Controllers\AdminConsultation\AdminConsultationController;
 use App\Http\Controllers\AdminDepartment\AdminDpController;
 use App\Http\Controllers\AdminEvaluation\AdminEvaluationController;
 use App\Http\Controllers\Student\StudentController;
-use App\Http\Controllers\AdminConsultation\ApprovalController;
+use App\Http\Controllers\AdminConsultation\AdminApprovalController;
+use App\Http\Controllers\AdminConsultation\AdminHistoryController;
+use App\Http\Controllers\AdminConsultation\AdminCalendarController;
+use App\Http\Controllers\AdminConsultation\AdminMessagesController;
 use App\Http\Controllers\Student\EvaluationFormController;
+use App\Http\Controllers\Student\CollegeAppointmentController;
 
 
 Route::middleware(['auth', 'role:Guidance'])->group(function () {
@@ -82,7 +86,9 @@ Route::middleware(['auth', 'role:Student'])->group(function () {
     Route::get('Student.evaluation.evaluationform', [EvaluationFormController::class, 'index'])
         ->name('Student.evaluation.evaluationform'); 
 
-        ;
+     Route::get('Student.Consultation.CollegeAppointment', [CollegeAppointmentController::class, 'index'])
+        ->name('Student.Consultation.CollegeAppointment'); 
+        
 
 });
 
