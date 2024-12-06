@@ -44,7 +44,19 @@ use App\Http\Controllers\AdminConsultation\ApprovalController;
 Route::middleware(['auth', 'role:Guidance'])->group(function () {
     Route::get('Consultation.CtDashboard', [AdminConsultationController::class, 'index'])
         ->name('Consultation.CtDashboard');
-        Route::get('/ctapproval', [ApprovalController::class, 'index'])->name('ctapproval');
+
+    Route::get('Consultation.CtApproval', [AdminConsultationController::class, 'index'])
+        ->name('Consultation.CtApproval');
+
+    Route::get('Consultation.CtHistory', [AdminConsultationController::class, 'index'])
+        ->name('Consultation.CtHistory');
+
+    Route::get('Consultation.CtCalendar', [AdminConsultationController::class, 'index'])
+        ->name('Consultation.CtCalendar');  
+
+    Route::get('Consultation.CtMessages', [AdminConsultationController::class, 'index'])
+        ->name('Consultation.CtMessages');
+        
 });
 
 Route::middleware(['auth', 'role:ComputerDepartment'])->group(function () {
