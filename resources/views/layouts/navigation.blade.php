@@ -7,12 +7,12 @@
 
                 <div class="shrink-0 flex items-center">
                     @auth
-                        @if(Auth::user()->role == 'HumanResources')
-                            <a href="{{ ('Evaluation.HrDashboard') }}">
+                        @if(Auth::user()->role == 'student')
+                             <a href="{{ ('Student.StudentDashboard') }}">
                                 <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                             </a>
-                        @elseif(Auth::user()->role == 'student')
-                        <a href="{{ ('student.studentdashboard') }}">
+                        @elseif(Auth::user()->role == 'HumanResources')
+                       <a href="{{ ('Evaluation.HrDashboard') }}">
                                 <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                             </a>
                         @elseif(Auth::user()->role == 'Guidance')
@@ -45,9 +45,11 @@
                             </x-nav-link>
 
                         @elseif(Auth::user()->role == 'student')
-                        <x-nav-link :href="('Student.StudentDashboard')" :active="request()->routeIs('Student.StudentDashboard')">
+
+                            <x-nav-link :href="('Student.StudentDashboard')" :active="request()->routeIs('Student.StudentDashboard')">
                                 {{ __('StudentDashboard') }}
                             </x-nav-link>
+
                         @elseif(Auth::user()->role == 'Guidance')
                         <x-nav-link :href="('consultation.ctdashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
                                 {{ __('CtDashboard') }}
