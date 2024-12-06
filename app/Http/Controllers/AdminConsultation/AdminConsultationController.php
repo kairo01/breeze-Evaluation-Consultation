@@ -10,6 +10,6 @@ class AdminConsultationController extends Controller
     public function index()
     
     {
-        return view('AdminConsultation.ctdashboard');
+        return view('Consultation.ctdashboard');
     }
 }

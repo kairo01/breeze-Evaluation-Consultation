@@ -10,6 +10,6 @@ class ApprovalController extends Controller
     public function index()
     {
         // Return the view located in resources/views/AdminConsultation/CtApproval.blade.php
-        return view('AdminConsultation.CtApproval');
+        return view('Consultation.CtApproval');
     }
 }

@@ -10,6 +10,6 @@ class AdminEvaluationController extends Controller
     public function index()
     
     {
-        return view('adminevaluation.hrdashboard');
+        return view('evaluation.hrdashboard');
     }
 }

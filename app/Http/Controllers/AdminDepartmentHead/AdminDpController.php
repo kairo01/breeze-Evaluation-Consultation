@@ -10,6 +10,6 @@ class AdminDpController extends Controller
     public function index()
     
     {
-        return view('admindepartment.dpdashboard');
+        return view('departmenthead.dpdashboard');
     }
 }

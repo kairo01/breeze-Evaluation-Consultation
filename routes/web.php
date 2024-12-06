@@ -42,20 +42,20 @@ use App\Http\Controllers\student\StudentController;
 use App\Http\Controllers\AdminConsultation\ApprovalController;
 
 Route::middleware(['auth', 'role:Guidance'])->group(function () {
-    Route::get('adminconsultation/ctdashboard', [AdminConsultationController::class, 'index'])
-        ->name('adminconsultation.ctdashboard');
+    Route::get('consultation/ctdashboard', [AdminConsultationController::class, 'index'])
+        ->name('consultation.ctdashboard');
         Route::get('/ctdashboard', [AdminConsultationController::class, 'index'])->name('ctdashboard');
         Route::get('/ctapproval', [ApprovalController::class, 'index'])->name('ctapproval');
 });
 
 Route::middleware(['auth', 'role:ComputerDepartment'])->group(function () {
-    Route::get('admindepartment/dpdashboard', [AdminDpController::class, 'index'])
-        ->name('admindepartment.dpdashboard');
+    Route::get('departmenthead/dpdashboard', [AdminDpController::class, 'index'])
+        ->name('departmenthead.dpdashboard');
 });
 
 Route::middleware(['auth', 'role:HumanResources'])->group(function () {
-    Route::get('adminevaluation/hrdashboard', [AdminEvaluationController::class, 'index'])
-        ->name('adminevaluation.hrdashboard');
+    Route::get('evaluation/hrdashboard', [AdminEvaluationController::class, 'index'])
+        ->name('evaluation.hrdashboard');
 });
 
 Route::middleware(['auth', 'role:student'])->group(function () {
