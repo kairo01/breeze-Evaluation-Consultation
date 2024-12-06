@@ -60,9 +60,12 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
         ->name('Evaluation.HrCalendar');
 });
 
-Route::middleware(['auth', 'role:student'])->group(function () {
+Route::middleware(['auth', 'role:Student'])->group(function () {
     Route::get('Student.StudentDashboard', [StudentController::class, 'index'])
         ->name('Student.StudentDashboard');
+
+    Route::get('Student.evaluation.evaluationform', [StudentController::class, 'index'])
+        ->name('evaluationform'); 
 });
 
 
