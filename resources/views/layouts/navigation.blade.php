@@ -33,6 +33,17 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @if(Auth::check())
                         @if(Auth::user()->role == 'HumanResources')
+                            <x-nav-link :href="('HrDashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="('Evaluation.HrFacultylist')" :active="request()->routeIs('Evaluation.HrFaculitylist')">
+                                {{ __('Facultylist') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
+                                {{ __('Calendar') }}
+                            </x-nav-link>
                             <x-nav-link :href="route('Evaluation.HrDashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
@@ -137,6 +148,16 @@
         <div class="pt-2 pb-3 space-y-1">
             @if(Auth::check())
                 @if(Auth::user()->role == 'HumanResources')
+                    <x-responsive-nav-link :href="('HrDasboard')" :active="request()->routeIs('Evaluation.HrDasboard')">
+                        {{ __('Hr Dashboard') }}
+                    </x-responsive-nav-link>
+                  
+                    <x-nav-link :href="('Evaluation.HrFacultylist')" :active="request()->routeIs('Evaluation.HrFaculitylist')">
+                                {{ __('HrFacultylist') }}
+                            </x-nav-link>
+
+                          <x-responsive-nav-link :href="('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
+                        {{ __('HrCalendar') }}
                     <x-responsive-nav-link :href="route('Evaluation.HrDashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
                         {{ __('Hr Dashboard') }}
                     </x-responsive-nav-link>
@@ -162,6 +183,7 @@
                 @elseif(Auth::user()->role == 'ComputerDepartment')
                     <x-responsive-nav-link :href="route('departmenthead.dpdashboard')" :active="request()->routeIs('departmenthead.dpdashboard')">
                         {{ __('Dept. Head Dashboard') }}
+
                     </x-responsive-nav-link>
                 @endif
             @endif

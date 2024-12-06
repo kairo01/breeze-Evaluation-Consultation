@@ -14,6 +14,13 @@ use App\Http\Controllers\AdminConsultation\AdminCalendarController;
 use App\Http\Controllers\AdminConsultation\AdminMessagesController;
 use App\Http\Controllers\Student\EvaluationFormController;
 use App\Http\Controllers\Student\AppointmentController;
+use App\Http\Controllers\AdminEvaluation\HrCollege;
+use App\Http\Controllers\AdminEvaluation\HrFacultylistController;
+use App\Http\Controllers\AdminEvaluation\HrHighschoolController;
+use App\Http\Controllers\AdminEvaluation\HrPicker;
+use App\Http\Controllers\AdminEvaluation\Evaluation;
+use App\Http\Controllers\AdminEvaluation\EvaluationController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,8 +51,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 require __DIR__.'/auth.php';
 
-
-
 //GUIDANCE == CONSULTATION
 Route::middleware(['auth', 'role:Guidance'])->group(function () {
     Route::get('Consultation.CtDashboard', [AdminConsultationController::class, 'index'])
@@ -73,11 +78,26 @@ Route::middleware(['auth', 'role:ComputerDepartment'])->group(function () {
 
 // HUMAN RESOURCES == EVALUATION
 Route::middleware(['auth', 'role:HumanResources'])->group(function () {
-    Route::get('Evaluation.HrDashboard', [AdminEvaluationController::class, 'index'])
-        ->name('Evaluation.HrDashboard');
+    Route::get('HrDashboard', [AdminEvaluationController::class, 'index'])
+        ->name('HrDashboard');
 
         Route::get('Evaluation.HrCalendar', [HrCalendarController::class, 'index'])
         ->name('Evaluation.HrCalendar');
+
+        Route::get('Evaluation.HrFacultylist', [HrFacultylistController::class, 'index'])
+        ->name('Evaluation.HrFacultylist');
+
+        Route::get('Evaluation.HrPicker', [HrPicker::class, 'index'])
+        ->name('Evaluation.HrPicker');
+
+        Route::get('HrCollege', [HrCollege::class, 'index'])
+        ->name('HrCollege');
+
+        Route::get('HrHighschool', [HrHighschoolController::class, 'index'])
+        ->name('HrHighschool');
+
+        Route::get('Evaluation', [EvaluationController::class, 'index'])
+        ->name('Evaluation');
 });
 
         Route::prefix('student')->middleware(['auth'])->group(function () {

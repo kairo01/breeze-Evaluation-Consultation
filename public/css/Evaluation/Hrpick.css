@@ -1,0 +1,72 @@
+.container {
+    font-family: bunny;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full viewport height */
+    padding: 0;
+    margin: 0 auto;
+    transform: translateY(-50px); /* Moves the container up by 50px */
+}
+
+.courses-container {
+    display: flex;
+    flex-direction: row; /* Horizontal alignment */
+    justify-content: center;
+    align-items: center;
+    gap: 60px; /* Spacing between buttons */
+}
+
+.course-button {
+    flex: 0 0 270px; /* Adjusted button width */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    border: none;
+    text-align: center;
+    font-size: 20px; /* Slightly larger font */
+    font-weight: bold;
+    color: #ffffff; /* White text */
+    width: 260px; /* Adjusted width for better balance */
+    height: 250px; /* Slightly increased height */
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 20px; /* Added padding for better spacing */
+}
+
+.course-button.college {
+    background-color: #18A558; /* Green for College */
+}
+
+.course-button.highschool {
+    background-color: #0F67B1; /* Blue for High School */
+}
+
+.course-button:hover {
+    transform: translateY(-5px); /* Lift effect */
+    opacity: 0.9; /* Slight transparency */
+}
+
+.course-icon {
+    width: 130px; /* Corrected icon size */
+    height: 130px;
+    border-radius: 50%;
+    margin-bottom: 15px; /* Adjusted spacing below icon */
+    object-fit: contain;
+}
+
+a {
+    text-decoration: none;
+    color: white; /* Button text color */
+    font-size: 20px; /* Slightly larger font */
+    font-weight: bold;
+}
+
+a:hover {
+    color: #000000; /* Hover text color */
+}

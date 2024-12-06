@@ -1,0 +1,21 @@
+profile img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.profile h5 {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.profile .btn {
+    margin-top: 10px;
+}
+
+.department-header img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 10px;
+}
