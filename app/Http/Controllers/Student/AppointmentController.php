@@ -10,6 +10,6 @@ class CollegeAppointmentController extends Controller
     public function index()
     
     {
-        return view('Student.Consultation.CollegeAppointment');
+        return view('Student.Consultation.Appointment');
     }
 }

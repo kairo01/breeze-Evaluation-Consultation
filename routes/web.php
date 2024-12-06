@@ -44,7 +44,7 @@ use App\Http\Controllers\AdminConsultation\AdminHistoryController;
 use App\Http\Controllers\AdminConsultation\AdminCalendarController;
 use App\Http\Controllers\AdminConsultation\AdminMessagesController;
 use App\Http\Controllers\Student\EvaluationFormController;
-use App\Http\Controllers\Student\CollegeAppointmentController;
+use App\Http\Controllers\Student\AppointmentController;
 
 
 Route::middleware(['auth', 'role:Guidance'])->group(function () {
@@ -80,16 +80,17 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
 
 Route::middleware(['auth', 'role:Student'])->group(function () {
 
-    Route::get('Student.StudentDashboard', [StudentController::class, 'index'])
-        ->name('Student.StudentDashboard');
+    // Student Dashboard Route
+    Route::get('/student/dashboard', [StudentController::class, 'index'])->name('Student.StudentDashboard');
 
-    Route::get('Student.evaluation.evaluationform', [EvaluationFormController::class, 'index'])
-        ->name('Student.evaluation.evaluationform'); 
+    // Evaluation Route
+    Route::get('/student/evaluation', [EvaluationController::class, 'index'])->name('Student.evaluation.evaluationform');
 
-     Route::get('Student.Consultation.CollegeAppointment', [CollegeAppointmentController::class, 'index'])
-        ->name('Student.Consultation.CollegeAppointment'); 
-        
+    // Appointment Route
+    Route::get('/student/appointment', [AppointmentController::class, 'index'])->name('Student.Consultation.Appointment');
 
+    // Conditional Routes based on Student Type (College or Highschool)
+    Route::get('/student/{student_type}/dashboard', [StudentController::class, 'studentDashboardByType'])->name('Student.StudentDashboardByType');
 });
 
 

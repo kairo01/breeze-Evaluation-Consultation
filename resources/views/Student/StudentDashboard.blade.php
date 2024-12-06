@@ -10,6 +10,16 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     {{ __("You're logged in!") }}
+
+                    @if(Auth::user()->student_type == 'college')
+                        <p>Welcome to the College Dashboard</p>
+                        <!-- Add College-specific content here -->
+                    @elseif(Auth::user()->student_type == 'highschool')
+                        <p>Welcome to the High School Dashboard</p>
+                        <!-- Add Highschool-specific content here -->
+                    @else
+                        <p>Your student type is not recognized.</p>
+                    @endif
                 </div>
             </div>
         </div>
