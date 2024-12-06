@@ -4,9 +4,9 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-
                 <div class="shrink-0 flex items-center">
                     @auth
+
                         @if(Auth::user()->role == 'Student')
                              <a href="{{ ('Student.StudentDashboard') }}">
                                 <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
@@ -21,6 +21,22 @@
                             </a>
                         @elseif(Auth::user()->role == 'ComputerDepartment')
                             <a href="{{ ('departmenthead.dpdashboard') }}">
+
+                        @if(Auth::user()->role == 'student')
+                            <a href="{{ route('Student.StudentDashboard') }}">
+                                <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                            </a>
+                        @elseif(Auth::user()->role == 'HumanResources')
+                            <a href="{{ route('Evaluation.HrDashboard') }}">
+                                <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                            </a>
+                        @elseif(Auth::user()->role == 'Guidance')
+                            <a href="{{ route('Consultation.CtDashboard') }}">
+                                <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                            </a>
+                        @elseif(Auth::user()->role == 'ComputerDepartment')
+                            <a href="{{ route('departmenthead.dpdashboard') }}">
+
                                 <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                             </a>
                         @endif
@@ -30,23 +46,26 @@
                         </a>
                     @endauth
                 </div>
-          
-                <!-- Navigation Links -->
 
+                <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                @if(Auth::check())
+                    @if(Auth::check())
                         @if(Auth::user()->role == 'HumanResources')
-                            <x-nav-link :href="('Evaluation.HrDashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
+                            <x-nav-link :href="route('Evaluation.HrDashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
                                 {{ __('HrDashboard') }}
                             </x-nav-link>
 
-                            <x-nav-link :href="('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
+                            <x-nav-link :href="route('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
                                 {{ __('HrCalendar') }}
                             </x-nav-link>
+
 
                         @elseif(Auth::user()->role == 'Student')
 
                             <x-nav-link :href="('Student.StudentDashboard')" :active="request()->routeIs('Student.StudentDashboard')">
+                        @elseif(Auth::user()->role == 'student')
+                            <x-nav-link :href="route('Student.StudentDashboard')" :active="request()->routeIs('Student.StudentDashboard')">
+
                                 {{ __('StudentDashboard') }}
                             </x-nav-link>
 
@@ -55,15 +74,27 @@
                             </x-nav-link>
 
                         @elseif(Auth::user()->role == 'Guidance')
-                        <x-nav-link :href="('Consultation.CtDashboard')" :active="request()->routeIs('Consultation.CtDashboard')">
-                                {{ __('CtDashboard') }}
+                            <x-nav-link :href="route('Consultation.CtDashboard')" :active="request()->routeIs('Consultation.CtDashboard')">
+                                {{ __('Dashboard') }}
                             </x-nav-link>
-                        @elseif(Auth::user()->role == 'ComputerDepartment')
+                            <x-nav-link :href="route('Consultation.CtApproval')" :active="request()->routeIs('Consultation.CtApproval')">
+                                {{ __('Approval') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('Consultation.CtHistory')" :active="request()->routeIs('Consultation.CtHistory')">
+                                {{ __('History') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('Consultation.CtCalendar')" :active="request()->routeIs('Consultation.CtCalendar')">
+                                {{ __('Calendar') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('Consultation.CtMessages')" :active="request()->routeIs('Consultation.CtMessages')">
+                                {{ __('Messages') }}
+                            </x-nav-link>
 
+                        @elseif(Auth::user()->role == 'ComputerDepartment')
+                            <!-- Add links for ComputerDepartment if necessary -->
                         @endif
                     @endif
                 </div>
-    
             </div>
 
             <!-- Settings Dropdown -->
@@ -116,15 +147,15 @@
         <div class="pt-2 pb-3 space-y-1">
             @if(Auth::check())
                 @if(Auth::user()->role == 'HumanResources')
-                    <x-responsive-nav-link :href="('Evaluation.HrDasboard')" :active="request()->routeIs('Evaluation.HrDasboard')">
+                    <x-responsive-nav-link :href="route('Evaluation.HrDasboard')" :active="request()->routeIs('Evaluation.HrDasboard')">
                         {{ __('Hr Dashboard') }}
                     </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
+                    <x-responsive-nav-link :href="route('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
                         {{ __('HrCalendar') }}
                     </x-responsive-nav-link>
 
                 @elseif(Auth::user()->role == 'student')
-           
+                    <!-- Add student links here -->
                 @endif
             @endif
         </div>
