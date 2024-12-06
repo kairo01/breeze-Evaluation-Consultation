@@ -23,7 +23,7 @@ class RedirectIfAuthenticated
                 } elseif ($role === 'ComputerDepartment') {
                     return redirect()->route('admindepartment.dpdashboard');
                 } elseif ($role === 'HumanResources') {
-                    return redirect()->route('adminevaluation.hrdashboard');
+                    return redirect()->route('Adminevaluation.HrDashboard');
                 } elseif ($role === 'student') {
                     return redirect()->route('Student.StudentDashboard');
                 }
