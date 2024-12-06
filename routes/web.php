@@ -78,19 +78,22 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
         ->name('Evaluation.HrCalendar');
 });
 
-Route::middleware(['auth', 'role:Student'])->group(function () {
+Route::prefix('student')->middleware(['auth'])->group(function () {
+    Route::get('dashboard/{student_type}', [StudentController::class, 'studentDashboardByType'])->name('Student.StudentDashboardByType');
+// In routes/web.php
+
+Route::get('/student-dashboard/{student_type}', [StudentController::class, 'studentDashboardByType'])->name('Student.StudentDashboardByType');
 
     // Student Dashboard Route
     Route::get('/student/dashboard', [StudentController::class, 'index'])->name('Student.StudentDashboard');
 
     // Evaluation Route
-    Route::get('/student/evaluation', [EvaluationController::class, 'index'])->name('Student.evaluation.evaluationform');
+    Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])->name('Student.evaluation.evaluationform');
 
     // Appointment Route
     Route::get('/student/appointment', [AppointmentController::class, 'index'])->name('Student.Consultation.Appointment');
 
     // Conditional Routes based on Student Type (College or Highschool)
-    Route::get('/student/{student_type}/dashboard', [StudentController::class, 'studentDashboardByType'])->name('Student.StudentDashboardByType');
+    
 });
-
 

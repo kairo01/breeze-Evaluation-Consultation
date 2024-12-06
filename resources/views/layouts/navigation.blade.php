@@ -6,7 +6,7 @@
                 <div class="shrink-0 flex items-center">
                     @auth
                         @if(Auth::user()->role == 'Student') 
-                            <a href="{{ route('Student.StudentDashboard') }}">
+                            <a href="{{ route('Student.StudentDashboardByType', ['student_type' => Auth::user()->student_type]) }}">
                                 <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                             </a>
                         @elseif(Auth::user()->role == 'HumanResources')
@@ -42,7 +42,7 @@
 
                         @elseif(Auth::user()->role == 'Student')
                             @if(in_array(Auth::user()->student_type, ['college', 'highschool']))
-                                <x-nav-link :href="route('Student.Student'. ucfirst(Auth::user()->student_type) .'Dashboard')" :active="request()->routeIs('Student.StudentDashboard')">
+                                <x-nav-link :href="route('Student.StudentDashboardByType', ['student_type' => Auth::user()->student_type])" :active="request()->routeIs('Student.StudentDashboardByType')">
                                     {{ __('Dashboard') }}
                                 </x-nav-link>
                                 <x-nav-link :href="route('Student.evaluation.evaluationform')" :active="request()->routeIs('Student.evaluation.evaluationform')">
@@ -145,35 +145,23 @@
                     </x-responsive-nav-link>
                 @elseif(Auth::user()->role == 'Student')
                     @if(in_array(Auth::user()->student_type, ['college', 'highschool']))
-                        <x-responsive-nav-link :href="route('Student.StudentDashboard')" :active="request()->routeIs('Student.StudentDashboard')">
+                        <x-responsive-nav-link :href="route('Student.StudentDashboardByType', ['student_type' => Auth::user()->student_type])" :active="request()->routeIs('Student.StudentDashboardByType')">
                             {{ __('Student Dashboard') }}
                         </x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('Student.evaluation.evaluationform')" :active="request()->routeIs('Student.evaluation.evaluationform')">
                             {{ __('Evaluation') }}
                         </x-responsive-nav-link>
                     @endif
+                @elseif(Auth::user()->role == 'Guidance')
+                    <x-responsive-nav-link :href="route('Consultation.CtDashboard')" :active="request()->routeIs('Consultation.CtDashboard')">
+                        {{ __('Guidance Dashboard') }}
+                    </x-responsive-nav-link>
+                @elseif(Auth::user()->role == 'ComputerDepartment')
+                    <x-responsive-nav-link :href="route('departmenthead.dpdashboard')" :active="request()->routeIs('departmenthead.dpdashboard')">
+                        {{ __('Dept. Head Dashboard') }}
+                    </x-responsive-nav-link>
                 @endif
             @endif
-        </div>
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
         </div>
     </div>
 </nav>
