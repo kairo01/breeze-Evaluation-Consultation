@@ -38,8 +38,10 @@ require __DIR__.'/auth.php';
 use App\Http\Controllers\AdminConsultation\AdminConsultationController;
 use App\Http\Controllers\AdminDepartment\AdminDpController;
 use App\Http\Controllers\AdminEvaluation\AdminEvaluationController;
-use App\Http\Controllers\student\StudentController;
+use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\AdminConsultation\ApprovalController;
+use App\Http\Controllers\Student\EvaluationFormController;
+
 
 Route::middleware(['auth', 'role:Guidance'])->group(function () {
     Route::get('Consultation.CtDashboard', [AdminConsultationController::class, 'index'])
@@ -73,11 +75,15 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:Student'])->group(function () {
+
     Route::get('Student.StudentDashboard', [StudentController::class, 'index'])
         ->name('Student.StudentDashboard');
 
-    Route::get('Student.evaluation.evaluationform', [StudentController::class, 'index'])
-        ->name('evaluationform'); 
+    Route::get('Student.evaluation.evaluationform', [EvaluationFormController::class, 'index'])
+        ->name('Student.evaluation.evaluationform'); 
+
+        ;
+
 });
 
 
