@@ -41,8 +41,7 @@ class AuthenticatedSessionController extends Controller
         } elseif ($role === 'HumanResources') {
             return redirect()->route('Evaluation.HrDashboard');
         } elseif ($role === 'student') {
-            return redirect()->route('
-            ');
+            return redirect()->route('Student.StudentDashboard');
         }
 
         // Default redirection if role does not match

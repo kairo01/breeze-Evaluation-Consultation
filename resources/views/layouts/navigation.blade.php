@@ -45,7 +45,9 @@
                             </x-nav-link>
 
                         @elseif(Auth::user()->role == 'student')
-
+                        <x-nav-link :href="('Student.StudentDashboard')" :active="request()->routeIs('Student.StudentDashboard')">
+                                {{ __('StudentDashboard') }}
+                            </x-nav-link>
                         @elseif(Auth::user()->role == 'Guidance')
                         <x-nav-link :href="('consultation.ctdashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
                                 {{ __('CtDashboard') }}
