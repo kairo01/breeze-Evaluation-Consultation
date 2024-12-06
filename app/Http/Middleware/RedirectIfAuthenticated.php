@@ -25,7 +25,7 @@ class RedirectIfAuthenticated
                 } elseif ($role === 'HumanResources') {
                     return redirect()->route('adminevaluation.hrdashboard');
                 } elseif ($role === 'student') {
-                    return redirect()->route('student.studentdashboard');
+                    return redirect()->route('Student.StudentDashboard');
                 }
                 
                 

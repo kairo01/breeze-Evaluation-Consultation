@@ -38,6 +38,7 @@ require __DIR__.'/auth.php';
 use App\Http\Controllers\AdminConsultation\AdminConsultationController;
 use App\Http\Controllers\AdminDepartment\AdminDpController;
 use App\Http\Controllers\AdminEvaluation\AdminEvaluationController;
+
 use App\Http\Controllers\student\StudentController;
 use App\Http\Controllers\AdminConsultation\ApprovalController;
 use App\Http\Controllers\AdminEvaluation\HrCollege;
@@ -47,11 +48,31 @@ use App\Http\Controllers\AdminEvaluation\HrPicker;
 use App\Http\Controllers\AdminEvaluation\Evaluation;
 use App\Http\Controllers\AdminEvaluation\EvaluationController;
 
+use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\AdminConsultation\AdminApprovalController;
+use App\Http\Controllers\AdminConsultation\AdminHistoryController;
+use App\Http\Controllers\AdminConsultation\AdminCalendarController;
+use App\Http\Controllers\AdminConsultation\AdminMessagesController;
+use App\Http\Controllers\Student\EvaluationFormController;
+use App\Http\Controllers\Student\AppointmentController;
+
+
 Route::middleware(['auth', 'role:Guidance'])->group(function () {
-    Route::get('consultation/ctdashboard', [AdminConsultationController::class, 'index'])
-        ->name('consultation.ctdashboard');
-        Route::get('/ctdashboard', [AdminConsultationController::class, 'index'])->name('ctdashboard');
-        Route::get('/ctapproval', [ApprovalController::class, 'index'])->name('ctapproval');
+    Route::get('Consultation.CtDashboard', [AdminConsultationController::class, 'index'])
+        ->name('Consultation.CtDashboard');
+
+    Route::get('Consultation.CtApproval', [AdminConsultationController::class, 'index'])
+        ->name('Consultation.CtApproval');
+
+    Route::get('Consultation.CtHistory', [AdminConsultationController::class, 'index'])
+        ->name('Consultation.CtHistory');
+
+    Route::get('Consultation.CtCalendar', [AdminConsultationController::class, 'index'])
+        ->name('Consultation.CtCalendar');  
+
+    Route::get('Consultation.CtMessages', [AdminConsultationController::class, 'index'])
+        ->name('Consultation.CtMessages');
+        
 });
 
 Route::middleware(['auth', 'role:ComputerDepartment'])->group(function () {
@@ -82,9 +103,22 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
         ->name('Evaluation');
 });
 
-Route::middleware(['auth', 'role:student'])->group(function () {
-    Route::get('student/studentdashboard', [StudentController::class, 'index'])
-        ->name('student.studentdashboard');
-});
+Route::prefix('student')->middleware(['auth'])->group(function () {
+    Route::get('dashboard/{student_type}', [StudentController::class, 'studentDashboardByType'])->name('Student.StudentDashboardByType');
+// In routes/web.php
 
+Route::get('/student-dashboard/{student_type}', [StudentController::class, 'studentDashboardByType'])->name('Student.StudentDashboardByType');
+
+    // Student Dashboard Route
+    Route::get('/student/dashboard', [StudentController::class, 'index'])->name('Student.StudentDashboard');
+
+    // Evaluation Route
+    Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])->name('Student.evaluation.evaluationform');
+
+    // Appointment Route
+    Route::get('/student/appointment', [AppointmentController::class, 'index'])->name('Student.Consultation.Appointment');
+
+    // Conditional Routes based on Student Type (College or Highschool)
+    
+});
 

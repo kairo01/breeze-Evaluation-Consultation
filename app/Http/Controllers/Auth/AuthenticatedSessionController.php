@@ -25,28 +25,33 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
+   public function store(LoginRequest $request): RedirectResponse
+{
+    $request->authenticate();
 
-        $request->session()->regenerate();
+    $request->session()->regenerate();
 
-        // Custom redirection based on user role
-        $role = Auth::user()->role; // Ensure your `users` table has a `role` column
+    // Custom redirection based on user role
+    $role = Auth::user()->role; // Ensure your `users` table has a `role` column
 
-        if ($role === 'Guidance') {
-            return redirect()->route('ctdashboard');
-        } elseif ($role === 'ComputerDepartment') {
-            return redirect()->route('departmenthead.dpdashboard');
-        } elseif ($role === 'HumanResources') {
-            return redirect()->route('Evaluation.HrDashboard');
-        } elseif ($role === 'student') {
-            return redirect()->route('student.studentdashboard');
-        }
-
-        // Default redirection if role does not match
-        return redirect()->intended(RouteServiceProvider::HOME);
+    if ($role === 'Guidance') {
+        return redirect()->route('Consultation.CtDashboard');
+    } elseif ($role === 'ComputerDepartment') {
+        return redirect()->route('departmenthead.dpdashboard');
+    } elseif ($role === 'HumanResources') {
+        return redirect()->route('Evaluation.HrDashboard');
+    } elseif ($role === 'Student') {
+        // Redirect based on student type (college or highschool)
+        $studentType = Auth::user()->student_type;
+        return redirect()->route('Student.StudentDashboardByType', ['student_type' => $studentType]);
+    } else {
+        return redirect()->route('dashboard'); 
     }
+
+    // Default redirection if role does not match
+    return redirect()->intended(RouteServiceProvider::HOME);
+}
+
 
     /**
      * Destroy an authenticated session.
