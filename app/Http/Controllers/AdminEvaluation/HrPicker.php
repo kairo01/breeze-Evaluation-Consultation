@@ -16,6 +16,6 @@ class HrPicker extends Controller
     public function HighSchoolPicker()
     {
         // This returns the view for the High School Picker
-        return view('Evaluation.HrHighschool');
+        return view('HrHighschool');
     }
 }

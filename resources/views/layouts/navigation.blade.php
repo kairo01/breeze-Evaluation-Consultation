@@ -26,7 +26,7 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                 @if(Auth::check())
                         @if(Auth::user()->role == 'HumanResources')
-                            <x-nav-link :href="('Evaluation.HrDashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
+                            <x-nav-link :href="('HrDashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
 
@@ -96,7 +96,7 @@
         <div class="pt-2 pb-3 space-y-1">
             @if(Auth::check())
                 @if(Auth::user()->role == 'HumanResources')
-                    <x-responsive-nav-link :href="('Evaluation.HrDasboard')" :active="request()->routeIs('Evaluation.HrDasboard')">
+                    <x-responsive-nav-link :href="('HrDasboard')" :active="request()->routeIs('Evaluation.HrDasboard')">
                         {{ __('Hr Dashboard') }}
                     </x-responsive-nav-link>
                   

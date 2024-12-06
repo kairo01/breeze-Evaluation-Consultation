@@ -42,8 +42,10 @@ use App\Http\Controllers\student\StudentController;
 use App\Http\Controllers\AdminConsultation\ApprovalController;
 use App\Http\Controllers\AdminEvaluation\HrCollege;
 use App\Http\Controllers\AdminEvaluation\HrFacultylistController;
-use App\Http\Controllers\AdminEvaluation\HrHighschool;
+use App\Http\Controllers\AdminEvaluation\HrHighschoolController;
 use App\Http\Controllers\AdminEvaluation\HrPicker;
+use App\Http\Controllers\AdminEvaluation\Evaluation;
+use App\Http\Controllers\AdminEvaluation\EvaluationController;
 
 Route::middleware(['auth', 'role:Guidance'])->group(function () {
     Route::get('consultation/ctdashboard', [AdminConsultationController::class, 'index'])
@@ -58,8 +60,8 @@ Route::middleware(['auth', 'role:ComputerDepartment'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:HumanResources'])->group(function () {
-    Route::get('Evaluation.HrDashboard', [AdminEvaluationController::class, 'index'])
-        ->name('Evaluation.HrDashboard');
+    Route::get('HrDashboard', [AdminEvaluationController::class, 'index'])
+        ->name('HrDashboard');
 
         Route::get('Evaluation.HrCalendar', [HrCalendarController::class, 'index'])
         ->name('Evaluation.HrCalendar');
@@ -73,8 +75,11 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
         Route::get('HrCollege', [HrCollege::class, 'index'])
         ->name('HrCollege');
 
-        Route::get('HrHighschool', [HrHighschool::class, 'index'])
+        Route::get('HrHighschool', [HrHighschoolController::class, 'index'])
         ->name('HrHighschool');
+
+        Route::get('Evaluation', [EvaluationController::class, 'index'])
+        ->name('Evaluation');
 });
 
 Route::middleware(['auth', 'role:student'])->group(function () {

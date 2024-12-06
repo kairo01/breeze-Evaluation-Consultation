@@ -1,54 +1,101 @@
-/* General styling for the course container */
+
+.header {
+    background-color: #059862;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 30px; /* Add space below the header */
+}
+
+h1 {
+    color: white;
+    text-align: center;
+    font-size: 28px;
+}
+
 .course-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 columns */
-    gap: 20px; /* space between items */
-    padding: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Makes the grid responsive */
+    grid-template-rows: auto;
+    grid-gap: 30px 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 1000px; /* Prevents it from getting too wide */
+    padding-top: 50px;
+    justify-items: center; /* Centers items in grid */
+    margin: 0 auto; /* Centers the container */
 }
 
-/* Course item styling */
+.course-container a {
+    text-decoration: none;
+    margin: 10px;
+    position: relative;
+}
+
 .course-item {
-    border: 2px solid #ccc;
-    border-radius: 8px;
+    position: relative;
+    width: 150px;
+    height: 150px;
     overflow: hidden;
-    text-align: center;
-    background-color: #f8f8f8;
-    transition: transform 0.3s ease;
+    border-radius: 10px;
+    box-shadow: 10px 10px 5px rgb(82, 80, 80);
+    transition: transform 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Hover effect on course items */
 .course-item:hover {
-    transform: scale(1.05); /* Slight zoom on hover */
+    background-color: #006b44;
 }
 
-/* Image styling */
 .course-item img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: contain;
     object-fit: cover;
-    border-bottom: 2px solid #ccc;
+    transition: opacity 0.3s ease;
 }
 
-/* Course name styling */
 .course-name {
-    display: block;
-    padding: 10px;
-    font-weight: bold;
-    color: #333;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    text-align: center;
 }
 
-/* Back button styling */
+.course-item:hover img {
+    opacity: 0;
+}
+
+.course-item:hover .course-name {
+    opacity: 1;
+}
+
 .back-button {
-    background-color: #4CAF50;
+    position: fixed;
+    bottom: 20px; /* Increased bottom spacing */
+    right: 20px; /* Increased right spacing */
+    padding: 12px 15px; /* Adjusted padding */
+    background-color: #f00c0c;
     color: white;
-    padding: 10px 20px;
-    border: none;
+    box-shadow: 10px 10px 5px rgb(163, 160, 160);
     border-radius: 5px;
-    cursor: pointer;
     font-size: 16px;
-    margin-top: 20px;
+    cursor: pointer;
+    width: 120px;
+    height: 55px;
+    border: none;
 }
 
 .back-button:hover {
-    background-color: #45a049;
+    background-color: #b63240;
 }

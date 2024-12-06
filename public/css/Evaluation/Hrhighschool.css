@@ -1,0 +1,82 @@
+*{
+    font-family: 'Georgia';
+}
+
+.header {
+    background-color: #0F67B1;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    font-family: "Averia Serif Libre", serif;
+    color: white;
+    margin: 0;
+}
+h2 {
+    font-family: "Averia Serif Libre", serif;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #0F67B1;
+}
+
+.grid-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 60px;
+}
+
+.section {
+    text-align: center;
+    width: 150px;
+}
+
+.section h2 {
+    margin-bottom: 10px;
+}
+
+.section div {
+    margin: 10px 0;
+}
+
+button {
+    background-color: #7aa5d9;
+    box-shadow: 10px 10px 5px rgb(82, 80, 80);
+    color: black;
+    padding: 15px 30px; 
+    font-size: 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 150px;
+    margin: 20px 0;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #0F67B1;
+    transform: translateY(-10px);
+}
+.back-button {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    padding: 10px 10px;
+    background-color: #f00c0c;
+    color: white;
+    box-shadow: 10px 10px 5px rgb(163, 160, 160);
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100px;
+    height: 50px;
+}
+
+.back-button:hover {
+    background-color: #b63240;
+}

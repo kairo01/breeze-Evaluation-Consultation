@@ -7,9 +7,8 @@
 
 
     <link rel="stylesheet" href="{{ asset('css/Evaluation/Hrcollege.css') }}">
-    <h2>COURSE</h2>
     <div class="course-container">
-        <a href="{{ url('HrBSIT') }}">
+        <a href="{{ url('Evaluation') }}">
             <div class="course-item" data-title="Bachelor of Science in Technology Information">
                 <img src="{{ asset('css/CoursePicture/CS.jfif') }}" alt="CS">
                 <span class="course-name">Bachelor of Science in Technology Information</span>
