@@ -7,12 +7,12 @@
 
                 <div class="shrink-0 flex items-center">
                     @auth
-                        @if(Auth::user()->usertype == 'HumanResources')
+                        @if(Auth::user()->role == 'HumanResources')
                             <a href="{{ ('Evaluation.HrDashboard') }}">
                                 <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                             </a>
-                        @elseif(Auth::user()->usertype == 'student')
-                            
+                        @elseif(Auth::user()->role == 'student')
+                        @elseif(Auth::user()->role == 'Guidance')
                         @endif
                     @else
                         <a href="{{ route('welcome') }}">
@@ -25,8 +25,8 @@
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                 @if(Auth::check())
-                        @if(Auth::user()->usertype == 'HumanResources')
-                            <x-nav-link :href="route('Evaluation.HrDashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
+                        @if(Auth::user()->role == 'HumanResources')
+                            <x-nav-link :href="('Evaluation.HrDashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
                                 {{ __('HrDashboard') }}
                             </x-nav-link>
 
@@ -34,16 +34,12 @@
                                 {{ __('HrCalendar') }}
                             </x-nav-link>
 
-                        @elseif(Auth::user()->usertype == 'student')
+                        @elseif(Auth::user()->role == 'student')
                             
                         @endif
                     @endif
                 </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
+    
             </div>
 
             <!-- Settings Dropdown -->
@@ -95,7 +91,7 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             @if(Auth::check())
-                @if(Auth::user()->usertype == 'HumanResources')
+                @if(Auth::user()->role == 'HumanResources')
                     <x-responsive-nav-link :href="('Evaluation.HrDasboard')" :active="request()->routeIs('Evaluation.HrDasboard')">
                         {{ __('Hr Dashboard') }}
                     </x-responsive-nav-link>
@@ -103,7 +99,7 @@
                         {{ __('HrCalendar') }}
                     </x-responsive-nav-link>
 
-                @elseif(Auth::user()->usertype == 'student')
+                @elseif(Auth::user()->role == 'student')
            
                 @endif
             @endif

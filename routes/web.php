@@ -54,8 +54,9 @@ Route::middleware(['auth', 'role:ComputerDepartment'])->group(function () {
 });
 
 Route::middleware(['auth', 'role:HumanResources'])->group(function () {
-    Route::get('evaluation/hrdashboard', [AdminEvaluationController::class, 'index'])
-        ->name('evaluation.hrdashboard');
+    Route::get('Evaluation.HrDashboard', [AdminEvaluationController::class, 'index'])
+        ->name('Evaluation.HrDashboard');
+
         Route::get('Evaluation.HrCalendar', [HrCalendarController::class, 'index'])
         ->name('Evaluation.HrCalendar');
 });
