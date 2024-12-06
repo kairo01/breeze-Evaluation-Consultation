@@ -39,6 +39,7 @@
                             <x-nav-link :href="route('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
                                 {{ __('Calendar') }}
                             </x-nav-link>
+
                         @elseif(Auth::user()->role == 'Student')
                             @if(in_array(Auth::user()->student_type, ['college', 'highschool']))
                                 <x-nav-link :href="route('Student.Student'. ucfirst(Auth::user()->student_type) .'Dashboard')" :active="request()->routeIs('Student.StudentDashboard')">
@@ -51,6 +52,19 @@
                                     {{ __('Appointment') }}
                                 </x-nav-link>
                             @endif
+
+
+                        @elseif(Auth::user()->role == 'Student')
+                            <x-nav-link :href="route('Student.StudentDashboard')" :active="request()->routeIs('Student.StudentDashboard')">
+
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+                            
+                            <x-nav-link :href="route('Student.evaluation.evaluationform')" :active="request()->routeIs('Student.evaluation.evaluationform')">
+                                {{ __('Evaluation') }}
+                            </x-nav-link>
+
+
                         @elseif(Auth::user()->role == 'Guidance')
                             <x-nav-link :href="route('Consultation.CtDashboard')" :active="request()->routeIs('Consultation.CtDashboard')">
                                 {{ __('Dashboard') }}
