@@ -27,11 +27,15 @@
                 @if(Auth::check())
                         @if(Auth::user()->role == 'HumanResources')
                             <x-nav-link :href="('Evaluation.HrDashboard')" :active="request()->routeIs('Evaluation.HrDashboard')">
-                                {{ __('HrDashboard') }}
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="('Evaluation.HrFacultylist')" :active="request()->routeIs('Evaluation.HrFaculitylist')">
+                                {{ __('Facultylist') }}
                             </x-nav-link>
 
                             <x-nav-link :href="('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
-                                {{ __('HrCalendar') }}
+                                {{ __('Calendar') }}
                             </x-nav-link>
 
                         @elseif(Auth::user()->role == 'student')
@@ -95,7 +99,12 @@
                     <x-responsive-nav-link :href="('Evaluation.HrDasboard')" :active="request()->routeIs('Evaluation.HrDasboard')">
                         {{ __('Hr Dashboard') }}
                     </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
+                  
+                    <x-nav-link :href="('Evaluation.HrFacultylist')" :active="request()->routeIs('Evaluation.HrFaculitylist')">
+                                {{ __('HrFacultylist') }}
+                            </x-nav-link>
+
+                          <x-responsive-nav-link :href="('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
                         {{ __('HrCalendar') }}
                     </x-responsive-nav-link>
 

@@ -40,6 +40,10 @@ use App\Http\Controllers\AdminDepartment\AdminDpController;
 use App\Http\Controllers\AdminEvaluation\AdminEvaluationController;
 use App\Http\Controllers\student\StudentController;
 use App\Http\Controllers\AdminConsultation\ApprovalController;
+use App\Http\Controllers\AdminEvaluation\HrCollege;
+use App\Http\Controllers\AdminEvaluation\HrFacultylistController;
+use App\Http\Controllers\AdminEvaluation\HrHighschool;
+use App\Http\Controllers\AdminEvaluation\HrPicker;
 
 Route::middleware(['auth', 'role:Guidance'])->group(function () {
     Route::get('consultation/ctdashboard', [AdminConsultationController::class, 'index'])
@@ -59,6 +63,18 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
 
         Route::get('Evaluation.HrCalendar', [HrCalendarController::class, 'index'])
         ->name('Evaluation.HrCalendar');
+
+        Route::get('Evaluation.HrFacultylist', [HrFacultylistController::class, 'index'])
+        ->name('Evaluation.HrFacultylist');
+
+        Route::get('Evaluation.HrPicker', [HrPicker::class, 'index'])
+        ->name('Evaluation.HrPicker');
+
+        Route::get('HrCollege', [HrCollege::class, 'index'])
+        ->name('HrCollege');
+
+        Route::get('HrHighschool', [HrHighschool::class, 'index'])
+        ->name('HrHighschool');
 });
 
 Route::middleware(['auth', 'role:student'])->group(function () {
