@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Admin Consultant History') }}
+            {{ __('Department Head History') }}
         </h2>
     </x-slot>
 
@@ -33,9 +33,9 @@
                                     <td class="px-4 py-2">{{ $appointment->status }}</td>
                                     <td class="px-4 py-2">
                                         @if($appointment->status == 'Pending')
-                                            <a href="{{ route('Consultation.CtApproval', $appointment->id) }}" class="text-blue-500">Approve</a>
+                                            <a href="{{ route('DepartmentHead.DpApproval', $appointment->id) }}" class="text-blue-500">Approve</a>
                                         @else
-                                            <a href="{{ route('Consultation.CtHistory', $appointment->id) }}" class="text-blue-500">View Details</a>
+                                            <a href="{{ route('DepartmentHead.DpHistory', $appointment->id) }}" class="text-blue-500">View Details</a>
                                         @endif
                                     </td>
                                 </tr>

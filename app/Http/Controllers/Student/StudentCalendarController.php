@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AppointmentController extends Controller
+class StudentCalendarController extends Controller
 {
     public function index()
     
     {
-        return view('Student.Consultation.Appointment');
+        return view('Student.StudentCalendar');
     }
 }

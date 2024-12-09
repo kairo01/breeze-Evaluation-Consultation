@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\AdminConsultation;
+namespace App\Http\Controllers\AdminDepartmentHead;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 
-class AdminApprovalController extends Controller
+class DpApprovalController extends Controller
 {
     public function index()
     {
-        // Fetch appointments pending approval by the Admin Consultant
+        // Fetch appointments pending approval by the Department Head
         $appointments = Appointment::where('status', 'Pending')
-            ->where('consultant', 'Admin Consultant') // Ensure this is for Admin Consultant approvals
+            ->where('consultant', 'Department Head')  // Ensure this is for Department Head approvals
             ->get();
         
-        return view('Consultation.CtApproval', compact('appointments'));
+        return view('DepartmentHead.DpApproval', compact('appointments'));
     }
 
     public function store(Request $request)
@@ -23,18 +23,16 @@ class AdminApprovalController extends Controller
         // Find the appointment to approve or decline
         $appointment = Appointment::find($request->id);
 
-        // If declined, add reason and set status to declined
         if ($request->status == 'Declined' && $request->reason) {
             $appointment->status = 'Declined';
             $appointment->decline_reason = $request->reason;
         } else {
-            // Otherwise, set status to accepted
             $appointment->status = 'Accepted';
         }
 
         $appointment->save();
 
         // Redirect back with success message
-        return redirect()->route('Consultation.CtApproval')->with('status', 'Appointment status updated!');
+        return redirect()->route('DepartmentHead.DpApproval')->with('status', 'Appointment status updated!');
     }
 }

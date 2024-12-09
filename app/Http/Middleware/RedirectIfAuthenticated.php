@@ -19,12 +19,12 @@ class RedirectIfAuthenticated
 
                 // Redirect based on user role
                 if ($role === 'Guidance') {
-                    return redirect()->route('ctdashboard');
+                    return redirect()->route('AdminConsultation.CtDashboard');
                 } elseif ($role === 'ComputerDepartment') {
-                    return redirect()->route('admindepartment.dpdashboard');
+                    return redirect()->route('AdminDepartmentHead.DpDashboard');
                 } elseif ($role === 'HumanResources') {
                     return redirect()->route('Adminevaluation.HrDashboard');
-                } elseif ($role === 'student') {
+                } elseif ($role === 'Student') {
                     return redirect()->route('Student.StudentDashboard');
                 }
                 

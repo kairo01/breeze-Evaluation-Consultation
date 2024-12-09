@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Admin Consultant Appointment Approval') }}
+            {{ __('Department Head Appointment Approval') }}
         </h2>
     </x-slot>
 
@@ -34,7 +34,7 @@
                                     <td class="py-2 px-4">{{ $appointment->meeting_preference }}</td>
                                     <td class="py-2 px-4">{{ \Carbon\Carbon::parse($appointment->appointment_date_time)->format('m/d/Y h:i A') }}</td>
                                     <td class="py-2 px-4">
-                                        <form action="{{ route('Consultation.CtApproval.store') }}" method="POST">
+                                        <form action="{{ route('DepartmentHead.DpApproval.store') }}" method="POST">
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $appointment->id }}">
 
