@@ -10,16 +10,20 @@ use App\Http\Controllers\AdminConsultation\AdminApprovalController;
 use App\Http\Controllers\AdminConsultation\AdminHistoryController;
 use App\Http\Controllers\AdminConsultation\AdminCalendarController;
 use App\Http\Controllers\AdminConsultation\AdminMessagesController;
+
 use App\Http\Controllers\Student\StudentHistoryController;
 use App\Http\Controllers\Student\StudentCalendarController;
 use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Student\EvaluationFormController;
 use App\Http\Controllers\Student\StudentAppointmentController;
 use App\Http\Controllers\AdminEvaluation\HrCollege;
+
+
+use App\Http\Controllers\AdminEvaluation\HrCollegeController;
+
 use App\Http\Controllers\AdminEvaluation\HrFacultylistController;
 use App\Http\Controllers\AdminEvaluation\HrHighschoolController;
-use App\Http\Controllers\AdminEvaluation\HrPicker;
-use App\Http\Controllers\AdminEvaluation\Evaluation;
+use App\Http\Controllers\AdminEvaluation\HrPickerController;
 use App\Http\Controllers\AdminEvaluation\EvaluationController;
 use App\Http\Controllers\AdminDepartmentHead\AdminDpController;
 use App\Http\Controllers\AdminDepartmentHead\DpApprovalController;
@@ -96,10 +100,14 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
     Route::get('Evaluation.HrFacultylist', [HrFacultylistController::class, 'index'])
         ->name('Evaluation.HrFacultylist');
 
-    Route::get('Evaluation.HrPicker', [HrPicker::class, 'index'])
+
+   
+
+        Route::get('Evaluation.HrPicker', [HrPickerController::class, 'index'])
         ->name('Evaluation.HrPicker');
 
-    Route::get('HrCollege', [HrCollege::class, 'index'])
+        Route::get('HrCollege', [HrCollegeController::class, 'index'])
+
         ->name('HrCollege');
 
     Route::get('HrHighschool', [HrHighschoolController::class, 'index'])

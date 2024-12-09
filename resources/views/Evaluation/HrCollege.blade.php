@@ -16,14 +16,14 @@
         </a>
         <a href="{{ url('HrHM') }}">
             <div class="course-item" data-title="Bachelor of Science in Hospitality Management">
-                <img src="{{ asset('css/CoursePicture/Hm.jfif') }}" alt="HM">
+                <img src="{{ asset('/CoursePicture/Hm.jfif') }}" alt="HM">
                 <span class="course-name">Bachelor of Science in Hospitality Management</span>
             </div>
         </a>
         <a href="{{ url('HrACT') }}">
             <div class="course-item" data-title="Associate in Computer Technology">
                 <img src="{{ asset('css/CourseLogo/Tesda.png') }}" alt="ACT">
-                <span class="course-name">Associate in Computer Technology</span>
+                <span class="course-name">cssAssociate in Computer Technology</span>
             </div>
         </a>
         <a href="{{ url('HrHRT') }}">

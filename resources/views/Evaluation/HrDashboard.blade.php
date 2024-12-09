@@ -11,7 +11,7 @@
 
         <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+        <div style="box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.3); border: 2px solid black;" class="bg-white overflow-hidden sm:rounded-lg">
             <div class="p-6 text-gray-900 text-center">
                 <h1 class="text-4xl font-bold">Evaluation System</h1>
                 <p class="text-lg mt-2">Academic Year: 2023-2024 1st Semester</p>
@@ -20,7 +20,6 @@
         </div>
     </div>
 </div>
-
 
     <!-- Card Container -->
     <div class="card-container">
