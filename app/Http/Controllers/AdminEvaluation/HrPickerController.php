@@ -5,7 +5,7 @@ namespace App\Http\Controllers\AdminEvaluation;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class HrPicker extends Controller
+class HrPickerController extends Controller
 {
     public function index()
     

@@ -31,9 +31,11 @@ font-family: bunny;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 30px;
     margin: 0 auto;
     max-width: 1200px; /* Optional: Adjust to match your layout */
+    margin-top: 50px;
+    
 }
 
 /* Card Design */
@@ -46,6 +48,7 @@ font-family: bunny;
     text-align: center;
     padding: 20px;
     transition: transform 0.2s ease-in-out;
+    border: solid black;
 }
 
 .card:hover {
