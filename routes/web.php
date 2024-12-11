@@ -25,10 +25,18 @@ use App\Http\Controllers\AdminEvaluation\HrFacultylistController;
 use App\Http\Controllers\AdminEvaluation\HrHighschoolController;
 use App\Http\Controllers\AdminEvaluation\HrPickerController;
 use App\Http\Controllers\AdminEvaluation\EvaluationHistoryController;
+
 use App\Http\Controllers\DepartmentHeadController\DpController;
 use App\Http\Controllers\DepartmentHeadController\DpApprovalController;
 use App\Http\Controllers\DepartmentHeadController\DpHistoryController;
 use App\Http\Controllers\DepartmentHeadController\DpCalendarController;
+
+
+
+use App\Http\Controllers\AdminEvaluation\EvaluationController;
+
+
+
 use App\Http\Controllers\Student\CollegeController;
 use App\Http\Controllers\Student\HighSchoolController;
 
@@ -124,6 +132,9 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
     Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])
         ->name('Student.evaluation.evaluationform');
 
+        Route::get('evaluation-form', [EvaluationController::class, 'showForm']);
+        Route::post('evaluation-submit', [EvaluationController::class, 'submit']); // <-- Fixed here
+        
     // Student Appointment Routes
     Route::get('/student/appointment', [StudentAppointmentController::class, 'index'])
         ->name('Student.Consultation.Appointment');
