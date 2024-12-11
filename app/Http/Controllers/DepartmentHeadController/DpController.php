@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\AdminDepartmentHead;
+namespace App\Http\Controllers\DepartmentHeadController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AdminDpController extends Controller
+class DpController extends Controller
 {
     public function index()
     

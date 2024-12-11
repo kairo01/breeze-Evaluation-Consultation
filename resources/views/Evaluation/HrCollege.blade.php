@@ -1,68 +1,78 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('College Course') }}
+        <h2 class="header-title">
+            {{ __('Select College Department') }}
         </h2>
     </x-slot>
 
+    <div class="container">
+        <h1 class="title">Select College Department</h1>
+        <div class="department-grid">
+            <!-- Computer Department -->
+            <a href="{{ route('evaluation.history', ['department' => 'computer']) }}" class="department-card">
+                <img src="{{ asset('images/computer_logo.png') }}" alt="Computer Department Logo" class="department-logo">
+                <h3>Computer Department</h3>
+            </a>
 
-    <link rel="stylesheet" href="{{ asset('css/Evaluation/Hrcollege.css') }}">
-    <div class="course-container">
-        <a href="{{ url('EvaluationHistory') }}">
-            <div class="course-item" data-title="Bachelor of Science in Technology Information">
-            <img class="course-icon" src="{{ asset('css/GeneralResources/collegelogo.jpg') }}" alt="College Department Icon">
-                <span class="course-name">Bachelor of Science in Technology Information</span>
-            </div>
-        </a>
-        <a href="{{ url('HrHM') }}">
-            <div class="course-item" data-title="Bachelor of Science in Hospitality Management">
-                <img src="{{ asset('/CoursePicture/Hm.jfif') }}" alt="HM">
-                <span class="course-name">Bachelor of Science in Hospitality Management</span>
-            </div>
-        </a>
-        <a href="{{ url('HrACT') }}">
-            <div class="course-item" data-title="Associate in Computer Technology">
-                <img src="{{ asset('css/CourseLogo/Tesda.png') }}" alt="ACT">
-                <span class="course-name">cssAssociate in Computer Technology</span>
-            </div>
-        </a>
-        <a href="{{ url('HrHRT') }}">
-            <div class="course-item" data-title="Hotel and Restaurant Technology">
-                <img src="{{ asset('css/CourseLogo/Tesda.png') }}" alt="HRT">
-                <span class="course-name">Hotel and Restaurant Technology</span>
-            </div>
-        </a>
-        <a href="{{ url('HrBSCS') }}">
-            <div class="course-item" data-title="Bachelor of Science in Computer Science">
-                <img src="{{ asset('css/GeneralResources/logoo.jpg') }}" alt="BSCS">
-                <span class="course-name">Bachelor of Science in Computer Science</span>
-            </div>
-        </a>
-        <a href="{{ url('HrCET') }}">
-            <div class="course-item" data-title="CET">
-             <img src="{{ asset('css/CourseLogo/Tesda.png') }}" alt="CET">
-                <span class="course-name">Computer Engineering Technology</span>
-            </div>
-        </a>
-        <a href="{{ url('HrHRS') }}">
-            <div class="course-item" data-title="Hotel & Restaurant Services">
-            <img src="{{ asset('css/CourseLogo/Tesda.png') }}" alt="HRS">
-                <span class="course-name">Hotel & Restaurant Services</span>
-            </div>
-        </a>
-        <a href="{{ url('HrTourism') }}">
-            <div class="course-item" data-title="Tourism">
-            <img src="{{ asset('css/CourseLogo/Tesda.png') }}" alt="Tourism">
-                <span class="course-name">Tourism</span>
-            </div>
-        </a>
+            <!-- HM Department -->
+            <a href="{{ route('evaluation.history', ['department' => 'hm']) }}" class="department-card">
+                <img src="{{ asset('images/hm_logo.png') }}" alt="HM Department Logo" class="department-logo">
+                <h3>HM Department</h3>
+            </a>
+
+            <!-- Tesda Department -->
+            <a href="{{ route('evaluation.history', ['department' => 'tesda']) }}" class="department-card">
+                <img src="{{ asset('images/tesda_logo.png') }}" alt="Tesda Department Logo" class="department-logo">
+                <h3>Tesda Department</h3>
+            </a>
+
+            <!-- Engineering Department -->
+            <a href="{{ route('evaluation.history', ['department' => 'engineering']) }}" class="department-card">
+                <img src="{{ asset('images/engineering_logo.png') }}" alt="Engineering Department Logo" class="department-logo">
+                <h3>Engineering Department</h3>
+            </a>
+        </div>
     </div>
 
-    <a href="{{ ('Evaluation.HrFacultylist') }}">
-        <button class="back-button">Back</button>
-    </a>
+    <style>
+        .container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        .department-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .department-card {
+            background-color: #28a745;
+            color: white;
+            width: 200px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+            text-decoration: none;
+        }
+        .department-card:hover {
+            transform: translateY(-5px);
+        }
+        .department-logo {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 15px;
+            border-radius: 50%;
+        }
+        h3 {
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
 </x-app-layout>
-
-
-
-
