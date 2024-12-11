@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\AdminConsultation;
+namespace App\Http\Controllers\ConsultationController
+;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AdminCalendarController extends Controller
+class ConsultationCalendarController extends Controller
 {
     public function index()
     

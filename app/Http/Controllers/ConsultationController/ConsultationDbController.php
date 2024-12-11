@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\AdminConsultation;
+namespace App\Http\Controllers\ConsultationController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class AdminConsultationController extends Controller
+class ConsultationDbController extends Controller
 {
     public function index()
     

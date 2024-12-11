@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\AdminConsultation;
+namespace App\Http\Controllers\ConsultationController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Appointment;
 
-class AdminHistoryController extends Controller
+class ConsultationHistoryController extends Controller
 {
     public function index()
     {
