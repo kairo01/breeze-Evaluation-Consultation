@@ -29,7 +29,10 @@ use App\Http\Controllers\AdminDepartmentHead\AdminDpController;
 use App\Http\Controllers\AdminDepartmentHead\DpApprovalController;
 use App\Http\Controllers\AdminDepartmentHead\DpHistoryController;
 use App\Http\Controllers\AdminDepartmentHead\DpCalendarController;
+
 use App\Http\Controllers\AdminEvaluation\EvaluationController;
+
+
 use App\Http\Controllers\Student\CollegeController;
 use App\Http\Controllers\Student\HighSchoolController;
 
@@ -113,15 +116,8 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
     Route::get('HrHighschool', [HrHighschoolController::class, 'index'])
         ->name('HrHighschool');
 
-
-    Route::get('Evaluation', [EvaluationController::class, 'index'])
-        ->name('Evaluation');
-
-    
-
     Route::get('EvaluationHistory', [EvaluationHistoryController::class, 'index'])
         ->name('EvaluationHistory');
-
 });
 
 // Student Routes
