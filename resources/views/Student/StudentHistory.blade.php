@@ -13,14 +13,6 @@
                     <table class="table-auto w-full mt-4">
 
                     <!-- Check if the user is a student and if they are college or highschool -->
-                    @if(Auth::user()->role == 'Student')
-                        @if(in_array(Auth::user()->student_type, ['college', 'highschool']))
-                            <h3 class="mt-4">
-                                @if(Auth::user()->student_type == 'college')
-                                    You are a College Student, here are your appointment histories.
-                                @elseif(Auth::user()->student_type == 'highschool')
-                                    You are a Highschool Student, here are your appointment histories.
-                                @endif
                             </h3>
                             <!-- Display student appointment history here -->
                             <table class="min-w-full">
@@ -49,12 +41,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                        @else
-                            <p class="mt-4">You are not a valid student type for viewing history.</p>
-                        @endif
-                    @else
-                        <p class="mt-4">You are not a student. You cannot view the appointment history.</p>
-                    @endif
+                       
                 </div>
             </div>
         </div>

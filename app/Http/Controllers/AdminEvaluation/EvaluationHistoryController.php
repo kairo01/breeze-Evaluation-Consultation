@@ -5,11 +5,11 @@ namespace App\Http\Controllers\AdminEvaluation;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class EvaluationController extends Controller
+class EvaluationHistoryController extends Controller
 {
     public function index()
     
     {
-        return view('Evaluation.Evaluation');
+        return view('Evaluation.EvaluationHistory');
     }
 }

@@ -12,14 +12,7 @@
                     {{ __("This is the Appointment page.") }}
 
                     <!-- Check if the user is a student and if they are college or highschool -->
-                    @if(Auth::user()->role == 'Student')
-                        @if(in_array(Auth::user()->student_type, ['college', 'highschool']))
-                            <h3 class="mt-4">
-                                @if(Auth::user()->student_type == 'college')
-                                    You are a College Student, ready to book your appointment.
-                                @elseif(Auth::user()->student_type == 'highschool')
-                                    You are a Highschool Student, ready to book your appointment.
-                                @endif
+                 
                             </h3>
                             <!-- Appointment Form -->
                             <form action="{{ route('Student.Consultation.Appointment') }}" method="POST">
@@ -84,12 +77,6 @@
 </form>
 
 
-                        @else
-                            <p class="mt-4">You are not a valid student type for appointment scheduling.</p>
-                        @endif
-                    @else
-                        <p class="mt-4">You are not a student. You cannot book an appointment.</p>
-                    @endif
                 </div>
             </div>
         </div>
@@ -115,12 +102,7 @@
             document.getElementById('successModal').classList.add('hidden');
         }
 
-        // Check if status is present in session (passed from controller)
-        window.onload = function() {
-            // Show the modal after 3 seconds if there is a status message
-            @if (session('status'))
-                setTimeout(showModal, 3000); // Show modal after 3 seconds
-            @endif
-        };
+      
+       
     </script>
 </x-app-layout>

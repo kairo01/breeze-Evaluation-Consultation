@@ -8,9 +8,9 @@
 
     <link rel="stylesheet" href="{{ asset('css/Evaluation/Hrcollege.css') }}">
     <div class="course-container">
-        <a href="{{ url('Evaluation') }}">
+        <a href="{{ url('EvaluationHistory') }}">
             <div class="course-item" data-title="Bachelor of Science in Technology Information">
-                <img src="{{ asset('css/CoursePicture/CS.jfif') }}" alt="CS">
+            <img class="course-icon" src="{{ asset('css/GeneralResources/collegelogo.jpg') }}" alt="College Department Icon">
                 <span class="course-name">Bachelor of Science in Technology Information</span>
             </div>
         </a>
@@ -40,19 +40,19 @@
         </a>
         <a href="{{ url('HrCET') }}">
             <div class="course-item" data-title="CET">
-                <img src="{{ asset('css/CoursePicture/Tesda.png') }}" alt="CET">
+             <img src="{{ asset('css/CourseLogo/Tesda.png') }}" alt="CET">
                 <span class="course-name">Computer Engineering Technology</span>
             </div>
         </a>
         <a href="{{ url('HrHRS') }}">
             <div class="course-item" data-title="Hotel & Restaurant Services">
-                <img src="{{ asset('css/CoursePicture/Tesda.png') }}" alt="HRS">
+            <img src="{{ asset('css/CourseLogo/Tesda.png') }}" alt="HRS">
                 <span class="course-name">Hotel & Restaurant Services</span>
             </div>
         </a>
         <a href="{{ url('HrTourism') }}">
             <div class="course-item" data-title="Tourism">
-                <img src="{{ asset('css/CoursePicture/Tesda.png') }}" alt="Tourism">
+            <img src="{{ asset('css/CourseLogo/Tesda.png') }}" alt="Tourism">
                 <span class="course-name">Tourism</span>
             </div>
         </a>
@@ -62,3 +62,7 @@
         <button class="back-button">Back</button>
     </a>
 </x-app-layout>
+
+
+
+

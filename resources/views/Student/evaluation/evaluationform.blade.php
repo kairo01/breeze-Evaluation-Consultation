@@ -4,37 +4,12 @@
             {{ __('Evaluation') }}
         </h2>
     </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-
-
-                    <!-- Check if the user is a student and if they are college or highschool -->
-                    @if(Auth::user()->role == 'Student')
-                        @if(in_array(Auth::user()->student_type, ['college', 'highschool']))
-                            <h1>
-                                @if(Auth::user()->student_type == 'college')
-                                    Welcome, College Student!
-                                @elseif(Auth::user()->student_type == 'highschool')
-                                    Welcome, Highschool Student!
-                                @endif
-                            </h1>
-                        @else
-                            <h1>You are not a student of the expected types.</h1>
-                        @endif
-                    @else
-                        <h1>You are not a student.</h1>
-                    @endif
-
-                <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evaluation Form</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=DM+Serif+Text:ital@0;1&family=Diplomata+SC&display=swap" rel="stylesheet">

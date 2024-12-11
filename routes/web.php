@@ -24,11 +24,13 @@ use App\Http\Controllers\AdminEvaluation\HrCollegeController;
 use App\Http\Controllers\AdminEvaluation\HrFacultylistController;
 use App\Http\Controllers\AdminEvaluation\HrHighschoolController;
 use App\Http\Controllers\AdminEvaluation\HrPickerController;
-use App\Http\Controllers\AdminEvaluation\EvaluationController;
+use App\Http\Controllers\AdminEvaluation\EvaluationHistoryController;
 use App\Http\Controllers\AdminDepartmentHead\AdminDpController;
 use App\Http\Controllers\AdminDepartmentHead\DpApprovalController;
 use App\Http\Controllers\AdminDepartmentHead\DpHistoryController;
 use App\Http\Controllers\AdminDepartmentHead\DpCalendarController;
+use App\Http\Controllers\Student\CollegeController;
+use App\Http\Controllers\Student\HighSchoolController;
 
 // Other Routes
 
@@ -100,9 +102,6 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
     Route::get('Evaluation.HrFacultylist', [HrFacultylistController::class, 'index'])
         ->name('Evaluation.HrFacultylist');
 
-
-   
-
         Route::get('Evaluation.HrPicker', [HrPickerController::class, 'index'])
         ->name('Evaluation.HrPicker');
 
@@ -113,15 +112,16 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
     Route::get('HrHighschool', [HrHighschoolController::class, 'index'])
         ->name('HrHighschool');
 
-    Route::get('Evaluation', [EvaluationController::class, 'index'])
-        ->name('Evaluation');
+    Route::get('EvaluationHistory', [EvaluationHistoryController::class, 'index'])
+        ->name('EvaluationHistory');
 });
 
 // Student Routes
 Route::prefix('student')->middleware(['auth'])->group(function () {
     // Student Dashboard by type (college/highschool)
-    Route::get('/student-dashboard/{student_type}', [StudentController::class, 'studentDashboardByType'])
-        ->name('Student.StudentDashboardByType');
+    Route::get('/student-dashboard/college', [CollegeController::class, 'index'])->name('Student.CollegeDashboard');
+
+    Route::get('/student-dashboard/highschool', [HighSchoolController::class, 'index'])->name('Student.HighSchoolDashboard');
 
     // Student Evaluation Form
     Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])
