@@ -119,6 +119,8 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
 
     Route::get('EvaluationHistory', [EvaluationHistoryController::class, 'index'])
         ->name('EvaluationHistory');
+
+        Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
 });
 
 // Student Routes
@@ -131,10 +133,11 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
     // Student Evaluation Form
     Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])
         ->name('Student.evaluation.evaluationform');
-
+/*/
         Route::get('evaluation-form', [EvaluationController::class, 'showForm']);
         Route::post('evaluation-submit', [EvaluationController::class, 'submit']); // <-- Fixed here
-        
+    /*/
+
     // Student Appointment Routes
     Route::get('/student/appointment', [StudentAppointmentController::class, 'index'])
         ->name('Student.Consultation.Appointment');
