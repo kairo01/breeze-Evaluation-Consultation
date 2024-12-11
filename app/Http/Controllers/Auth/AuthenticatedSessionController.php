@@ -33,6 +33,7 @@ class AuthenticatedSessionController extends Controller
 
     // Custom redirection based on user role
     $role = Auth::user()->role; // Ensure your `users` table has a `role` column
+    $student_type = Auth::user()->student_type;
 
     if ($role === 'Guidance') {
         return redirect()->route('Consultation.CtDashboard');
@@ -41,9 +42,11 @@ class AuthenticatedSessionController extends Controller
     } elseif ($role === 'HumanResources') {
         return redirect()->route('HrDashboard');
     } elseif ($role === 'Student') {
-        // Redirect based on student type (college or highschool)
-        $studentType = Auth::user()->student_type;
-        return redirect()->route('Student.StudentDashboardByType', ['student_type' => $studentType]);
+        if ($student_type === 'College') {
+            return redirect()->route('Student.CollegeDashboard');
+        } else if ($student_type === 'HighSchool') {
+            return redirect()->route('Student.HighSchoolDashboard');
+        }
     } else {
         return redirect()->route('dashboard'); 
     }

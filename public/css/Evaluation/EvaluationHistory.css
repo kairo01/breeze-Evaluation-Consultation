@@ -1,21 +1,97 @@
-profile img {
-    border-radius: 50%;
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-}
-
-.profile h5 {
-    margin-top: 10px;
+.header-title {
     font-weight: bold;
+    font-size: 24px;
+    color: #333;
 }
 
-.profile .btn {
+.content {
+    padding: 30px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.department-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.head-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid black;
+    
+}
+
+.evaluate-btn {
+    display: inline-block;
     margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    
 }
 
-.department-header img {
-    width: 120px;
-    height: auto;
-    margin-bottom: 10px;
+.evaluate-btn:hover {
+    background-color: #0056b3;
+}
+
+.faculty-members {
+    display: grid;
+    grid-template-columns: repeat(3, 200px);
+    justify-content: center;
+    gap: 80px;
+}
+
+.faculty-card {
+    background-color: #f9f9f9;
+    width: 250px;
+    height: 250px;
+    padding: 15px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.faculty-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.faculty-img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid black;
+}
+
+.department-head h3 {
+font-size: 20px; /* Increased font size */
+font-weight: bold;
+color: #000;
+margin-top: 15px; /* Added gap between image and name */
+font-family: bunny;
+}
+
+.faculty-card h4 {
+font-weight: bold;
+margin-top: 10px;
+font-size: 20px; /* Increased font size for faculty names */
+font-family: bunny;
 }

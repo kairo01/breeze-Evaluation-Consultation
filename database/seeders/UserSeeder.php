@@ -15,6 +15,7 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             [
                 'name' => 'HumanResources',
+                'student_id' => null,
                 'email' => 'HumanResources@example.com',
                 'password' => Hash::make('password123'),
                 'role' => 'HumanResources',
@@ -26,6 +27,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'Guidance',
+                'student_id' => null,
                 'email' => 'Guidance@example.com',
                 'password' => Hash::make('password123'),
                 'role' => 'Guidance',
@@ -37,6 +39,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'ComputerDepartment',
+                'student_id' => null,
                 'email' => 'ComputerDepartment@example.com',
                 'password' => Hash::make('password123'),
                 'role' => 'ComputerDepartment',
@@ -48,6 +51,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'HighSchoolStudent',
+                'student_id' => '21-000',
                 'email' => 'highschool@example.com',
                 'password' => Hash::make('password123'),
                 'role' => 'Student',
@@ -59,7 +63,20 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'CollegeStudent',
+                'student_id' => '21-001',
                 'email' => 'college@example.com',
+                'password' => Hash::make('password123'),
+                'role' => 'Student',
+                'student_type' => 'college',
+                'status' => 'active',
+                'remember_token' => null,  // Add remember_token here
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Rostelyn',
+                'student_id' => '21-0122',
+                'email' => 'Rostelyn@example.com',
                 'password' => Hash::make('password123'),
                 'role' => 'Student',
                 'student_type' => 'college',

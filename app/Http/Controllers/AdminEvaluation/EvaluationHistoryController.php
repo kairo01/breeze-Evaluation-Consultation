@@ -5,12 +5,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Evaluation;
 use Illuminate\Http\Request;
 
-class EvaluationController extends Controller
+class EvaluationHistoryController extends Controller
 {
     public function showForm()
     {
         return view('Student.evaluation.evaluationform');
-    }
+
+        return view('Evaluation.EvaluationHistory');
+        }
 
 
     public function submit(Request $request)

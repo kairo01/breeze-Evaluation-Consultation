@@ -16,11 +16,12 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('student_id')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['HumanResources', 'Guidance', 'ComputerDepartment', 'HighSchoolStudent', 'CollegeStudent']); // Updated roles
-            $table->string('student_type')->nullable(); // Add student_type column for highschool/college
+            $table->enum('student_type', ['College', 'HighSchool'])->nullable(); // Add student_type column for highschool/college
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->rememberToken();
             $table->timestamps();

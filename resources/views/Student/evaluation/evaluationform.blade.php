@@ -1,40 +1,31 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Evaluation') }}
+            {{ __('Evaluation Form') }}
         </h2>
-    </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-
-                    <!-- Check if the user is a student and if they are college or highschool -->
-                    @if(Auth::user()->role == 'Student')
-                        @if(in_array(Auth::user()->student_type, ['college', 'highschool']))
-                            <h1>
-                                @if(Auth::user()->student_type == 'college')
-                                    Welcome, College Student!
-                                @elseif(Auth::user()->student_type == 'highschool')
-                                    Welcome, Highschool Student!
-                                @endif
-                            </h1>
-                        @else
-                            <h1>You are not a student of the expected types.</h1>
-                        @endif
-                    @else
-                        <h1>You are not a student.</h1>
+                    <!-- Success Alert -->
+                    @if (session('success'))
+                        <div class="alert alert-success mb-4">
+                            {{ session('success') }}
+                        </div>
                     @endif
 
-                <!DOCTYPE html>
+                   
+                        @csrf <!-- CSRF Token for protection -->
+                        <h2 class="font-bold text-lg mb-4">Teacher Evaluation</h2>
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evaluation Form</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=DM+Serif+Text:ital@0;1&family=Diplomata+SC&display=swap" rel="stylesheet">
@@ -47,143 +38,99 @@
         }
 
 
-        .container {
-            margin-top: 50px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .header h1 {
-            text-align: center;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-        }
-
-        .h2 {
-            font-size: 1.5rem;
-            margin-top: 20px;
-        }
-
-        .back-btn, .submit-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 1rem;
-            color: white;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .back-btn {
-            background-color: #6c757d;
-            border-radius: 5px;
-        }
-
-        .submit-btn {
-            background-color: #007bff;
-            border-radius: 5px;
-        }
-
-        .back-btn:hover {
-            background-color: #5a6268;
-        }
-
-        .submit-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .custom-popup {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            animation: fadeOut 3s forwards;
-        }
-
-        @keyframes fadeOut {
-            0% { opacity: 1; }
-            100% { opacity: 0; display: none; }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="evaluation-content">
-            <div class="select-year-container">
-                <h2 class="h2">Select School Year:</h2>
-                <select class="form-select" id="school_year" name="school_year">
-                    <option value="2023-2024">2023-2024</option>
-                    <option value="2024-2025" selected>2024-2025</option>
-                    <option value="2025-2026">2025-2026</option>
-                </select>
-            </div>
-            <form>
-                <div class="evaluation-form">
-                    <div class="evaluation-section">
-                        <h2 class="h2">PART 1</h2>
-                        <h2 class="h2">Directions:</h2>
-                        <p>Kindly evaluate your teacher/s per subject according to their teaching performance.</p>
-                        <div class="form-group">
-                            <h2 class="h2">Name of Teacher:</h2>
-                            <input type="text" class="form-control" id="teacher_name" name="teacher_name" required>
+                        <!-- Teacher Info Section -->
+                        <div class="mb-4">
+                            <label class="block text-gray-700">Teacher Name:</label>
+                            <input type="text" name="teacher_name"
+                                class="form-control @error('teacher_name') border-red-500 @enderror"
+                                value="{{ old('teacher_name') }}">
+                            @error('teacher_name')
+                                <span class="text-red-500">{{ $message }}</span>
+                            @enderror
                         </div>
-                        <div class="form-group">
-                            <h2 class="h2">Subject:</h2>
-                            <input type="text" class="form-control" id="subject" name="subject" required>
-                        </div>
-                        <div class="form-group">
-                            <h2 class="h2">Teaching Performance:</h2>
-                            <textarea class="form-control" id="teaching_performance" name="teaching_performance" rows="3" required></textarea>
-                        </div>
-                    </div>
-                    <div class="evaluation-section">
-                        <h2 class="h2">PART 2</h2>
-                        <h2 class="h2">Directions:</h2>
-                        <p>Kindly evaluate the following in terms of facilities and services.</p>
-                        <div class="form-group">
-                            <h2 class="h2">Library:</h2>
-                            <textarea class="form-control" id="library" name="library" rows="2" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <h2 class="h2">Laboratory:</h2>
-                            <textarea class="form-control" id="laboratory" name="laboratory" rows="2" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <h2 class="h2">Comfort Room:</h2>
-                            <textarea class="form-control" id="comfort_room" name="comfort_room" rows="2" required></textarea>
-                        </div>
-                        <div class="form-group">
-                            <h2 class="h2">Canteen:</h2>
-                            <textarea class="form-control" id="canteen" name="canteen" rows="2" required></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-between mt-4">
 
-                    <button type="button" class="submit-btn">Submit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="custom-popup" style="display: none;">
-        Form submitted successfully!
-    </div>
-    <script>
-        document.querySelector('.submit-btn').addEventListener('click', function () {
-            const popup = document.querySelector('.custom-popup');
-            popup.style.display = 'block';
-            setTimeout(() => popup.style.display = 'none', 3000);
-        });
-    </script>
-</body>
-</html>
-               
+                        <div class="mb-4">
+                            <label class="block text-gray-700">Subject:</label>
+                            <input type="text" name="subject"
+                                class="form-control @error('subject') border-red-500 @enderror"
+                                value="{{ old('subject') }}">
+                            @error('subject')
+                                <span class="text-red-500">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <!-- Teaching Skills Section -->
+                        <h3 class="font-bold text-md mt-6 mb-4">Teaching Skills</h3>
+                        @foreach ([
+                            'Subject Knowledge' => 'Mastery of the subject matter.',
+                            'Clarity' => 'Ability to explain concepts clearly and concisely.',
+                            'Teaching Methods' => 'Use of diverse and engaging teaching techniques.',
+                            'Organization' => 'Preparedness and structured lesson plans.',
+                            'Pacing' => 'Proper speed of instruction based on student understanding.'
+                        ] as $skill => $description)
+                            <div class="mb-4">
+                                <label class="block text-gray-700">{{ $skill }}</label>
+                                <small class="text-gray-600">{{ $description }}</small>
+                                <div class="flex space-x-2 mt-2">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <label class="cursor-pointer">
+                                            <input type="radio" 
+                                                   name="teaching_skills[{{ strtolower(str_replace(' ', '_', $skill)) }}]" 
+                                                   value="{{ $i }}"
+                                                   class="form-control"
+                                                   {{ old("teaching_skills." . strtolower(str_replace(' ', '_', $skill))) == $i ? 'checked' : '' }}>
+                                            <div class="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center
+                                                    hover:bg-blue-500 {{ old('teaching_skills') == $i ? 'bg-blue-500' : '' }}">
+                                                {{ $i }}
+                                            </div>
+                                        </label>
+                                    @endfor
+                                </div>
+                                @error("teaching_skills." . strtolower(str_replace(' ', '_', $skill)))
+                                    <span class="text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        @endforeach
+
+                        <!-- Facilities and Equipment Section -->
+                        <h2 class="font-bold text-lg mt-6 mb-4">Facilities and Equipment</h2>
+                        @foreach ([ 
+                            'Classroom Cleanliness' => 'Overall cleanliness and maintenance of classrooms.',
+                            'Ventilation' => 'Availability and functionality of air conditioning or fans.',
+                            'Lighting' => 'Adequate lighting for effective learning.',
+                            'Seating Arrangement' => 'Comfort and arrangement of chairs and desks.',
+                            'Technology' => 'Availability and functionality of projectors, computers, or smartboards.'
+                        ] as $facility => $description)
+                            <div class="mb-4">
+                                <label class="block text-gray-700">{{ $facility }}</label>
+                                <small class="text-gray-600">{{ $description }}</small>
+                                <div class="flex space-x-2 mt-2">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <label class="cursor-pointer">
+                                            <input type="radio" 
+                                                   name="facilities[{{ strtolower(str_replace(' ', '_', $facility)) }}]" 
+                                                   value="{{ $i }}"
+                                                   class="form-control"
+                                                   {{ old("facilities." . strtolower(str_replace(' ', '_', $facility))) == $i ? 'checked' : '' }}>
+                                            <div class="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center
+                                                    hover:bg-blue-500 {{ old('facilities') == $i ? 'bg-blue-500' : '' }}">
+                                                {{ $i }}
+                                            </div>
+                                        </label>
+                                    @endfor
+                                </div>
+                                @error("facilities." . strtolower(str_replace(' ', '_', $facility)))
+                                    <span class="text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        @endforeach
+
+                        <!-- Submit Button -->
+                        <div class="mt-4">
+                            <button type="submit"
+                                class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
