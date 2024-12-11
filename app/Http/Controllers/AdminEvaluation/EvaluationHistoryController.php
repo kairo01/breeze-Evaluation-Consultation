@@ -10,8 +10,6 @@ class EvaluationHistoryController extends Controller
     public function showForm()
     {
 
-        return view('Student.evaluation.evaluationform');
-
         return view('Evaluation.EvaluationHistory');
         }
     

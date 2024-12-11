@@ -49,10 +49,12 @@
                                 {{ __('Calendar') }}
                             </x-nav-link>
                         @elseif(Auth::user()->role == 'Student')
+
                             @if(Auth::user()->student_type == 'College')
                                 <x-nav-link :href="route('Student.CollegeDashboard')" :active="request()->routeIs('Student.CollegeDashboard')">
                                     {{ __('Dashboard') }}
                                 </x-nav-link>
+                                
                             @elseif(Auth::user()->student_type == 'HighSchool')
                                 <x-nav-link :href="route('Student.HighSchoolDashboard')" :active="request()->routeIs('Student.HighSchoolDashboard')">
                                     {{ __('Dashboard') }}
@@ -90,6 +92,7 @@
                             <x-nav-link :href="route('Consultation.CtMessages')" :active="request()->routeIs('Consultation.CtMessages')">
                                 {{ __('Messages') }}
                             </x-nav-link>
+
                         @elseif(Auth::user()->role == 'ComputerDepartment')
                             <x-nav-link :href="route('DepartmentHead.DpDashboard')" :active="request()->routeIs('DepartmentHead.DpDashboard')">
                                 {{ __('Dashboard') }}
