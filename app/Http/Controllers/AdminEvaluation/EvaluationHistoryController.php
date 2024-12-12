@@ -127,6 +127,7 @@ class EvaluationHistoryController extends Controller
                     ],
                 ],
             ],
+            
             'highschool' => [
                 'name' => 'High School Department',
                 'head' => [

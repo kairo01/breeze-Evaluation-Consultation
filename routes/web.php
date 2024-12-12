@@ -38,7 +38,10 @@ use App\Http\Controllers\AdminEvaluation\EvaluationController;
 
 
 use App\Http\Controllers\Student\CollegeController;
+use App\Http\Controllers\Student\CollegePickerController;
 use App\Http\Controllers\Student\HighSchoolController;
+use App\Http\Controllers\Student\HighSchoolPickerController;
+use App\Http\Controllers\Student\StudentPickerController;
 
 // Other Routes
 
@@ -121,6 +124,11 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
         ->name('EvaluationHistory');
 
         Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
+
+          // Student Evaluation Form
+    Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])
+    ->name('Student.evaluation.evaluationform');
+
 });
 
 // Student Routes
@@ -155,7 +163,17 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
        
             Route::get('/create', [EvaluationFormController::class, 'create'])->name('evaluation.create');
             Route::post('/store', [EvaluationFormController::class, 'store'])->name('evaluation.store');
-            Route::get('/show/{id}', [EvaluationFormController::class, 'show'])->name('evaluation.show');
-     
-        
+
+            Route::get('/Student.evaluation.StudentPicker', [StudentPickerController::class, 'index'])
+            ->name('Student.evaluation.StudentPicker');
+
+            Route::get('Student.evaluation.CollegeStudent', [CollegePickerController::class, 'index'])
+            ->name('Student.evaluation.CollegeStudent');
+            
+            Route::get('/Student.evaluation.HigSchoolStudent', [HighSchoolPickerController::class, 'index'])
+            ->name('Student.evaluation.HigSchoolStudent');
+            
+Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
+
+
 });
