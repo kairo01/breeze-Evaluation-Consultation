@@ -9,6 +9,7 @@ class EvaluationHistoryController extends Controller
 {
     public function show($department)
     {
+        // List of departments
         $departments = [
             'computer' => [
                 'name' => 'Computer Department',
@@ -68,7 +69,7 @@ class EvaluationHistoryController extends Controller
                     ],
                 ],
             ],
-           'engineering' => [
+            'engineering' => [
                 'name' => 'Engineering Department',
                 'head' => [
                     'name' => 'Engr. Mark Villar',
@@ -188,17 +189,16 @@ class EvaluationHistoryController extends Controller
                 ],
             ],
         ];
-
-        return view('Evaluation.EvaluationHistory');
-
-        // Check if department exists
+    
+        // Check if the requested department exists
         if (!isset($departments[$department])) {
             abort(404); // Department not found
-
         }
-
+    
+        // Pass the department data to the view
         return view('Evaluation.EvaluationHistory', [
             'department' => $departments[$department],
         ]);
     }
+    
 }
