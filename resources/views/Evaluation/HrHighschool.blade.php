@@ -1,17 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Calendar') }}
+            {{ __('Select Department') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're in Calendar!") }}
-                </div>
-            </div>
-        </div>
+      <link rel="stylesheet" href="{{ asset('css/Evaluation/HrFaculty.css') }}">
+
+    <div class="container">
+        <div class="department-grid">
+            <!-- Computer Department -->
+            <a href="{{ route('evaluation.history', ['department' => 'highschool']) }}" class="department-card">
+                <img src="{{ asset('css/GeneralResources/CS.jfif') }}" alt="Computer Department Logo" class="department-logo">
+                <h3>HighSchool Department</h3>
+            </a>
+       </div>  
     </div>
+
+
 </x-app-layout>

@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="header-title">
+       <h2 class="header-title">
             {{ $department['name'] }}
         </h2>
     </x-slot>

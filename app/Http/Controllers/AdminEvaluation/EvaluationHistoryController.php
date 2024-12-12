@@ -14,28 +14,28 @@ class EvaluationHistoryController extends Controller
                 'name' => 'Computer Department',
                 'head' => [
                     'name' => 'Jhai De Guzman',
-                    'image' => 'images/department_heads/computer_head.jpg',
+                    'image' => 'css/GeneralResources/collegelogo.jpg',
                 ],
                 'faculty' => [
                     [
                         'name' => 'Percian Joseph Borja',
-                        'image' => 'images/faculty/computer/percian.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Eric Almoguerra',
-                        'image' => 'images/faculty/computer/eric.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Aries Cayabyab',
-                        'image' => 'images/faculty/computer/aries.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Nomer Aleviado',
-                        'image' => 'images/faculty/computer/nomer.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Joseph Chua',
-                        'image' => 'images/faculty/computer/joseph.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                 ],
             ],
@@ -43,28 +43,28 @@ class EvaluationHistoryController extends Controller
                 'name' => 'HM Department',
                 'head' => [
                     'name' => 'Jessalyn Sarmiento Tancio',
-                    'image' => 'images/department_heads/hm_head.jpg',
+                    'image' => 'css/GeneralResources/Hm.jfif',
                 ],
                 'faculty' => [
                     [
                         'name' => 'Katherine Araos',
-                        'image' => 'images/faculty/hm/juan.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Hannie Faye Cuaresma',
-                        'image' => 'images/faculty/hm/ana.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Jaevend Mae Deuda',
-                        'image' => 'images/faculty/hm/carlos.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Chrislyn Colleen Sison',
-                        'image' => 'images/faculty/hm/diana.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Atty. RK. Dela Fuente',
-                        'image' => 'images/faculty/hm/luis.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                 ],
             ],
@@ -72,28 +72,28 @@ class EvaluationHistoryController extends Controller
                 'name' => 'Engineering Department',
                 'head' => [
                     'name' => 'Engr. Mark Villar',
-                    'image' => 'images/department_heads/engineering_head.jpg',
+                    'image' => 'css/GeneralResources/icon.jpg',
                 ],
                 'faculty' => [
                     [
                         'name' => 'Jane Dela Cruz',
-                        'image' => 'images/faculty/engineering/jane.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Paul Mendoza',
-                        'image' => 'images/faculty/engineering/paul.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Albert Ramos',
-                        'image' => 'images/faculty/engineering/albert.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Sarah Lim',
-                        'image' => 'images/faculty/engineering/sarah.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Francis Santos',
-                        'image' => 'images/faculty/engineering/francis.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                 ],
             ],
@@ -101,28 +101,89 @@ class EvaluationHistoryController extends Controller
                 'name' => 'Tesda Department',
                 'head' => [
                     'name' => 'Pedro Garcia',
-                    'image' => 'images/department_heads/tesda_head.jpg',
+                    'image' => 'css/GeneralResources/icon.jpg',
                 ],
                 'faculty' => [
                     [
                         'name' => 'Marissa Gomez',
-                        'image' => 'images/faculty/tesda/marissa.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Fernando Diaz',
-                        'image' => 'images/faculty/tesda/fernando.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Tessa Miranda',
-                        'image' => 'images/faculty/tesda/tessa.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Lorenzo Bautista',
-                        'image' => 'images/faculty/tesda/lorenzo.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                     [
                         'name' => 'Patricia Vega',
-                        'image' => 'images/faculty/tesda/patricia.jpg',
+                        'image' => 'css/GeneralResources/icon.jpg',
+                    ],
+                ],
+            ],
+            'highschool' => [
+                'name' => 'High School Department',
+                'head' => [
+                    'name' => 'Arlene Cabillan',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                'faculty' => [
+                    [
+                        'name' => 'Baby-Lyn Ravago',
+                        'image' => 'css/GeneralResources/icon.jpg',
+                    ],
+                    [
+                        'name' => 'Ronald Simbul',
+                        'image' => 'css/GeneralResources/icon.jpg',
+                    ],
+                    [
+                        'name' => 'Juniel Jenolan',
+                        'image' => 'css/GeneralResources/icon.jpg',
+                    ],
+                    [
+                        'name' => 'Dhan Ramos',
+                        'image' => 'css/GeneralResources/icon.jpg',
+                    ],
+                    [
+                        'name' => 'Eljer Dizon',
+                        'image' => 'css/GeneralResources/icon.jpg',
+                    ],
+                    [
+                        'name' => 'Angelica Garcia',
+                        'image' => 'css/GeneralResources/icon.jpg',
+                    ],
+                    [
+                        'name' => 'Shelby Enriquez',
+                        'image' => 'css/GeneralResources/icon.jpg',
+                    ],
+                    [
+                        'name' => 'Mhaicka Tolentino',
+                        'image' => 'css/GeneralResources/icon.jpg',
+                    ],
+                    [
+                        'name' => 'Mitzi Malixi',
+                        'image' => 'css/GeneralResources/icon.jpg',
+                    ],
+                    [
+                        'name' => 'Jan Antonnete Canindo',
+                        'image' => 'css/GeneralResources/icon.jpg',
+                    ],
+                    [
+                        'name' => 'Christine Leron',
+                        'image' => 'css/GeneralResources/icon.jpg',
+                    ],
+                    [
+                        'name' => 'Sean Reclosado',
+                        'image' => 'css/GeneralResources/icon.jpg',
+                    ],
+                    [
+                        'name' => 'Saira Mangayao',
+                        'image' => 'css/GeneralResources/icon.jpg',
                     ],
                 ],
             ],
