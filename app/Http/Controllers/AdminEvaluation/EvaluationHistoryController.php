@@ -189,9 +189,12 @@ class EvaluationHistoryController extends Controller
             ],
         ];
 
+        return view('Evaluation.EvaluationHistory');
+
         // Check if department exists
         if (!isset($departments[$department])) {
             abort(404); // Department not found
+
         }
 
         return view('Evaluation.EvaluationHistory', [

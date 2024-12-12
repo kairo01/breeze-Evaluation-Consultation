@@ -133,10 +133,12 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
     // Student Evaluation Form
     Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])
         ->name('Student.evaluation.evaluationform');
+
 /*/
         Route::get('evaluation-form', [EvaluationController::class, 'showForm']);
         Route::post('evaluation-submit', [EvaluationController::class, 'submit']); // <-- Fixed here
     /*/
+
 
     // Student Appointment Routes
     Route::get('/student/appointment', [StudentAppointmentController::class, 'index'])
@@ -149,4 +151,11 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
     // Student Calendar
     Route::get('/student/StudentCalendar', [StudentCalendarController::class, 'index'])
         ->name('Student.StudentCalendar');
+
+       
+            Route::get('/create', [EvaluationFormController::class, 'create'])->name('evaluation.create');
+            Route::post('/store', [EvaluationFormController::class, 'store'])->name('evaluation.store');
+            Route::get('/show/{id}', [EvaluationFormController::class, 'show'])->name('evaluation.show');
+     
+        
 });
