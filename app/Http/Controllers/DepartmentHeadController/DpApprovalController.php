@@ -13,7 +13,7 @@ class DpApprovalController extends Controller
      */
     public function index()
     {
-        $appointments = Appointment::where('consultant_id', auth()->id())
+        $appointments = Appointment::where('Consultant_role', auth()->id())
             ->where('status', 'Pending')
             ->get();
 
@@ -27,10 +27,6 @@ class DpApprovalController extends Controller
     {
         $appointment = Appointment::findOrFail($request->appointment_id);
 
-        // Ensure the department head is authorized
-        if ($appointment->consultant_id !== auth()->id()) {
-            abort(403, 'Unauthorized action.');
-        }
 
         $appointment->update([
             'status' => 'Approved',
@@ -48,10 +44,6 @@ class DpApprovalController extends Controller
     {
         $appointment = Appointment::findOrFail($request->appointment_id);
 
-        // Ensure the department head is authorized
-        if ($appointment->consultant_id !== auth()->id()) {
-            abort(403, 'Unauthorized action.');
-        }
 
         $validated = $request->validate([
             'decline_reason' => 'required|string|max:255',

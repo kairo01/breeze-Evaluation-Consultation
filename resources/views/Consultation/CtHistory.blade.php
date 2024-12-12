@@ -15,9 +15,7 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    @if($appointments->isEmpty())
-                        <p>No approved appointments.</p>
-                    @else
+                   
                         <table class="min-w-full leading-normal">
                             <thead>
                                 <tr>
@@ -74,7 +72,7 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    @endif
+                    
                 </div>
             </div>
         </div>
