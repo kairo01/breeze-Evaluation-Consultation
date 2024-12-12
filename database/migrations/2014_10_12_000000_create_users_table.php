@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['HumanResources', 'Guidance', 'ComputerDepartment', 'HighSchoolStudent', 'CollegeStudent']); // Updated roles
-            $table->enum('student_type', ['College', 'HighSchool'])->nullable(); // Add student_type column for highschool/college
+            $table->enum('role', ['HumanResources', 'Guidance', 'ComputerDepartment', 'HighSchoolStudent', 'CollegeStudent']);
+            $table->enum('student_type', ['College', 'HighSchool'])->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->rememberToken();
             $table->timestamps();
@@ -35,6 +35,13 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        // Temporarily disable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        
+        // Drop the table
         Schema::dropIfExists('users');
+
+        // Re-enable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

@@ -9,9 +9,32 @@ class Appointment extends Model
 {
     use HasFactory;
 
-    // Allow mass assignment for these fields
     protected $fillable = [
-        'user_id', 'name', 'course', 'consultant', 'purpose', 'meeting_mode', 
-        'meeting_preference', 'appointment_date_time', 'status',
+
+        'student_id',
+        'consultant_role',
+        'course',
+        'purpose',
+        'meeting_mode',
+        'meeting_preference',
+        'date_time',
+        'status',
+        'decline_reason',
     ];
+
+    /**
+     * The student who made the appointment.
+     */
+    public function student()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * The consultant handling the appointment.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -66,38 +66,6 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-// GUIDANCE == CONSULTATION
-Route::middleware(['auth', 'role:Guidance'])->group(function () {
-    Route::get('Consultation.CtDashboard', [ConsultationDbController::class, 'index'])
-        ->name('Consultation.CtDashboard');
-
-    Route::get('Consultation.CtApproval', [ConsultationApprovalController::class, 'index'])
-        ->name('Consultation.CtApproval');
-
-    Route::get('Consultation.CtHistory', [ConsultationHistoryController::class, 'index'])
-        ->name('Consultation.CtHistory');
-
-    Route::get('Consultation.CtCalendar', [ConsultationCalendarController::class, 'index'])
-        ->name('Consultation.CtCalendar');  
-
-    Route::get('Consultation.CtMessages', [ConsultationMessagesController::class, 'index'])
-        ->name('Consultation.CtMessages');
-});
-
-// DEPARTMENT HEAD 
-Route::middleware(['auth', 'role:ComputerDepartment'])->group(function () {
-    Route::get('DepartmentHead/DpDashboard', [DpController::class, 'index'])
-        ->name('DepartmentHead.DpDashboard');
-
-    Route::get('DepartmentHead/DpApproval', [DpApprovalController::class, 'index'])
-        ->name('DepartmentHead.DpApproval');
-
-    Route::get('DepartmentHead/DpHistory', [DpHistoryController::class, 'index'])
-        ->name('DepartmentHead.DpHistory');
-
-    Route::get('DepartmentHead/DpCalendar', [DpCalendarController::class, 'index'])
-        ->name('DepartmentHead.DpCalendar');
-});
 
 // HUMAN RESOURCES == EVALUATION
 Route::middleware(['auth', 'role:HumanResources'])->group(function () {
@@ -131,30 +99,50 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
 
 });
 
+// GUIDANCE == CONSULTATION
+Route::middleware(['auth', 'role:Guidance'])->group(function () {
+    Route::get('/Consultation/CtDashboard', [ConsultationDbController::class, 'index'])
+        ->name('Consultation.CtDashboard');
+
+    Route::get('/Consultation/CtCalendar', [ConsultationCalendarController::class, 'index'])
+        ->name('Consultation.CtCalendar');  
+
+    Route::get('/Consultation/CtMessages', [ConsultationMessagesController::class, 'index'])
+        ->name('Consultation.CtMessages');
+});
+
+// DEPARTMENT HEAD 
+Route::middleware(['auth', 'role:ComputerDepartment'])->group(function () {
+    Route::get('/DepartmentHead/DpDashboard', [DpController::class, 'index'])
+        ->name('DepartmentHead.DpDashboard');
+
+    Route::get('/DepartmentHead/DpCalendar', [DpCalendarController::class, 'index'])
+        ->name('DepartmentHead.DpCalendar');
+});
+
+
 // Student Routes
 Route::prefix('student')->middleware(['auth'])->group(function () {
 
-    Route::get('/student-dashboard/college', [CollegeController::class, 'index'])->name('Student.CollegeDashboard');
+    // Student Dashboard
+    Route::get('/student-dashboard/college', [CollegeController::class, 'index'])
+        ->middleware('student.type:College')
+        ->name('Student.CollegeDashboard');
 
-    Route::get('/student-dashboard/highschool', [HighSchoolController::class, 'index'])->name('Student.HighSchoolDashboard');
+    Route::get('/student-dashboard/highschool', [HighSchoolController::class, 'index'])
+        ->middleware('student.type:HighSchool')
+        ->name('Student.HighSchoolDashboard');
 
     // Student Evaluation Form
     Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])
         ->name('Student.evaluation.evaluationform');
+
 
 /*/
         Route::get('evaluation-form', [EvaluationController::class, 'showForm']);
         Route::post('evaluation-submit', [EvaluationController::class, 'submit']); // <-- Fixed here
     /*/
 
-
-    // Student Appointment Routes
-    Route::get('/student/appointment', [StudentAppointmentController::class, 'index'])
-        ->name('Student.Consultation.Appointment');
-
-    // Student Appointment History
-    Route::get('/student/StudentHistory', [StudentHistoryController::class, 'index'])
-        ->name('Student.StudentHistory');
 
     // Student Calendar
     Route::get('/student/StudentCalendar', [StudentCalendarController::class, 'index'])
@@ -176,4 +164,27 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
 Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
 
 
+});
+
+Route::prefix('student')->name('Student.')->group(function () {
+    Route::get('/appointment', [StudentAppointmentController::class, 'index'])->name('Consform.Appointment');
+    Route::post('/appointment', [StudentAppointmentController::class, 'store'])->name('Consform.Appointment.store');
+    Route::get('/history', [StudentHistoryController::class, 'index'])->name('StudentHistory');
+    // Add other student routes here
+});
+
+// Routes for Consultation
+Route::prefix('consultation')->name('Consultation.')->middleware('role:Guidance')->group(function () {
+    Route::get('/approval', [ConsultationApprovalController::class, 'index'])->name('CtApproval');
+    Route::post('/approval/approve', [ConsultationApprovalController::class, 'approve'])->name('CtApproval.approve');
+    Route::post('/approval/decline', [ConsultationApprovalController::class, 'decline'])->name('CtApproval.decline');
+    Route::get('/history', [ConsultationHistoryController::class, 'index'])->name('CtHistory');
+});
+
+// Routes for Department Head
+Route::prefix('department-head')->name('DepartmentHead.')->middleware('role:ComputerDepartment')->group(function () {
+    Route::get('/approval', [DpApprovalController::class, 'index'])->name('DpApproval');
+    Route::post('/approval/approve', [DpApprovalController::class, 'approve'])->name('DpApproval.approve');
+    Route::post('/approval/decline', [DpApprovalController::class, 'decline'])->name('DpApproval.decline');
+    Route::get('/history', [DpHistoryController::class, 'index'])->name('DpHistory');
 });
