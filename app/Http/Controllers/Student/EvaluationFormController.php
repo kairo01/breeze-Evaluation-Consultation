@@ -18,7 +18,7 @@ class EvaluationFormController extends Controller
     {
         return view('Student.evaluation.evaluationform');
     }
-
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -26,21 +26,36 @@ class EvaluationFormController extends Controller
             'subject' => 'required|string|max:255',
             'teaching_skills' => 'required|array',
             'facilities' => 'required|array',
+            'facilities.*.rating' => 'required|integer|min:1|max:5',
+            'facilities.*.comment' => 'nullable|string|max:255',
+            'teacher_comment' => 'required|string|max:500',
         ]);
-
+    
+        // Prepare data for saving
+        $facilitiesData = [];
+        foreach ($request->facilities as $facility => $data) {
+            $facilitiesData[$facility] = [
+                'rating' => $data['rating'],
+                'comment' => $data['comment'] ?? null,
+            ];
+        }
+    
         Evaluation::create([
             'teacher_name' => $request->teacher_name,
             'subject' => $request->subject,
-            'teaching_skills' => json_encode($request->teaching_skills), // Serialize to store in DB
-            'facilities' => json_encode($request->facilities), // Serialize to store in DB
+            'teaching_skills' => $request->teaching_skills,
+            'facilities' => $facilitiesData,
+            'teacher_comment' => $request->teacher_comment,
         ]);
-
+    
         return redirect()->route('evaluation.create')->with('success', 'Evaluation submitted successfully.');
     }
-
+    
     public function show($id)
     {
         $evaluation = Evaluation::findOrFail($id);
         return view('Student.evaluation.evaluation.show', compact('evaluation'));
     }
+
+    
 }
