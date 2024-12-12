@@ -47,19 +47,35 @@
                             @endforeach
                         </div>
 
+                        <div class="mt-6 mb-4 text-center">
+                            <label class="block text-gray-700">Comment About the Teacher:</label>
+                            <textarea 
+                                name="teacher_comment" 
+                                rows="4" 
+                                class="form-control mt-2 w-2/3 mx-auto" 
+                                placeholder="Write your feedback about the teacher here..." 
+                                required></textarea>
+                        </div>
+
                         <h2 class="font-bold text-lg mt-6 mb-4 text-center">Facilities</h2>
                         <div class="space-y-4">
                             @foreach (['Comfort Room', 'Library', 'Cafeteria', 'Playground', 'Parking Area'] as $facility)
                                 <div class="flex items-center">
                                     <label class="w-1/3 text-gray-700">{{ $facility }}</label>
-                                    <div class="flex space-x-2 w-2/3 justify-center">
+                                    <div class="flex space-x-2 w-1/3 justify-center">
                                         @for ($i = 1; $i <= 5; $i++)
                                             <label>
-                                                <input type="radio" name="facilities[{{ $facility }}]" value="{{ $i }}" required>
+                                                <input type="radio" name="facilities[{{ $facility }}][rating]" value="{{ $i }}" required>
                                                 {{ $i }}
                                             </label>
                                         @endfor
                                     </div>
+                                    <input 
+                                        type="text" 
+                                        name="facilities[{{ $facility }}][comment]" 
+                                        placeholder="Add a comment..." 
+                                        class="form-control w-1/3 ml-4"
+                                    >
                                 </div>
                             @endforeach
                         </div>

@@ -1,0 +1,53 @@
+.container {
+    text-align: center;
+    padding: 80px 80px; /* Adjust padding for spacing */
+    font-family: bunny;
+}
+.title {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+.department-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+.department-card {
+    background-color: white;
+    color: black;
+    width: 220px;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease-in-out;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px; /* Added margin to lower the cards */
+    
+
+}
+.department-card:hover {
+    transform: translateY(-5px);
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+.department-logo {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid black;
+}
+h3 {
+    font-size: 20px;
+    font-weight: bold;
+}

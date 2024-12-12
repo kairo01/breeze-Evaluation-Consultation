@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\AdminEvaluation;
+namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class EvaluationHistoryController extends Controller
+class FacultyListController extends Controller
 {
     public function show($department)
     {
