@@ -13,7 +13,7 @@
             @endforeach
         </ul>
     </div>
-@endif
+    @endif
     <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             @if(session('success'))
@@ -50,7 +50,7 @@
                     @enderror
                 </div>
 
-                <!-- Select Consultant -->
+                <!-- Select Consultant (excluding "HumanResources") -->
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="consultant_role">
                         Select Consultant:
@@ -58,7 +58,9 @@
                     <select name="consultant_role" id="consultant_role" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <option value="">Select Consultant</option>
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}">{{ $user->role}}</option>
+                            @if($user->role !== 'HumanResources') <!-- Exclude HumanResources -->
+                                <option value="{{ $user->id }}" data-role="{{ $user->role }}">{{ $user->role }}</option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
@@ -141,6 +143,26 @@
             } else {
                 preferenceContainer.style.display = 'none';
                 document.getElementById('meeting_preference').value = '';
+            }
+        });
+
+        document.getElementById('consultant_role').addEventListener('change', function() {
+            const purposeSelect = document.getElementById('purpose');
+            const selectedConsultant = this.selectedOptions[0].dataset.role;
+
+            if (selectedConsultant === 'HumanResources' || selectedConsultant === 'ComputerDepartment') {
+                // Disable other options and set to "Personal"
+                Array.from(purposeSelect.options).forEach(function(option) {
+                    if (option.value !== 'Personal') {
+                        option.disabled = true;
+                    }
+                });
+                purposeSelect.value = 'Personal';
+            } else {
+                // Enable all options
+                Array.from(purposeSelect.options).forEach(function(option) {
+                    option.disabled = false;
+                });
             }
         });
     </script>

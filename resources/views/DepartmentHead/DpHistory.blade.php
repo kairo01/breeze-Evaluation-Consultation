@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Department Head History
+            Deparment History
         </h2>
     </x-slot>
 
@@ -15,9 +15,7 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    @if($appointments->isEmpty())
-                        <p>No approved appointments.</p>
-                    @else
+                   
                         <table class="min-w-full leading-normal">
                             <thead>
                                 <tr>
@@ -45,24 +43,36 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            @foreach($appointments as $appointment)
-                <tr>
-                    <td>{{ $appointment->student->name }}</td>
-                    <td>{{ $appointment->course }}</td>
-                    <td>{{ $appointment->purpose }}</td>
-                    <td>{{ $appointment->meeting_mode }}</td>
-                    <td>{{ $appointment->meeting_preference ?? 'N/A' }}</td>
-                    <td>{{ $appointment->date_time }}</td>
-                    <td>
-                        <span class="inline-block px-3 py-1 text-sm font-semibold text-green-800 bg-green-200 rounded-full">
-                            {{ $appointment->status }}
-                        </span>
+                                @foreach($appointments as $appointment)
+                                    <tr>
+                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            {{ $appointment->student->name }}
+                                        </td>
+                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            {{ $appointment->course }}
+                                        </td>
+                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            {{ $appointment->purpose }}
+                                        </td>
+                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            {{ $appointment->meeting_mode }}
+                                        </td>
+                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            {{ $appointment->meeting_preference ?? 'N/A' }}
+                                        </td>
+                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            {{ $appointment->date_time }}
+                                        </td>
+                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+                                            <span class="inline-block px-3 py-1 text-sm font-semibold text-green-800 bg-green-200 rounded-full">
+                                                {{ $appointment->status }}
+                                            </span>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                    @endif
+                    
                 </div>
             </div>
         </div>
