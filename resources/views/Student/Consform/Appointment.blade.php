@@ -58,10 +58,9 @@
                     <select name="consultant_role" id="consultant_role" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <option value="">Select Consultant</option>
                         @foreach($users as $user)
-                     <option value='{ $user->id}'>{{ $user->role}}</option>
-                    @endforeach
+                            <option value="{{ $user->id }}">{{ $user->role}}</option>
+                        @endforeach
                     </select>
-                  
                 </div>
 
                 <!-- Purpose -->

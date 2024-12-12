@@ -25,24 +25,19 @@ class StudentAppointmentController extends Controller
      */
     public function store(Request $request)
     {
-     
-
         // Validate the request
-        $validated = $request->validate([
-            'course' => 'required|string',
+        $request->validate([
             'consultant_role' => 'required|exists:users,id',
+            'course' => 'required|string',
             'purpose' => 'required|in:Transfer,Return to Class,Academic,Graduating,Personal',
             'meeting_mode' => 'required|in:Face to Face,Online',
             'meeting_preference' => 'nullable|required_if:meeting_mode,Online|in:Zoom,Gmeet',
             'date_time' => 'required|date|after:now',
         ]);
 
-      
-
         // Create the appointment
-        $appointment = Appointment::create([
-            'name' => $request->input('name'),
-            'student_id' => $request->input('student_id'),
+        Appointment::create([
+            'student_id' => auth()->id(),
             'consultant_role' => $request->input('consultant_role'),
             'course' =>$request->input('course'),
             'purpose' => $request->input('purpose'),
@@ -51,8 +46,6 @@ class StudentAppointmentController extends Controller
             'date_time' => $request->input('date_time'),
             'status' => 'Pending',
         ]);
-
-      
 
         // Redirect back with success message
         return redirect()->route('Student.Consform.Appointment')->with('success', 'Appointment successfully created.');
