@@ -3,38 +3,67 @@
 namespace App\Http\Controllers\ConsultationController;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Appointment;
+use Illuminate\Http\Request;
 
 class ConsultationApprovalController extends Controller
 {
+    /**
+     * Display pending appointments for Guidance.
+     */
     public function index()
     {
-        // Fetch appointments pending approval by the Admin Consultant
-        $appointments = Appointment::where('status', 'Pending')
-            ->where('consultant', 'Admin Consultant') // Ensure this is for Admin Consultant approvals
+        $appointments = Appointment::where('consultant_id', auth()->id())
+            ->where('status', 'Pending')
             ->get();
-        
+
         return view('Consultation.CtApproval', compact('appointments'));
     }
 
-    public function store(Request $request)
+    /**
+     * Approve an appointment.
+     */
+    public function approve(Request $request)
     {
-        // Find the appointment to approve or decline
-        $appointment = Appointment::find($request->id);
+        $appointment = Appointment::findOrFail($request->appointment_id);
 
-        // If declined, add reason and set status to declined
-        if ($request->status == 'Declined' && $request->reason) {
-            $appointment->status = 'Declined';
-            $appointment->decline_reason = $request->reason;
-        } else {
-            // Otherwise, set status to accepted
-            $appointment->status = 'Accepted';
+        // Ensure the consultant is authorized
+        if ($appointment->consultant_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
         }
 
-        $appointment->save();
+        $appointment->update([
+            'status' => 'Approved',
+        ]);
 
-        // Redirect back with success message
-        return redirect()->route('Consultation.CtApproval')->with('status', 'Appointment status updated!');
+        // Optionally, notify the student here
+
+        return back()->with('success', 'Appointment approved successfully.');
+    }
+
+    /**
+     * Decline an appointment.
+     */
+    public function decline(Request $request)
+    {
+        $appointment = Appointment::findOrFail($request->appointment_id);
+
+        // Ensure the consultant is authorized
+        if ($appointment->consultant_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $validated = $request->validate([
+            'decline_reason' => 'required|string|max:255',
+        ]);
+
+        $appointment->update([
+            'status' => 'Declined',
+            'decline_reason' => $validated['decline_reason'],
+        ]);
+
+        // Optionally, notify the student here
+
+        return back()->with('success', 'Appointment declined successfully.');
     }
 }

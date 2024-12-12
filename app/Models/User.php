@@ -20,8 +20,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role', // Add role
-        'status', // Add status
+        'role',
+        'status',
+        'student_type',
+        'student_id',
     ];
 
     /**
@@ -43,4 +45,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Appointments made by the student.
+     */
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    /**
+     * Appointments approved by the consultant.
+     */
+    public function approvedAppointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }

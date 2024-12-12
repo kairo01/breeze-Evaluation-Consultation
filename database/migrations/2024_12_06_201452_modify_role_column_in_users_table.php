@@ -10,17 +10,16 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up()
-{
-    Schema::table('users', function (Blueprint $table) {
-        $table->string('role', 255)->change(); // Increase the length of the role column
-    });
-}
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('role', 255)->change(); // Increase the length of the role column
+        });
+    }
 
-public function down()
-{
-    Schema::table('users', function (Blueprint $table) {
-        $table->string('role', 50)->change(); // Revert to the previous length if needed
-    });
-}
-
+    public function down()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('role', 50)->change(); // Revert to the previous length if needed
+        });
+    }
 };

@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\ConsultationController
-;
+namespace App\Http\Controllers\ConsultationController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
