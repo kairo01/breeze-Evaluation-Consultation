@@ -63,9 +63,6 @@
                                 </x-nav-link>
                             @endif
                             @if(Auth::user()->student_type == 'College' || Auth::user()->student_type == 'HighSchool')
-                                <x-nav-link :href="route('Student.evaluation.evaluationform')" :active="request()->routeIs('Student.evaluation.evaluationform')">
-                                    {{ __('Evaluation') }}
-                                </x-nav-link>
 
                                 <x-nav-link :href="route('Student.Consform.Appointment')" :active="request()->routeIs('Student.Consform.Appointment')">
                                 {{ __('Appointment') }}
