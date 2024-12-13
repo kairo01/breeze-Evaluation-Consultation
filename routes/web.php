@@ -150,9 +150,7 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
             Route::get('/Student.evaluation.StudentPicker', [StudentPickerController::class, 'index'])
             ->name('Student.evaluation.StudentPicker');
 
-            Route::get('Student.evaluation.CollegeStudent', [CollegePickerController::class, 'index'])
-            ->name('Student.evaluation.CollegeStudent');
-            
+   
             Route::get('/Student.evaluation.HigSchoolStudent', [HighSchoolPickerController::class, 'index'])
             ->name('Student.evaluation.HigSchoolStudent');
             
@@ -183,11 +181,10 @@ Route::prefix('consultation')->name('Consultation.')->middleware('role:Guidance'
     Route::get('/history', [ConsultationHistoryController::class, 'index'])->name('CtHistory');
 });
 
-// Routes for Department Head
+// Department Head Routes
 Route::prefix('department-head')->name('DepartmentHead.')->middleware('role:ComputerDepartment')->group(function () {
-    Route::get('/approval', [DpApprovalController::class, 'index'])->name('DpApproval');
-    Route::post('/approval/approve', [DpApprovalController::class, 'approve'])->name('DpApproval.approve');
-    Route::post('/approval/decline', [DpApprovalController::class, 'decline'])->name('DpApproval.decline');
+    Route::get('/approval', [DpApprovalController::class, 'index'])->name('DpApproval');  // This handles the GET request
+    Route::post('/approval/approve', [DpApprovalController::class, 'approve'])->name('DpApproval.approve'); // This handles the POST request for approval
+    Route::post('/approval/decline', [DpApprovalController::class, 'decline'])->name('DpApproval.decline'); // This handles the POST request for decline
     Route::get('/history', [DpHistoryController::class, 'index'])->name('DpHistory');
 });
-

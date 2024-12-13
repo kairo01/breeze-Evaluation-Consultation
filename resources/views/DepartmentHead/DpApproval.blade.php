@@ -63,7 +63,7 @@
                                             {{ $appointment->meeting_preference ?? 'N/A' }}
                                         </td>
                                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                            {{ $appointment->date_time }}
+                                            {{ \Carbon\Carbon::parse($appointment->date_time)->format('Y-m-d H:i') }}
                                         </td>
                                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                             <!-- Accept Form -->

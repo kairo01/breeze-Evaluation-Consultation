@@ -42,5 +42,33 @@ class Appointment extends Model
         // Assuming 'consultant_role' links to a user in the 'users' table.
         return $this->belongsTo(User::class, 'consultant_role');
     }
+    public function index()
+{
+    // Retrieve appointments from the database (example)
+    $appointments = Appointment::where('student_id', auth()->id())
+        ->where('status', 'Approved') // Only include approved appointments
+        ->get()
+        ->map(function ($appointment) {
+            return [
+                'title' => $appointment->purpose,
+                'start' => $appointment->date_time,
+                'description' => 'Consultant: ' . $appointment->consultant->name,
+            ];
+        });
+
+    // Pass the appointments to the Blade template
+    return view('student.studentCalendar', compact('appointments'));
+}
+public function getEventData()
+{
+    return [
+        'id' => $this->id,
+        'title' => $this->student->name . ' - ' . $this->purpose,
+        'start' => $this->date_time,
+        'end' => $this->date_time,
+        'description' => 'Consultant: ' . $this->consultant->name . ' - ' . $this->course,
+    ];
+}
+
 }
 
