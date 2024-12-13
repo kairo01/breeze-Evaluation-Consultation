@@ -44,4 +44,6 @@ class CreateUsersTable extends Migration
         // Re-enable foreign key checks
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
+
 }
+
