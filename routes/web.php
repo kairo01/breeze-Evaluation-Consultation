@@ -38,11 +38,13 @@ use App\Http\Controllers\AdminEvaluation\EvaluationController;
 
 
 use App\Http\Controllers\Student\CollegeController;
-use App\Http\Controllers\Student\CollegePickerController;
 use App\Http\Controllers\Student\HighSchoolController;
+
 use App\Http\Controllers\Student\HighSchoolPickerController;
 use App\Http\Controllers\Student\StudentPickerController;
 use App\Http\Controllers\Student\NotificationController;
+
+
 
 // Other Routes
 
@@ -94,7 +96,6 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
 
         Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
 
-
 });
 
 // GUIDANCE == CONSULTATION
@@ -145,6 +146,7 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
             Route::get('/create', [EvaluationFormController::class, 'create'])->name('evaluation.create');
             Route::post('/store', [EvaluationFormController::class, 'store'])->name('evaluation.store');
 
+
             Route::get('/Student.evaluation.StudentPicker', [StudentPickerController::class, 'index'])
             ->name('Student.evaluation.StudentPicker');
 
@@ -158,6 +160,11 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
 
             Route::get('Student.evaluation.FacultyList', [EvaluationHistoryController::class, 'index'])
             ->name('Student.evaluation.FacultyList');
+
+
+            Route::get('/show/{id}', [EvaluationFormController::class, 'show'])->name('evaluation.show');
+     
+        
 
 });
 
