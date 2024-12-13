@@ -12,7 +12,11 @@
         <div class="department-head">
             <img src="{{ asset($department['head']['image']) }}" alt="Department Head" class="head-img">
             <h3>Department Head: {{ $department['head']['name'] }}</h3>
-            <button> <a href="Student.evaluation.evaluationform">asd</a> </button>
+                <button>
+            <x-nav-link :href="route('Student.evaluation.evaluationform')" :active="request()->routeIs('Student.evaluation.evaluationform')">
+                                    {{ __('Evaluation') }}
+                                </x-nav-link>
+                </button>
         </div>
 
         <!-- Faculty Members Section -->
@@ -21,10 +25,10 @@
                 <div class="faculty-card">
                     <img src="{{ asset($faculty['image']) }}" alt="Faculty Member" class="faculty-img">
                     <h4>{{ $faculty['name'] }}</h4>
-                    <button> <a href="Student.evaluation.evaluationform">asd</a> </button>
-                </div>
-               
-            @endforeach
-        </div>
+
+                    <button>
+                        <a href="route('Student.evaluation.evaluationform')"></a>
+                    </button>
+                </div>   >
     </div>
 </x-app-layout>
