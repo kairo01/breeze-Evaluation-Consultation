@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\AdminEvaluation;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EvaluationHistoryController extends Controller
 {
@@ -195,11 +197,26 @@ class EvaluationHistoryController extends Controller
         if (!isset($departments[$department])) {
             abort(404); // Department not found
         }
+
+        $user = Auth::user();
+        $user_email = $user->email;
+        
+        // // $users = User::where('email' , 'Humanresources@example.com');
+        if ($user_email === "humanresources@example.com") {
+            return view('Evaluation.EvaluationHistory', [
+                'department' => $departments[$department],
+            ]);
+            
+        }else{
+            return view('Student.evaluation.FacultyList', [
+                'department' => $departments[$department],
+            ]);
+            
+        }
+
+       
     
-        // Pass the department data to the view
-        return view('Evaluation.EvaluationHistory', [
-            'department' => $departments[$department],
-        ]);
+        
     }
     
 }

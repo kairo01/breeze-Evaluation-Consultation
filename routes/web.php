@@ -93,9 +93,6 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
 
         Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
 
-          // Student Evaluation Form
-    Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])
-    ->name('Student.evaluation.evaluationform');
 
 });
 
@@ -137,13 +134,6 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
     Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])
         ->name('Student.evaluation.evaluationform');
 
-
-/*/
-        Route::get('evaluation-form', [EvaluationController::class, 'showForm']);
-        Route::post('evaluation-submit', [EvaluationController::class, 'submit']); // <-- Fixed here
-    /*/
-
-
     // Student Calendar
     Route::get('/student/StudentCalendar', [StudentCalendarController::class, 'index'])
         ->name('Student.StudentCalendar');
@@ -161,8 +151,10 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
             Route::get('/Student.evaluation.HigSchoolStudent', [HighSchoolPickerController::class, 'index'])
             ->name('Student.evaluation.HigSchoolStudent');
             
-Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
+            Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
 
+            Route::get('Student.evaluation.FacultyList', [EvaluationHistoryController::class, 'index'])
+            ->name('Student.evaluation.FacultyList');
 
 });
 

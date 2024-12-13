@@ -10,7 +10,7 @@
     <div class="container">
         <div class="department-grid">
             <!-- Computer Department -->
-            <a href="{{ route('evaluation.history', ['department' => 'highschool']) }}" class="department-card">
+            <a href="{{ route('Student.evaluation.FacultyList', ['department' => 'highschool']) }}" class="department-card">
                 <img src="{{ asset('css/GeneralResources/CS.jfif') }}" alt="Computer Department Logo" class="department-logo">
                 <h3>HighSchool Department</h3>
             </a>
