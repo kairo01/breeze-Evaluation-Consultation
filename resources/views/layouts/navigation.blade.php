@@ -79,7 +79,11 @@
                             </x-nav-link> 
                             
                             <x-nav-link :href="route('Student.evaluation.StudentPicker')" :active="request()->routeIs('Student.evaluation.StudentPicker')">
-                                    {{ __('faculty List') }}
+                                    {{ __('Faculty List') }}
+                                </x-nav-link>
+
+                                <x-nav-link :href="route('Student.StudentNotification')" :active="request()->routeIs('Student.StudentNotification')">
+                                    {{ __('Notification') }}
                                 </x-nav-link>
                                 @endif
                           

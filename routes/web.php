@@ -42,6 +42,7 @@ use App\Http\Controllers\Student\CollegePickerController;
 use App\Http\Controllers\Student\HighSchoolController;
 use App\Http\Controllers\Student\HighSchoolPickerController;
 use App\Http\Controllers\Student\StudentPickerController;
+use App\Http\Controllers\Student\NotificationController;
 
 // Other Routes
 
@@ -148,6 +149,8 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
     Route::get('/student/StudentCalendar', [StudentCalendarController::class, 'index'])
         ->name('Student.StudentCalendar');
 
+        Route::get('/student/StudentNotification', [NotificationController::class, 'index'])
+        ->name('Student.StudentNotification');
        
             Route::get('/create', [EvaluationFormController::class, 'create'])->name('evaluation.create');
             Route::post('/store', [EvaluationFormController::class, 'store'])->name('evaluation.store');
@@ -188,3 +191,4 @@ Route::prefix('department-head')->name('DepartmentHead.')->middleware('role:Comp
     Route::post('/approval/decline', [DpApprovalController::class, 'decline'])->name('DpApproval.decline');
     Route::get('/history', [DpHistoryController::class, 'index'])->name('DpHistory');
 });
+
