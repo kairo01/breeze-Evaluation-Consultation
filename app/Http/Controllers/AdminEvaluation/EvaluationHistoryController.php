@@ -202,7 +202,7 @@ class EvaluationHistoryController extends Controller
         $user_email = $user->email;
         
         // // $users = User::where('email' , 'Humanresources@example.com');
-        if ($user_email === "humanresources@example.com") {
+        if ($user_email === "HumanResources@example.com") {
             return view('Evaluation.EvaluationHistory', [
                 'department' => $departments[$department],
             ]);

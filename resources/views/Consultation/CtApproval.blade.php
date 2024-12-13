@@ -66,8 +66,7 @@
                                             {{ $appointment->date_time }}
                                         </td>
                                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
-                                            <!-- Accept Form -->
-                                            <form action="{{ route('Consultation.CtApproval.approve') }}" method="POST" class="inline-block">
+                                        <form action="{{ route('Consultation.CtApproval.approve') }}" method="POST" class="inline-block">
                                                 @csrf
                                                 <input type="hidden" name="appointment_id" value="{{ $appointment->id }}">
                                                 <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded">

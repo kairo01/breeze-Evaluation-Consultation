@@ -38,11 +38,13 @@ use App\Http\Controllers\AdminEvaluation\EvaluationController;
 
 
 use App\Http\Controllers\Student\CollegeController;
-use App\Http\Controllers\Student\CollegePickerController;
 use App\Http\Controllers\Student\HighSchoolController;
+
 use App\Http\Controllers\Student\HighSchoolPickerController;
 use App\Http\Controllers\Student\StudentPickerController;
 use App\Http\Controllers\Student\NotificationController;
+
+
 
 // Other Routes
 
@@ -94,7 +96,6 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
 
         Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
 
-
 });
 
 // GUIDANCE == CONSULTATION
@@ -145,12 +146,11 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
             Route::get('/create', [EvaluationFormController::class, 'create'])->name('evaluation.create');
             Route::post('/store', [EvaluationFormController::class, 'store'])->name('evaluation.store');
 
+
             Route::get('/Student.evaluation.StudentPicker', [StudentPickerController::class, 'index'])
             ->name('Student.evaluation.StudentPicker');
 
-            Route::get('Student.evaluation.CollegeStudent', [CollegePickerController::class, 'index'])
-            ->name('Student.evaluation.CollegeStudent');
-            
+   
             Route::get('/Student.evaluation.HigSchoolStudent', [HighSchoolPickerController::class, 'index'])
             ->name('Student.evaluation.HigSchoolStudent');
             
@@ -158,6 +158,11 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
 
             Route::get('Student.evaluation.FacultyList', [EvaluationHistoryController::class, 'index'])
             ->name('Student.evaluation.FacultyList');
+
+
+            Route::get('/show/{id}', [EvaluationFormController::class, 'show'])->name('evaluation.show');
+     
+        
 
 });
 
@@ -176,11 +181,10 @@ Route::prefix('consultation')->name('Consultation.')->middleware('role:Guidance'
     Route::get('/history', [ConsultationHistoryController::class, 'index'])->name('CtHistory');
 });
 
-// Routes for Department Head
+// Department Head Routes
 Route::prefix('department-head')->name('DepartmentHead.')->middleware('role:ComputerDepartment')->group(function () {
-    Route::get('/approval', [DpApprovalController::class, 'index'])->name('DpApproval');
-    Route::post('/approval/approve', [DpApprovalController::class, 'approve'])->name('DpApproval.approve');
-    Route::post('/approval/decline', [DpApprovalController::class, 'decline'])->name('DpApproval.decline');
+    Route::get('/approval', [DpApprovalController::class, 'index'])->name('DpApproval');  // This handles the GET request
+    Route::post('/approval/approve', [DpApprovalController::class, 'approve'])->name('DpApproval.approve'); // This handles the POST request for approval
+    Route::post('/approval/decline', [DpApprovalController::class, 'decline'])->name('DpApproval.decline'); // This handles the POST request for decline
     Route::get('/history', [DpHistoryController::class, 'index'])->name('DpHistory');
 });
-

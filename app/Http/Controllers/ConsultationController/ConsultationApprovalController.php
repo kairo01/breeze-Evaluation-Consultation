@@ -8,37 +8,25 @@ use Illuminate\Http\Request;
 
 class ConsultationApprovalController extends Controller
 {
-    /**
-     * Display pending appointments for Guidance.
-     */
     public function index()
     {
         $appointments = Appointment::where('consultant_role', auth()->id())
             ->where('status', 'Pending')
             ->get();
-
         return view('Consultation.CtApproval', compact('appointments'));
     }
 
-    /**
-     * Approve an appointment.
-     */
     public function approve(Request $request)
     {
         $appointment = Appointment::findOrFail($request->appointment_id);
-
-        $appointment->update([
-            'status' => 'Approved',
-        ]);
-
-        // Optionally, notify the student here
-
+        $appointment->update(['status' => 'Approved']);
+        
+        // Notify the student or take other actions if necessary
+        
+        // Redirect to consultation calendar or back to approval page
         return back()->with('success', 'Appointment approved successfully.');
     }
 
-    /**
-     * Decline an appointment.
-     */
     public function decline(Request $request)
     {
         $appointment = Appointment::findOrFail($request->appointment_id);
@@ -52,7 +40,7 @@ class ConsultationApprovalController extends Controller
             'decline_reason' => $validated['decline_reason'],
         ]);
 
-        // Optionally, notify the student here
+        // Optionally, notify the student about the decline
 
         return back()->with('success', 'Appointment declined successfully.');
     }
