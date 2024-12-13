@@ -12,7 +12,10 @@
         <div class="department-head">
             <img src="{{ asset($department['head']['image']) }}" alt="Department Head" class="head-img">
             <h3>Department Head: {{ $department['head']['name'] }}</h3>
-            <button> <a href="Student.evaluation.evaluationform">asd</a> </button>
+            <x-nav-link :href="route('Student.evaluation.evaluationform')" :active="request()->routeIs('Student.evaluation.evaluationform')">
+                                    {{ __('Evaluation') }}
+                                </x-nav-link>
+
         </div>
 
         <!-- Faculty Members Section -->
