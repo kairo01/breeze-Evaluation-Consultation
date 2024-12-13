@@ -25,10 +25,14 @@
                 <div class="faculty-card">
                     <img src="{{ asset($faculty['image']) }}" alt="Faculty Member" class="faculty-img">
                     <h4>{{ $faculty['name'] }}</h4>
-
                     <button>
-                        <a href="route('Student.evaluation.evaluationform')"></a>
+                    <x-nav-link :href="route('Student.evaluation.evaluationform')" >
+                                    {{ __('Evaluation') }}
+                                </x-nav-link>
                     </button>
-                </div>   >
+                </div>
+               
+            @endforeach
+        </div>
     </div>
 </x-app-layout>
