@@ -67,11 +67,7 @@
                                     {{ __('Evaluation') }}
                                 </x-nav-link>
 
-
-                                <x-nav-link :href="route('Student.Consultation.Appointment')" :active="request()->routeIs('Student.Consultation.Appointment')">
-
                                 <x-nav-link :href="route('Student.Consform.Appointment')" :active="request()->routeIs('Student.Consform.Appointment')">
-
                                 {{ __('Appointment') }}
                             </x-nav-link>
                             <x-nav-link :href="route('Student.StudentHistory')" :active="request()->routeIs('Student.StudentHistory')">
@@ -85,9 +81,8 @@
                             <x-nav-link :href="route('Student.evaluation.StudentPicker')" :active="request()->routeIs('Student.evaluation.StudentPicker')">
                                     {{ __('faculty List') }}
                                 </x-nav-link>
-                                
-                            @endif
-                            
+                                @endif
+                          
                         @elseif(Auth::user()->role == 'Guidance')
                             <x-nav-link :href="route('Consultation.CtDashboard')" :active="request()->routeIs('Consultation.CtDashboard')">
                                 {{ __('Dashboard') }}
@@ -104,6 +99,7 @@
                             <x-nav-link :href="route('Consultation.CtMessages')" :active="request()->routeIs('Consultation.CtMessages')">
                                 {{ __('Messages') }}
                             </x-nav-link>
+                            @endif
 
                         @elseif(Auth::user()->role == 'ComputerDepartment')
                             <x-nav-link :href="route('DepartmentHead.DpDashboard')" :active="request()->routeIs('DepartmentHead.DpDashboard')">
@@ -119,7 +115,7 @@
                                 {{ __('Calendar') }}
                             </x-nav-link>
                         @endif
-                    @endif
+                    
                 </div>
             </div>
 
@@ -175,7 +171,7 @@
                     </x-responsive-nav-link>
                     <x-nav-link :href="('Evaluation.HrFacultylist')" :active="request()->routeIs('Evaluation.HrFaculitylist')">
                         {{ __('HrFacultylist') }}
-                    </x-nav-link>
+                    </x-reponsive-nav-link>
                     <x-responsive-nav-link :href="('Evaluation.HrCalendar')" :active="request()->routeIs('Evaluation.HrCalendar')">
                         {{ __('HrCalendar') }}
                     </x-responsive-nav-link>
@@ -195,9 +191,9 @@
                         {{ __('Calendar') }}
                     </x-responsive-nav-link>
                 @elseif(Auth::user()->role == 'ComputerDepartment')
-                    
+                    @endif
                 @endif
-            @endif
+            
         </div>
     </div>
 </nav>

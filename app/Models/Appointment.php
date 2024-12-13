@@ -37,4 +37,10 @@ class Appointment extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function consultant()
+    {
+        // Assuming 'consultant_role' links to a user in the 'users' table.
+        return $this->belongsTo(User::class, 'consultant_role');
+    }
 }
+
