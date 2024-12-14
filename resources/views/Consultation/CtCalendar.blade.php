@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Calendar') }}
+            {{ __('Consultation Calendar') }}
         </h2>
     </x-slot>
 
@@ -13,6 +13,9 @@
     <div class="calendar-container flex space-x-4 mt-4 px-4">
         <!-- Mini Calendar & Side Form -->
         <div id="miniCalendarContainer" class="w-1/4">
+            <button class="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="showBusySlotModal()">
+                Add Busy Slot
+            </button>
             <button class="back-button mb-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" onclick="goBack()">
                 Back
             </button>
@@ -25,20 +28,82 @@
         <div id="calendar" class="w-3/4"></div>
     </div>
 
-    <!-- Tailwind Modal for Viewing Event Details -->
-    <div id="eventModal" class="fixed inset-0 z-50 hidden flex justify-center items-center bg-black bg-opacity-50">
-    <div class="bg-white p-4 rounded-md shadow-lg w-96">
-        <div class="flex justify-between items-center mb-4">
-            <h5 class="text-lg font-semibold text-gray-800" id="modalTitle"></h5>
-            <button id="closeModalBtn" class="text-gray-500 hover:text-gray-700 text-lg font-bold">&times;</button>
-        </div>
-        <div class="text-gray-700">
-            <p id="modalDescription" class="text-sm mb-4"></p>
-            <p class="font-semibold text-sm">Date and Time:</p>
-            <p id="modalDateTime" class="text-sm font-medium"></p>
+    <!-- Modal for Adding Busy Slot -->
+    <div id="busySlotModal" class="fixed inset-0 z-50 hidden flex justify-center items-center bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-md shadow-lg w-96">
+            <div class="flex justify-between items-center mb-4">
+                <h5 class="text-lg font-semibold text-gray-800">Add Busy Slot</h5>
+                <button onclick="closeBusySlotModal()" class="text-gray-500 hover:text-gray-700 text-lg font-bold">&times;</button>
+            </div>
+            <form action="{{ route('Consultation.store.busy.slot') }}" method="POST">
+                @csrf
+                <div class="mb-4">
+                    <label for="title" class="block text-gray-700 font-medium">Title</label>
+                    <input type="text" id="title" name="title" class="w-full p-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="description" class="block text-gray-700 font-medium">Description</label>
+                    <textarea id="description" name="description" class="w-full p-2 border rounded" required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="date" class="block text-gray-700 font-medium">Date</label>
+                    <input type="date" id="date" name="date" class="w-full p-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="busyAllDay" name="busyAllDay" class="mr-2" onclick="toggleTimeInputs()">
+                        <label for="busyAllDay" class="text-gray-700 font-medium">Busy All Day</label>
+                    </div>
+                </div>
+                <div id="timeInputs" class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="from" class="block text-gray-700 font-medium">From</label>
+                        <input type="time" id="from" name="from" class="w-full p-2 border rounded">
+                    </div>
+                    <div>
+                        <label for="to" class="block text-gray-700 font-medium">To</label>
+                        <input type="time" id="to" name="to" class="w-full p-2 border rounded">
+                    </div>
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" onclick="closeBusySlotModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Submit
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-</div>
+
+    <!-- Modal for Viewing Event Details -->
+    <div id="eventModal" class="fixed inset-0 z-50 hidden flex justify-center items-center bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-md shadow-lg w-96">
+            <div class="flex justify-between items-center mb-4">
+                <h5 class="text-lg font-semibold text-gray-800">Event Details</h5>
+                <button onclick="closeEventModal()" class="text-gray-500 hover:text-gray-700 text-lg font-bold">&times;</button>
+            </div>
+            <div class="text-gray-700">
+                <div class="mb-4">
+                    <p class="font-semibold text-sm">Title:</p>
+                    <p id="modalTitleLabel" class="text-sm mb-2"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="font-semibold text-sm">Description:</p>
+                    <p id="modalDescriptionLabel" class="text-sm mb-2"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="font-semibold text-sm">Date:</p>
+                    <p id="modalDateLabel" class="text-sm mb-2"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="font-semibold text-sm">Time:</p>
+                    <p id="modalTimeLabel" class="text-sm mb-2"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Include FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
@@ -46,63 +111,86 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('calendar');
-            var miniCalendarEl = document.getElementById('miniCalendar');
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var miniCalendarEl = document.getElementById('miniCalendar');
 
-            // Main Calendar
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'timeGridWeek',
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
-                events: @json($appointments), // Event data passed from the controller
-                eventClick: function(info) {
-                    // Open modal with event details
-                    const event = info.event;
-                    document.getElementById('modalTitle').innerText = event.title;
-                    document.getElementById('modalDescription').innerText = event.extendedProps.description;
+        // Main Calendar
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'timeGridWeek',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: [
+                ...@json($appointments), // Pass appointments
+                ...@json($busySlots),    // Pass busy slots
+            ],
+            eventClick: function (info) {
+    const event = info.event;
 
-                    // Format the date to a user-friendly format
-                    const formattedDate = event.start.toLocaleString();  // Local date string format
-                    document.getElementById('modalDateTime').innerText = formattedDate;
+    if (event.extendedProps.type === 'appointment') {
+        // Appointment-specific logic
+        document.getElementById('modalTitleLabel').innerText = `Appointment: ${event.title}`;
+        document.getElementById('modalDescriptionLabel').innerText = event.extendedProps.description;
+    } else if (event.extendedProps.type === 'busy_slot') {
+        // Busy slot-specific logic
+        document.getElementById('modalTitleLabel').innerText = `Busy Slot: ${event.title}`;
+        document.getElementById('modalDescriptionLabel').innerText = event.extendedProps.description;
+    }
 
-                    document.getElementById('eventModal').classList.remove('hidden');
-                }
-            });
-            calendar.render();
+    document.getElementById('modalDateLabel').innerText = event.start.toLocaleDateString();
+    document.getElementById('modalTimeLabel').innerText = event.allDay
+        ? 'All Day'
+        : `${event.start.toLocaleTimeString()} - ${event.end ? event.end.toLocaleTimeString() : 'N/A'}`;
 
-            // Mini Calendar
-            var miniCalendar = new FullCalendar.Calendar(miniCalendarEl, {
-                initialView: 'dayGridMonth',
-                headerToolbar: {
-                    left: 'prev,next',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
-                dateClick: function(info) {
-                    calendar.gotoDate(info.dateStr);
-                }
-            });
-            miniCalendar.render();
+    document.getElementById('eventModal').classList.remove('hidden');
+}
 
-            // Close modal functionality
-            document.getElementById('closeModalBtn').addEventListener('click', function () {
-                document.getElementById('eventModal').classList.add('hidden');
-            });
+        });
 
-            // Close modal if clicked outside
-            document.getElementById('eventModal').addEventListener('click', function (e) {
-                if (e.target === this) {
-                    this.classList.add('hidden');
-                }
-            });
+        calendar.render();
 
-            // Go Back Button
-            window.goBack = function() {
-                window.history.back();
+        // Mini Calendar
+        var miniCalendar = new FullCalendar.Calendar(miniCalendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            dateClick: function (info) {
+                calendar.gotoDate(info.dateStr);
             }
+        });
+        miniCalendar.render();
+
+            window.showBusySlotModal = function () {
+                document.getElementById('busySlotModal').classList.remove('hidden');
+            };
+
+            window.closeBusySlotModal = function () {
+                document.getElementById('busySlotModal').classList.add('hidden');
+            };
+
+            window.closeEventModal = function () {
+                document.getElementById('eventModal').classList.add('hidden');
+            };
+
+            window.toggleTimeInputs = function () {
+                const isChecked = document.getElementById('busyAllDay').checked;
+                document.getElementById('from').disabled = isChecked;
+                document.getElementById('to').disabled = isChecked;
+
+                if (isChecked) {
+                    document.getElementById('from').value = '';
+                    document.getElementById('to').value = '';
+                }
+            };
+
+            window.goBack = function () {
+                window.history.back();
+            };
         });
     </script>
 </x-app-layout>

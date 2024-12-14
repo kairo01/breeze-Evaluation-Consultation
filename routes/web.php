@@ -179,6 +179,7 @@ Route::prefix('consultation')->name('Consultation.')->middleware('role:Guidance'
     Route::post('/approval/approve', [ConsultationApprovalController::class, 'approve'])->name('CtApproval.approve');
     Route::post('/approval/decline', [ConsultationApprovalController::class, 'decline'])->name('CtApproval.decline');
     Route::get('/history', [ConsultationHistoryController::class, 'index'])->name('CtHistory');
+    Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('store.busy.slot');
 });
 
 // Department Head Routes
@@ -187,4 +188,6 @@ Route::prefix('department-head')->name('DepartmentHead.')->middleware('role:Comp
     Route::post('/approval/approve', [DpApprovalController::class, 'approve'])->name('DpApproval.approve'); // This handles the POST request for approval
     Route::post('/approval/decline', [DpApprovalController::class, 'decline'])->name('DpApproval.decline'); // This handles the POST request for decline
     Route::get('/history', [DpHistoryController::class, 'index'])->name('DpHistory');
+    Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('store.busy.slot');
+
 });

@@ -31,7 +31,7 @@ class StudentAppointmentController extends Controller
             'course' => 'required|string',
             'purpose' => 'required|in:Transfer,Return to Class,Academic,Graduating,Personal',
             'meeting_mode' => 'required|in:Face to Face,Online',
-            'meeting_preference' => 'nullable|required_if:meeting_mode,Online|in:Zoom,Gmeet',
+            'meeting_preference' => 'nullable|required_if:meeting_mode,Online|in:Zoom,Whatsapp',
             'date_time' => 'required|date|after:now',
         ]);
 

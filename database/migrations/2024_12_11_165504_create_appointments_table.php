@@ -19,7 +19,7 @@ class CreateAppointmentsTable extends Migration
             $table->string('course');
             $table->enum('purpose', ['Transfer', 'Return to Class', 'Academic', 'Graduating', 'Personal']);
             $table->enum('meeting_mode', ['Face to Face', 'Online']);
-            $table->enum('meeting_preference', ['Zoom', 'Gmeet'])->nullable();
+            $table->enum('meeting_preference', ['Zoom', 'Whatsapp'])->nullable();
             $table->dateTime('date_time');
             $table->enum('status', ['Pending', 'Approved', 'Declined'])->default('Pending');
             $table->text('decline_reason')->nullable();

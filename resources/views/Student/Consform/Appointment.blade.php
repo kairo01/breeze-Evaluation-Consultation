@@ -106,7 +106,7 @@
                     <select name="meeting_preference" id="meeting_preference" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <option value="">Select Preference</option>
                         <option value="Zoom">Zoom</option>
-                        <option value="Gmeet">Gmeet</option>
+                        <option value="Whatsapp">Whatsapp</option>
                     </select>
                     @error('meeting_preference')
                         <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
