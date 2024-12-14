@@ -9,7 +9,7 @@ class CreateEvaluationTable extends Migration
     public function up()
 {
     Schema::create('evaluations', function (Blueprint $table) {
-        $table->id();
+        $table->unsignedBigInteger('student_id'); // Add this column
         $table->string('teacher_name');
         $table->string('subject');
         $table->json('teaching_skills');

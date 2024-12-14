@@ -33,17 +33,13 @@ class CreateUsersTable extends Migration
      *
      * @return void
      */
-    public function down()
-    {
-        // Temporarily disable foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        
-        // Drop the table
-        Schema::dropIfExists('users');
-
-        // Re-enable foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-    }
-
-}
+    
+    
+       
+     public function down(): void
+     {
+         Schema::dropIfExists('users');
+     }
+ };
+ 
 

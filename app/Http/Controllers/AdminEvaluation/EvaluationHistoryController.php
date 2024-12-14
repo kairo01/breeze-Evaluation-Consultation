@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\AdminEvaluation;
 
 use App\Http\Controllers\Controller;
+use App\Models\Evaluation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -217,6 +218,18 @@ class EvaluationHistoryController extends Controller
        
     
         
+    }
+
+    public function index() {
+
+        $evaluations = Evaluation::all();
+        return view('Evaluation.HrHistory',compact('evaluations'));
+    }
+
+    public function History() {
+        
+
+        return view('Evaluation.HrHistory' ,compact('evaluations'));
     }
     
 }

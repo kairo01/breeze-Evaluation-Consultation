@@ -13,7 +13,7 @@
             <img src="{{ asset($department['head']['image']) }}" alt="Department Head" class="head-img">
             <h3>Department Head: {{ $department['head']['name'] }}</h3>
             
-            <button class="evaluate-btn">View Evaluation History</button>
+            <a href="{{ route('Evaluation.History') }}" class="evaluate-btn">View Evaluation History</a>
         </div>
 
         <!-- Faculty Members Section -->
@@ -24,6 +24,7 @@
                     <h4>{{ $faculty['name'] }}</h4>
                     <button class="evaluate-btn">View Evaluation History</button>
                 </div>
+              
             @endforeach
         </div>
     </div>

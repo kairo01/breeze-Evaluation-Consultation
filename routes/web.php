@@ -32,19 +32,16 @@ use App\Http\Controllers\DepartmentHeadController\DpHistoryController;
 use App\Http\Controllers\DepartmentHeadController\DpCalendarController;
 
 
-
 use App\Http\Controllers\AdminEvaluation\EvaluationController;
 
 
 
 use App\Http\Controllers\Student\CollegeController;
+use App\Http\Controllers\Student\CollegePickerController;
 use App\Http\Controllers\Student\HighSchoolController;
-
 use App\Http\Controllers\Student\HighSchoolPickerController;
 use App\Http\Controllers\Student\StudentPickerController;
 use App\Http\Controllers\Student\NotificationController;
-
-
 
 // Other Routes
 
@@ -94,7 +91,13 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
     Route::get('EvaluationHistory', [EvaluationHistoryController::class, 'index'])
         ->name('EvaluationHistory');
 
+        Route::get('/evaluation/history/', [EvaluationHistoryController::class, 'index'])->name('Evaluation.History');
+
         Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
+
+          // Student Evaluation Form
+    Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])
+    ->name('Student.evaluation.evaluationform');
 
 });
 
@@ -109,6 +112,15 @@ Route::middleware(['auth', 'role:Guidance'])->group(function () {
     Route::get('/Consultation/CtMessages', [ConsultationMessagesController::class, 'index'])
         ->name('Consultation.CtMessages');
 });
+
+// Route::get('/highschool', function () {
+//     return 'High School Page';
+// })->name('highschool.index');
+
+// Route::get('/college', function () {
+//     return 'College Page';
+// })->name('college.index');
+
 
 // DEPARTMENT HEAD 
 Route::middleware(['auth', 'role:ComputerDepartment'])->group(function () {
@@ -136,6 +148,13 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
     Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])
         ->name('Student.evaluation.evaluationform');
 
+
+/*/
+        Route::get('evaluation-form', [EvaluationController::class, 'showForm']);
+        Route::post('evaluation-submit', [EvaluationController::class, 'submit']); // <-- Fixed here
+    /*/
+
+
     // Student Calendar
     Route::get('/student/StudentCalendar', [StudentCalendarController::class, 'index'])
         ->name('Student.StudentCalendar');
@@ -146,23 +165,19 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
             Route::get('/create', [EvaluationFormController::class, 'create'])->name('evaluation.create');
             Route::post('/store', [EvaluationFormController::class, 'store'])->name('evaluation.store');
 
-
             Route::get('/Student.evaluation.StudentPicker', [StudentPickerController::class, 'index'])
             ->name('Student.evaluation.StudentPicker');
 
-   
+            Route::get('Student.evaluation.CollegeStudent', [CollegePickerController::class, 'index'])
+            ->name('Student.evaluation.CollegeStudent');
+
+
             Route::get('/Student.evaluation.HigSchoolStudent', [HighSchoolPickerController::class, 'index'])
             ->name('Student.evaluation.HigSchoolStudent');
             
-            Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
+Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
 
-            Route::get('Student.evaluation.FacultyList', [EvaluationHistoryController::class, 'index'])
-            ->name('Student.evaluation.FacultyList');
-
-
-            Route::get('/show/{id}', [EvaluationFormController::class, 'show'])->name('evaluation.show');
-     
-        
+Route::get('Evaluation.HrHistory', [EvaluationFormController::class, 'index'])->name('Evaluation.HrHistory');
 
 });
 
@@ -182,12 +197,19 @@ Route::prefix('consultation')->name('Consultation.')->middleware('role:Guidance'
     Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('store.busy.slot');
 });
 
-// Department Head Routes
+// Routes for Department Head
 Route::prefix('department-head')->name('DepartmentHead.')->middleware('role:ComputerDepartment')->group(function () {
-    Route::get('/approval', [DpApprovalController::class, 'index'])->name('DpApproval');  // This handles the GET request
-    Route::post('/approval/approve', [DpApprovalController::class, 'approve'])->name('DpApproval.approve'); // This handles the POST request for approval
-    Route::post('/approval/decline', [DpApprovalController::class, 'decline'])->name('DpApproval.decline'); // This handles the POST request for decline
+    Route::get('/approval', [DpApprovalController::class, 'index'])->name('DpApproval');
+    Route::post('/approval/approve', [DpApprovalController::class, 'approve'])->name('DpApproval.approve');
+    Route::post('/approval/decline', [DpApprovalController::class, 'decline'])->name('DpApproval.decline');
     Route::get('/history', [DpHistoryController::class, 'index'])->name('DpHistory');
     Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('store.busy.slot');
 
 });
+
+Route::post('/events', [EventController::class, 'store'])->name('events.store');
+Route::get('/notifications', function () {
+    return view('notifications');
+})->middleware(['auth'])->name('notifications');
+
+
