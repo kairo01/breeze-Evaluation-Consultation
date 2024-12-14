@@ -72,11 +72,11 @@
                     </label>
                     <select name="purpose" id="purpose" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <option value="">Select Purpose</option>
-                        <option value="Transfer">Transfer Interview</option>
-                        <option value="Return to Class">Return to Class Interview</option>
-                        <option value="Academic">Academic</option>
-                        <option value="Graduating">Graduating Interview and Exit Interview</option>
-                        <option value="Personal">Counciling</option>
+                        <option value="Transfer Interview">Transfer Interview</option>
+                        <option value="Return to Class Interview">Return to Class Interview</option>
+                        <option value="Academic Problem">Academic Problem</option>
+                        <option value="Graduating Interview and Exit Interview">Graduating Interview and Exit Interview</option>
+                        <option value="Counseling">Counseling</option>
                     </select>
                     @error('purpose')
                         <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
