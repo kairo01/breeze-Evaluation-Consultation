@@ -136,30 +136,20 @@
 
     <!-- Tailwind JS for Conditional Display -->
     <script>
-        document.getElementById('meeting_mode').addEventListener('change', function() {
-            const preferenceContainer = document.getElementById('meeting_preference_container');
-            if (this.value === 'Online') {
-                preferenceContainer.style.display = 'block';
-            } else {
-                preferenceContainer.style.display = 'none';
-                document.getElementById('meeting_preference').value = '';
-            }
-        });
-
         document.getElementById('consultant_role').addEventListener('change', function() {
             const purposeSelect = document.getElementById('purpose');
             const selectedConsultant = this.selectedOptions[0].dataset.role;
 
-            if (selectedConsultant === 'HumanResources' || selectedConsultant === 'ComputerDepartment') {
-                // Disable other options and set to "Personal"
+            // If the consultant is 'ComputerDepartment', show only 'Counseling'
+            if (selectedConsultant === 'ComputerDepartment') {
                 Array.from(purposeSelect.options).forEach(function(option) {
-                    if (option.value !== 'Personal') {
-                        option.disabled = true;
+                    if (option.value !== 'Counseling') {
+                        option.disabled = true;  // Disable all except 'Counseling'
                     }
                 });
-                purposeSelect.value = 'Personal';
+                purposeSelect.value = 'Counseling'; // Set the default to 'Counseling'
             } else {
-                // Enable all options
+                // Enable all options for other consultants
                 Array.from(purposeSelect.options).forEach(function(option) {
                     option.disabled = false;
                 });
