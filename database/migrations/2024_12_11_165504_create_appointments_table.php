@@ -17,7 +17,7 @@ class CreateAppointmentsTable extends Migration
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('consultant_role')->constrained('users')->onDelete('cascade');
             $table->string('course');
-            $table->enum('purpose', ['Transfer', 'Return to Class', 'Academic', 'Graduating', 'Personal']);
+            $table->enum('purpose', ['Transfer Interview', 'Return to Class Interview', 'Academic Problem', 'Graduating Interview and Exit Interview', 'Counseling']);
             $table->enum('meeting_mode', ['Face to Face', 'Online']);
             $table->enum('meeting_preference', ['Zoom', 'Whatsapp'])->nullable();
             $table->dateTime('date_time');

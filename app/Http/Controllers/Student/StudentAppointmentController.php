@@ -29,7 +29,7 @@ class StudentAppointmentController extends Controller
         $request->validate([
             'consultant_role' => 'required|exists:users,id',
             'course' => 'required|string',
-            'purpose' => 'required|in:Transfer,Return to Class,Academic,Graduating,Personal',
+            'purpose' => 'required|in:Transfer Interview,Return to Class Interview,Academic Problem,Graduating Interview and Exit Interview,Counseling',
             'meeting_mode' => 'required|in:Face to Face,Online',
             'meeting_preference' => 'nullable|required_if:meeting_mode,Online|in:Zoom,Whatsapp',
             'date_time' => 'required|date|after:now',
