@@ -29,17 +29,6 @@
         </div>
 
         <!-- Display HR data if available -->
-        @if(isset($hrData) && count($hrData) > 0)
-            <div class="hr-data">
-                <h3>HR Data</h3>
-                <ul>
-                    @foreach($hrData as $hrItem)
-                        <li>{{ $hrItem['name'] }} - {{ $hrItem['position'] }}</li> <!-- Adjust according to your data structure -->
-                    @endforeach
-                </ul>
-            </div>
-        @else
-            <p>No HR data available.</p>
-        @endif
+       
     </div>
 </x-app-layout>

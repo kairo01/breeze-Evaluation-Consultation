@@ -43,6 +43,7 @@ use App\Http\Controllers\Student\HighSchoolPickerController;
 use App\Http\Controllers\Student\StudentPickerController;
 use App\Http\Controllers\Student\NotificationController;
 
+
 // Other Routes
 
 Route::get('/', function () {
@@ -120,7 +121,7 @@ Route::middleware(['auth', 'role:Guidance'])->group(function () {
 // Route::get('/college', function () {
 //     return 'College Page';
 // })->name('college.index');
-
+Route::get('faculty/{department}', [FacultyListController::class, 'show']);
 
 // DEPARTMENT HEAD 
 Route::middleware(['auth', 'role:ComputerDepartment'])->group(function () {

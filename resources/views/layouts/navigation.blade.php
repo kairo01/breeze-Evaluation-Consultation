@@ -58,11 +58,10 @@
                                     {{ __('Dashboard') }}
                                 </x-nav-link>
                             @endif
-                            @if(Auth::user()->student_type == 'College' || Auth::user()->student_type == 'HighSchool')
-                                <x-nav-link :href="route('Student.evaluation.evaluationform')" :active="request()->routeIs('Student.evaluation.evaluationform')">
+                               @if(Auth::user()->student_type == 'College' || Auth::user()->student_type == 'HighSchool')
+                               <x-nav-link :href="route('Student.evaluation.StudentPicker')" :active="request()->routeIs('Student.evaluation.StudentPicker')">
                                     {{ __('Evaluation') }}
                                 </x-nav-link>
-
                                 <x-nav-link :href="route('Student.Consform.Appointment')" :active="request()->routeIs('Student.Consform.Appointment')">
                                 {{ __('Appointment') }}
                             </x-nav-link>
@@ -72,9 +71,7 @@
                             <x-nav-link :href="route('Student.StudentCalendar')" :active="request()->routeIs('Student.StudentCalendar')">
                                 {{ __('Calendar') }}
                             </x-nav-link> 
-                            <x-nav-link :href="route('Student.evaluation.StudentPicker')" :active="request()->routeIs('Student.evaluation.StudentPicker')">
-                                    {{ __('faculty List') }}
-                                </x-nav-link>
+                        
                                 @endif
                           
                         @elseif(Auth::user()->role == 'Guidance')

@@ -14,15 +14,9 @@
             <h3>Department Head: {{ $department['head']['name'] }}</h3>
 
             <x-nav-link :href="route('Student.evaluation.evaluationform')" :active="request()->routeIs('Student.evaluation.evaluationform')">
-                                    {{ __('Evaluation') }}
+                         <button class="evaluate-btn">Evaluate</button>
                                 </x-nav-link>
 
-
-                <button>
-            <x-nav-link :href="route('Student.evaluation.evaluationform')" :active="request()->routeIs('Student.evaluation.evaluationform')">
-                                    {{ __('Evaluation') }}
-                                </x-nav-link>
-                </button>
         </div>
 
         <!-- Faculty Members Section -->
@@ -33,11 +27,11 @@
                     <h4>{{ $faculty['name'] }}</h4>
                     <button>
                     <x-nav-link :href="route('Student.evaluation.evaluationform')" >
-                                    {{ __('Evaluation') }}
+                            <button class="evaluate-btn">Evaluate</button>
                                 </x-nav-link>
                     </button>
                 </div>
-               
+        
             @endforeach
         </div>
     </div>
