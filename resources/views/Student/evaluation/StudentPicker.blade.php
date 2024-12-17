@@ -1,23 +1,43 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Choose Department') }}
+            {{ __('Select Department') }}
         </h2>
     </x-slot>
-    <link rel="stylesheet" href="{{ asset('css/Evaluation/Hrpick.css') }}">
+
+      <link rel="stylesheet" href="{{ asset('css/Evaluation/HrFaculty.css') }}">
+
     <div class="container">
-        <div class="courses-container">
-            <!-- College Picker -->
-            <div class="course-button college">
-                <img class="course-icon" src="{{ asset('css/GeneralResources/collegelogo.jpg') }}" alt="College Department Icon">
-                <div><a href="Student.evaluation.CollegeStudent">COLLEGE DEPARTMENT</a></div>
-            </div>
-            
-            <!-- High School Picker -->
-            <div class="course-button highschool">
-                <img class="course-icon" src="{{ asset('css/GeneralResources/hslogo.jpg') }}" alt="High School Icon">
-                <div><a href="Student.evaluation.HigSchoolStudent">HIGH SCHOOL</a></div>
-            </div>
+        <div class="department-grid">
+            <!-- Computer Department -->
+            <a href="{{ route('evaluation.history', ['department' => 'computer']) }}" class="department-card">
+                <img src="{{ asset('css/GeneralResources/CS.jfif') }}" alt="Computer Department Logo" class="department-logo">
+                <h3>Computer Department</h3>
+            </a>
+
+            <!-- HM Department -->
+            <a href="{{ route('evaluation.history', ['department' => 'hm']) }}" class="department-card">
+                <img src="{{ asset('css/GeneralResources/HM.jfif') }}" alt="HM Department Logo" class="department-logo">
+                <h3>HM Department</h3>
+            </a>
+
+            <!-- Tesda Department -->
+            <a href="{{ route('evaluation.history', ['department' => 'tesda']) }}" class="department-card">
+                <img src="{{ asset('css/GeneralResources/Tesda.png') }}" alt="Tesda Department Logo" class="department-logo">
+                <h3>Tesda Department</h3>
+            </a>
+
+            <!-- Engineering Department -->
+            <a href="{{ route('evaluation.history', ['department' => 'engineering']) }}" class="department-card">
+                <img src="{{ asset('css/GeneralResources/collegelogo.jpg') }}" alt="Engineering Department Logo" class="department-logo">
+                <h3>Engineering Department</h3>
+            </a>
+
+            <a href="{{ route('evaluation.history', ['department' => 'highschool']) }}" class="department-card">
+                <img src="{{ asset('css/GeneralResources/CS.jfif') }}" alt="Computer Department Logo" class="department-logo">
+                <h3>HighSchool Department</h3>
+            </a>
+
         </div>
     </div>
 </x-app-layout>

@@ -9,10 +9,11 @@ class Evaluation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['teacher_name', 'subject', 'teaching_skills', 'facilities'];
+    protected $fillable = ['student_id' , 'teacher_name', 'subject', 'teaching_skills', 'facilities'];
 
     protected $casts = [
         'teaching_skills' => 'array',
         'facilities' => 'array',
     ];
+    
 }
