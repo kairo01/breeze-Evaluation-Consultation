@@ -37,4 +37,5 @@
             <button class="text-blue-500 hover:underline" style="font-family: 'Bunny', sans-serif;">More...</button>
         </div>
     </div>
+
 </x-app-layout>

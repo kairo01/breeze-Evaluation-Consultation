@@ -1,155 +1,124 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Calendar') }}
+            {{ __('Hr Calendar') }}
         </h2>
     </x-slot>
 
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
-    <link rel="stylesheet" href="{{ asset('css/Evaluation/HrCalendar.css') }}">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Calendar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/main.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Admin Calendar</h2>
+        <div id="calendar"></div>
 
-
-    <div class="calendar-container">
-        <div id="miniCalendarContainer">
-            <button id="createEventButton" onclick="showSideForm()">Set Evaluation</button>
-            <button class="back-button" onclick="goBack()">Back</button>
-            <div id="createEventForm">
-                <h3>Set Evaluation</h3>
-                <input type="text" id="sideEventTitle" placeholder="Evaluation Title">
-                <textarea id="sideEventDescription" placeholder="Description"></textarea>
-                <input type="datetime-local" id="sideEventStart">
-                <div class="button-container">
-                    <button onclick="createEvent('side')" class="event-button">Create</button>
-                    <button onclick="hideSideForm()" class="cancel-button">Cancel</button>
+        <!-- Success Alert (Toast Notification) -->
+        <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1050">
+            <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        Evaluation successfully set!
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
             </div>
-            <div id="miniCalendar"></div>
         </div>
-        <div id='calendar'></div>
-    </div>
-    <div id="blueLabel" class="blue-label">Label</div>
-    <div id="overlay" class="overlay" onclick="hideCenteredForm()"></div>
-    <div id="centeredForm" class="centered-form">
-        <h3>Set Evaluation</h3>
-        <input type="text" id="centeredEventTitle" placeholder="Evaluation Title">
-        <textarea id="centeredEventDescription" placeholder="Description"></textarea>
-        <input type="datetime-local" id="centeredEventStart">
-        <div class="button-container">   class="event-button">Create</button>
-            <button onclick="hideCenteredForm()" class="cancel-button">Cancel</button>
+
+        <!-- Modal to Create Event -->
+        <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="createEventForm">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eventModalLabel">Set Evaluation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Evaluation Title</label>
+                                <input type="text" class="form-control" id="title" name="title" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="start_date" class="form-label">Start Date</label>
+                                <input type="datetime-local" class="form-control" id="start_date" name="start_date" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="student_type" class="form-label">Student Type</label>
+                                <select class="form-select" id="student_type" name="student_type" required>
+                                    <option value="" disabled selected>Select student type</option>
+                                    <option value="highschool">High School</option>
+                                    <option value="college">College</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-success">Set Evaluation</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
-    <script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/locales-all.js'></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('calendar');
-            var miniCalendarEl = document.getElementById('miniCalendar');
+            const calendarEl = document.getElementById('calendar');
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'timeGridWeek',
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
-                dateClick: function(info) {
-                    showCenteredForm(info.dateStr);
+                dateClick: function (info) {
+                    $('#start_date').val(info.dateStr + 'T00:00'); // Autofill start date
+                    $('#eventModal').modal('show');
                 }
             });
+
             calendar.render();
 
-            var miniCalendar = new FullCalendar.Calendar(miniCalendarEl, {
-                initialView: 'dayGridMonth',
-                headerToolbar: {
-                    left: '',
-                    center: '',
-                    right: ''
-                },
-                dateClick: function(info) {
-                    calendar.gotoDate(info.dateStr);
-                }
-            });
-            miniCalendar.render();
-
-            window.showSideForm = function() {
-                var form = document.getElementById('createEventForm');
-                form.style.display = 'block';
-            }
-
-            window.hideSideForm = function() {
-                var form = document.getElementById('createEventForm');
-                form.style.display = 'none';
-            }
-
-            window.showCenteredForm = function(date) {
-                var form = document.getElementById('centeredForm');
-                var overlay = document.getElementById('overlay');
-                form.style.display = 'block';
-                overlay.style.display = 'block';
-                if (date) {
-                    form.querySelector('#centeredEventStart').value = date;
-                }
-            }
-
-            window.hideCenteredForm = function() {
-                var form = document.getElementById('centeredForm');
-                var overlay = document.getElementById('overlay');
-                form.style.display = 'none';
-                overlay.style.display = 'none';
-            }
-
-            window.createEvent = function(type) {
-                var title, description, start, form;
-
-                if (type === 'centered') {
-                    form = document.getElementById('centeredForm');
-                    title = document.getElementById('centeredEventTitle').value;
-                    description = document.getElementById('centeredEventDescription').value;
-                    start = document.getElementById('centeredEventStart').value;
-                } else {
-                    form = document.getElementById('createEventForm');
-                    title = document.getElementById('sideEventTitle').value;
-                    description = document.getElementById('sideEventDescription').value;
-                    start = document.getElementById('sideEventStart').value;
-                }
+            // Handle form submission
+            $('#createEventForm').on('submit', function (e) {
+                e.preventDefault();
 
                 $.ajax({
-                    url: '/events',
+                    url: '/create-event',
                     method: 'POST',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        title: title,
-                        description: description,
-                        start: start
-                    },
-                    success: function(response) {
+                    data: $(this).serialize(),
+                    success: function (response) {
                         if (response.success) {
-                            calendar.addEvent({
-                                title: response.event.title,
-                                description: response.event.description,
-                                start: response.event.start,
-                                end: response.event.end,
-                                allDay: false
-                            });
-                            form.querySelector('input[type="text"]').value = '';
-                            form.querySelector('textarea').value = '';
-                            form.querySelector('input[type="datetime-local"]').value = '';
-                            if (type === 'centered') {
-                                hideCenteredForm(); 
-                            } else {
-                                hideSideForm();
-                            }
+                            const toast = new bootstrap.Toast(document.getElementById('successToast'));
+                            toast.show(); // Show the success alert
+                            $('#eventModal').modal('hide'); // Close the modal
+                            calendar.refetchEvents(); // Refresh the calendar events
                         }
+                    },
+                    error: function () {
+                        alert('An error occurred while creating the evaluation.');
                     }
                 });
-            }
-
-            window.goBack = function() {
-                window.history.back();
-            }
+            });
         });
     </script>
-   
+</body>
+</html>
+
 </x-app-layout>

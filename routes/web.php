@@ -193,9 +193,6 @@ Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->g
     Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('DepartmentHead.store.busy.slot');
 });
 
-Route::post('/events', [EventController::class, 'store'])->name('events.store');
-Route::get('/notifications', function () {
-    return view('notifications');
-})->middleware(['auth'])->name('notifications');
 
 
+Route::post('/create-event', [HrCalendarController::class, 'createEvent']);

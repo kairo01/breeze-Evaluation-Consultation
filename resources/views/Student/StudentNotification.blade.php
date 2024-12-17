@@ -5,15 +5,18 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're in  Student Notification!") }}
-
-                    
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="bg-white shadow-md rounded-lg p-6">
+          
+            <div class="border p-4 mb-4">
+                <ul>
+        @foreach (auth()->user()->notifications as $notification)
+            <li>
+                <strong>{{ $notification->data['title'] }}</strong> - 
+                {{ $notification->data['description'] ?? 'No description' }}
+                <br>
+                <small>Opens on: {{ \Carbon\Carbon::parse($notification->data['start'])->format('F j, Y, g:i A') }}</small>
+            </li>
+        @endforeach
+    </ul>
+    
 </x-app-layout>
