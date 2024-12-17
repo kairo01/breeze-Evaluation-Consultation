@@ -16,14 +16,16 @@ class EvaluationController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'start' => 'required|date',
+            'start_date' => 'required|date|after_or_equal:now', // Prevent past dates
+            'student_type' => 'required|in:highschool,college',
         ]);
 
         // Save evaluation to the database
         $evaluation = Evaluation::create([
             'title' => $request->title,
             'description' => $request->description,
-            'start' => $request->start,
+            'start_date' => $request->input('start_date'),
+            'student_type' => $request->input('student_type'),
         ]);
 
         // Notify all students (adjust as necessary)

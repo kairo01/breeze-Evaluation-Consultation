@@ -208,6 +208,7 @@ Route::prefix('department-head')->name('DepartmentHead.')->middleware('role:Comp
 
 });
 
-
+Route::get('/fetch-events', [HrCalendarController::class, 'fetchEvents'])->name('calendar.fetch');
 
 Route::post('/create-event', [HrCalendarController::class, 'createEvent']);
+

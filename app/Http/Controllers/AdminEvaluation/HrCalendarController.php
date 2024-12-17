@@ -23,7 +23,7 @@ class HrCalendarController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'start_date' => 'required|date',
+            'start_date' => 'required|date|after_or_equal:now', // Prevent past dates
             'student_type' => 'required|in:highschool,college',
         ]);
 
