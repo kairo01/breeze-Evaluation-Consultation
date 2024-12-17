@@ -185,7 +185,11 @@ input[type="radio"] {
 
     <form action="{{ route('evaluation.store') }}" method="POST">
         @csrf
-        
+        <div class="container">
+          <label for="student_id">Student ID:</label>
+        <input type="text" value="{{Auth::user()->id}}" name="student_id" required>
+        </div>
+      
         <div class="container">
             <label for="teacher_name">Teacher Name:</label>
             <input type="text" id="teacher_name" name="teacher_name" required>
