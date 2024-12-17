@@ -87,7 +87,7 @@
                             <x-nav-link :href="route('Consultation.CtCalendar')" :active="request()->routeIs('Consultation.CtCalendar')">
                                 {{ __('Calendar') }}
                             </x-nav-link>
-                            @elseif(in_array(Auth::user()->role, ['ComputerDepartment', 'ScienceDepartment', 'MathDepartment', 'EnglishDepartment']))
+                            @elseif(in_array(Auth::user()->role, ['ComputerDepartment', 'EngineeringDeparment', 'HighSchoolDepartment', 'TesdaDepartment', 'HmDepartment' ]))
         <x-nav-link :href="route('DepartmentHead.DpDashboard')" :active="request()->routeIs('DepartmentHead.DpDashboard')">
             {{ __('Dashboard') }}
         </x-nav-link>

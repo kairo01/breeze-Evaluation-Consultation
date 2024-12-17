@@ -13,7 +13,7 @@ class CheckDepartmentType
     public function handle(Request $request, Closure $next)
     {
         // Check if the user is a department head
-        $allowedRoles = ['ComputerDepartment', 'ScienceDepartment', 'MathDepartment', 'EnglishDepartment'];
+        $allowedRoles = ['ComputerDepartment', 'EngineeringDeparment', 'HighSchoolDepartment', 'TesdaDepartment', 'HmDepartment'];
 
         if (in_array(Auth::user()->role, $allowedRoles)) {
             return $next($request);

@@ -28,11 +28,11 @@ class DepartmentHeadSeeder extends Seeder
 
         // Create the department head for Science Department
         User::create([
-            'name' => 'ScienceDepartment',
+            'name' => 'EngineeringDeparment',
             'student_id' => null,
-            'email' => 'ScienceDepartment@example.com',
+            'email' => 'EngineeringDeparment@example.com',
             'password' => Hash::make('password123'),
-            'role' => 'ScienceDepartment',
+            'role' => 'EngineeringDeparment',
             'student_type' => null,
             'status' => 'active',
             'remember_token' => null,
@@ -42,11 +42,11 @@ class DepartmentHeadSeeder extends Seeder
 
         // Create the department head for Math Department
         User::create([
-            'name' => 'MathDepartment',
+            'name' => 'HighSchoolDepartment',
             'student_id' => null,
-            'email' => 'MathDepartment@example.com',
+            'email' => 'HighSchoolDepartment@example.com',
             'password' => Hash::make('password123'),
-            'role' => 'MathDepartment',
+            'role' => 'HighSchoolDepartment',
             'student_type' => null,
             'status' => 'active',
             'remember_token' => null,
@@ -56,16 +56,30 @@ class DepartmentHeadSeeder extends Seeder
 
         // Create the department head for English Department
         User::create([
-            'name' => 'EnglishDepartment',
+            'name' => 'TesdaDepartment',
             'student_id' => null,
-            'email' => 'EnglishDepartment@example.com',
+            'email' => 'TesdaDepartment@example.com',
             'password' => Hash::make('password123'),
-            'role' => 'EnglishDepartment',
+            'role' => 'TesdaDepartment',
             'student_type' => null,
             'status' => 'active',
             'remember_token' => null,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        // Create the department head for English Department
+        User::create([
+            'name' => 'HmDepartment',
+            'student_id' => null,
+            'email' => 'HmDepartment@example.com',
+            'password' => Hash::make('password123'),
+            'role' => 'HmDepartment',
+            'student_type' => null,
+            'status' => 'active',
+            'remember_token' => null,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        
     }
 }

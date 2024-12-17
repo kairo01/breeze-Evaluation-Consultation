@@ -116,13 +116,13 @@
 
                 <!-- Date and Time -->
                 <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="date_time">
-                        Date and Time:
-                    </label>
-                    <input type="datetime-local" name="date_time" id="date_time" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    @error('date_time')
-                        <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                    @enderror
+    <label class="block text-gray-700 text-sm font-bold mb-2" for="date_time">
+        Date and Time:
+    </label>
+    <input type="datetime-local" name="date_time" id="date_time" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" min="{{ now()->format('Y-m-d\TH:i') }}" />
+    @error('date_time')
+        <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
+    @enderror
                 </div>
 
                 <!-- Submit Button -->
@@ -137,6 +137,18 @@
 
     <!-- Tailwind JS for Conditional Display -->
     <script>
+        document.getElementById('date_time').addEventListener('change', function() {
+                        const selectedDateTime = new Date(this.value);
+                        const startHour = new Date(selectedDateTime);
+                        startHour.setHours(8, 0, 0); // 8 AM
+                        const endHour = new Date(selectedDateTime);
+                        endHour.setHours(17, 0, 0); // 5 PM
+
+                        if (selectedDateTime < startHour || selectedDateTime > endHour) {
+                            alert('Please select a time between 8 AM and 5 PM.');
+                            this.value = ''; // Clear the input
+                        }
+                    });
         document.getElementById('consultant_role').addEventListener('change', function() {
             const purposeSelect = document.getElementById('purpose');
             const selectedConsultant = this.selectedOptions[0].dataset.role;
