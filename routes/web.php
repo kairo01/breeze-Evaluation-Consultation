@@ -208,9 +208,6 @@ Route::prefix('department-head')->name('DepartmentHead.')->middleware('role:Comp
 
 });
 
-Route::post('/events', [EventController::class, 'store'])->name('events.store');
-Route::get('/notifications', function () {
-    return view('notifications');
-})->middleware(['auth'])->name('notifications');
 
 
+Route::post('/create-event', [HrCalendarController::class, 'createEvent']);

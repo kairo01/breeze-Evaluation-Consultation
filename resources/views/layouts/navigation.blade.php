@@ -71,6 +71,9 @@
                             <x-nav-link :href="route('Student.StudentCalendar')" :active="request()->routeIs('Student.StudentCalendar')">
                                 {{ __('Calendar') }}
                             </x-nav-link> 
+                            <x-nav-link :href="route('Student.StudentNotification')" :active="request()->routeIs('Student.StudentNotification')">
+                                {{ __('Notification') }}
+                            </x-nav-link> 
                         
                                 @endif
                           
