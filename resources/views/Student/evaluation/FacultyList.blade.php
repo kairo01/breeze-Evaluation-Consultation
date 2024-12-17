@@ -13,7 +13,7 @@
             <img src="{{ asset($department['head']['image']) }}" alt="Department Head" class="head-img">
             <h3>Department Head: {{ $department['head']['name'] }}</h3>
 
-            <x-nav-link :href="route('Student.evaluation.evaluationform')" :active="request()->routeIs('Student.evaluation.evaluationform')">
+            <x-nav-link :href="route('Student.evaluation.evaluationform', ['teacher_name' => $department['head']['name']])" :active="request()->routeIs('Student.evaluation.evaluationform')">
                          <button class="evaluate-btn">Evaluate</button>
                                 </x-nav-link>
 
@@ -26,7 +26,7 @@
                     <img src="{{ asset($faculty['image']) }}" alt="Faculty Member" class="faculty-img">
                     <h4>{{ $faculty['name'] }}</h4>
                     <button>
-                    <x-nav-link :href="route('Student.evaluation.evaluationform')" >
+                    <x-nav-link :href="route('Student.evaluation.evaluationform', ['teacher_name' => $faculty['name']])" >
                             <button class="evaluate-btn">Evaluate</button>
                                 </x-nav-link>
                     </button>

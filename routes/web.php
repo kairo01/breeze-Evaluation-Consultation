@@ -143,6 +143,7 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
     Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])
         ->name('Student.evaluation.evaluationform');
 
+        Route::get('/evaluation/prepare/{teacher_name}', [EvaluationFormController::class, 'prepare'])->name('evaluation.prepare');
 
 /*/
         Route::get('evaluation-form', [EvaluationController::class, 'showForm']);
