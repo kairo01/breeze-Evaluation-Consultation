@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['HumanResources', 'Guidance', 'ComputerDepartment', 'HighSchoolStudent', 'CollegeStudent']);
+            $table->enum('role', ['HumanResources', 'Guidance', 'ComputerDepartment', 'ScienceDepartment', 'MathDepartment', 'EnglishDepartment', 'Student']); // Added roles
             $table->enum('student_type', ['College', 'HighSchool'])->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->rememberToken();

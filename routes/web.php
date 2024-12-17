@@ -124,13 +124,7 @@ Route::middleware(['auth', 'role:Guidance'])->group(function () {
 Route::get('faculty/{department}', [FacultyListController::class, 'show']);
 
 // DEPARTMENT HEAD 
-Route::middleware(['auth', 'role:ComputerDepartment'])->group(function () {
-    Route::get('/DepartmentHead/DpDashboard', [DpController::class, 'index'])
-        ->name('DepartmentHead.DpDashboard');
 
-    Route::get('/DepartmentHead/DpCalendar', [DpCalendarController::class, 'index'])
-        ->name('DepartmentHead.DpCalendar');
-});
 
 
 // Student Routes
@@ -198,14 +192,14 @@ Route::prefix('consultation')->name('Consultation.')->middleware('role:Guidance'
     Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('store.busy.slot');
 });
 
-// Routes for Department Head
-Route::prefix('department-head')->name('DepartmentHead.')->middleware('role:ComputerDepartment')->group(function () {
-    Route::get('/approval', [DpApprovalController::class, 'index'])->name('DpApproval');
-    Route::post('/approval/approve', [DpApprovalController::class, 'approve'])->name('DpApproval.approve');
-    Route::post('/approval/decline', [DpApprovalController::class, 'decline'])->name('DpApproval.decline');
-    Route::get('/history', [DpHistoryController::class, 'index'])->name('DpHistory');
-    Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('store.busy.slot');
-
+Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->group(function () {
+    Route::get('/DpDashboard', [DpController::class, 'index'])->name('DepartmentHead.DpDashboard');
+    Route::get('/DpCalendar', [DpCalendarController::class, 'index'])->name('DepartmentHead.DpCalendar');
+    Route::get('/approval', [DpApprovalController::class, 'index'])->name('DepartmentHead.DpApproval');
+    Route::post('/approval/approve', [DpApprovalController::class, 'approve'])->name('DepartmentHead.DpApproval.approve');
+    Route::post('/approval/decline', [DpApprovalController::class, 'decline'])->name('DepartmentHead.DpApproval.decline');
+    Route::get('/history', [DpHistoryController::class, 'index'])->name('DepartmentHead.DpHistory');
+    Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('DepartmentHead.store.busy.slot');
 });
 
 Route::post('/events', [EventController::class, 'store'])->name('events.store');

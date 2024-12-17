@@ -14,6 +14,7 @@
         </ul>
     </div>
     @endif
+
     <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             @if(session('success'))
@@ -139,7 +140,8 @@
         document.getElementById('consultant_role').addEventListener('change', function() {
             const purposeSelect = document.getElementById('purpose');
             const selectedConsultant = this.selectedOptions[0].dataset.role;
-
+            const meetingPreferenceContainer = document.getElementById('meeting_preference_container');
+            
             // If the consultant is 'ComputerDepartment', show only 'Counseling'
             if (selectedConsultant === 'ComputerDepartment') {
                 Array.from(purposeSelect.options).forEach(function(option) {
@@ -153,6 +155,23 @@
                 Array.from(purposeSelect.options).forEach(function(option) {
                     option.disabled = false;
                 });
+            }
+
+            // Show/Hide Meeting Preference based on Meeting Mode
+            if (this.value && document.getElementById('meeting_mode').value === 'Online') {
+                meetingPreferenceContainer.style.display = 'block';
+            } else {
+                meetingPreferenceContainer.style.display = 'none';
+            }
+        });
+
+        // Ensure the meeting preference is hidden initially
+        document.getElementById('meeting_mode').addEventListener('change', function() {
+            const meetingPreferenceContainer = document.getElementById('meeting_preference_container');
+            if (this.value === 'Online') {
+                meetingPreferenceContainer.style.display = 'block';
+            } else {
+                meetingPreferenceContainer.style.display = 'none';
             }
         });
     </script>
