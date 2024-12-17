@@ -8,20 +8,27 @@ use Illuminate\Http\Request;
 
 class EvaluationFormController extends Controller
 {
-    public function index()
+    public function index(Request $request)
 {
     $evaluations = Evaluation::all(); // Fetch all evaluations from the database
-    return view('Student.evaluation.evaluationform', compact('evaluations'));
+
+    $teacher_name = $request->query('teacher_name');
+
+    return view('Student.evaluation.evaluationform', compact('evaluations', 'teacher_name'));
 }
 
-    public function create()
+    public function create(Request $request)
     {
-        return view('Student.evaluation.evaluationform');
+
+        $teacher_name = $request->query('teacher_name');
+
+        return view('Student.evaluation.evaluationform', compact('teacher_name'));
     }
     
     public function store(Request $request)
     {
         $request->validate([
+            'student_id' => 'required|string|max:255',
             'teacher_name' => 'required|string|max:255',
             'subject' => 'required|string|max:255',
             'teaching_skills' => 'required|array',
@@ -31,7 +38,7 @@ class EvaluationFormController extends Controller
             'teacher_comment' => 'required|string|max:500',
         ]);
     
-        // Prepare data for saving
+        // Prepare facilities data
         $facilitiesData = [];
         foreach ($request->facilities as $facility => $data) {
             $facilitiesData[$facility] = [
@@ -40,14 +47,16 @@ class EvaluationFormController extends Controller
             ];
         }
     
+        // Save data into the database
         Evaluation::create([
+            'student_id' => $request->student_id,
             'teacher_name' => $request->teacher_name,
             'subject' => $request->subject,
             'teaching_skills' => $request->teaching_skills,
             'facilities' => $facilitiesData,
             'teacher_comment' => $request->teacher_comment,
         ]);
-    
+
         return redirect()->route('evaluation.create')->with('success', 'Evaluation submitted successfully.');
     }
     

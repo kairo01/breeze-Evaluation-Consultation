@@ -38,18 +38,6 @@ class UserSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'ComputerDepartment',
-                'student_id' => null,
-                'email' => 'ComputerDepartment@example.com',
-                'password' => Hash::make('password123'),
-                'role' => 'ComputerDepartment',
-                'student_type' => null,
-                'status' => 'active',
-                'remember_token' => null,  // Add remember_token here
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
                 'name' => 'HighSchoolStudent',
                 'student_id' => '21-000',
                 'email' => 'highschool@example.com',
