@@ -94,6 +94,10 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
     Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])
     ->name('Student.evaluation.evaluationform');
 
+    Route::get('/fetch-events', [HrCalendarController::class, 'fetchEvents'])->name('calendar.fetch');
+    Route::post('/create-event', [HrCalendarController::class, 'createEvent']);
+
+
 });
 
 // GUIDANCE == CONSULTATION
@@ -194,7 +198,4 @@ Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->g
     Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('DepartmentHead.store.busy.slot');
 });
 
-Route::get('/fetch-events', [HrCalendarController::class, 'fetchEvents'])->name('calendar.fetch');
-
-Route::post('/create-event', [HrCalendarController::class, 'createEvent']);
 
