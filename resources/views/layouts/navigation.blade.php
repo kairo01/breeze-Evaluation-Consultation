@@ -71,6 +71,9 @@
                             <x-nav-link :href="route('Student.StudentCalendar')" :active="request()->routeIs('Student.StudentCalendar')">
                                 {{ __('Calendar') }}
                             </x-nav-link> 
+                            <x-nav-link :href="route('Student.StudentNotification')" :active="request()->routeIs('Student.StudentNotification')">
+                                {{ __('Notification') }}
+                            </x-nav-link> 
                         
                                 @endif
                           
@@ -87,19 +90,19 @@
                             <x-nav-link :href="route('Consultation.CtCalendar')" :active="request()->routeIs('Consultation.CtCalendar')">
                                 {{ __('Calendar') }}
                             </x-nav-link>
-                        @elseif(Auth::user()->role == 'ComputerDepartment')
-                            <x-nav-link :href="route('DepartmentHead.DpDashboard')" :active="request()->routeIs('DepartmentHead.DpDashboard')">
-                                {{ __('Dashboard') }}
-                            </x-nav-link>
-                            <x-nav-link :href="route('DepartmentHead.DpApproval')" :active="request()->routeIs('DepartmentHead.DpApproval')">
-                                {{ __('Approval') }}
-                            </x-nav-link>
-                            <x-nav-link :href="route('DepartmentHead.DpHistory')" :active="request()->routeIs('DepartmentHead.DpHistory')">
-                                {{ __('History') }}
-                            </x-nav-link>
-                            <x-nav-link :href="route('DepartmentHead.DpCalendar')" :active="request()->routeIs('DepartmentHead.DpCalendar')">
-                                {{ __('Calendar') }}
-                            </x-nav-link>
+                            @elseif(in_array(Auth::user()->role, ['ComputerDepartment', 'EngineeringDeparment', 'HighSchoolDepartment', 'TesdaDepartment', 'HmDepartment' ]))
+        <x-nav-link :href="route('DepartmentHead.DpDashboard')" :active="request()->routeIs('DepartmentHead.DpDashboard')">
+            {{ __('Dashboard') }}
+        </x-nav-link>
+        <x-nav-link :href="route('DepartmentHead.DpApproval')" :active="request()->routeIs('DepartmentHead.DpApproval')">
+            {{ __('Approval') }}
+        </x-nav-link>
+        <x-nav-link :href="route('DepartmentHead.DpHistory')" :active="request()->routeIs('DepartmentHead.DpHistory')">
+            {{ __('History') }}
+        </x-nav-link>
+        <x-nav-link :href="route('DepartmentHead.DpCalendar')" :active="request()->routeIs('DepartmentHead.DpCalendar')">
+            {{ __('Calendar') }}
+        </x-nav-link>
                         @endif
                     @endif
                 </div>

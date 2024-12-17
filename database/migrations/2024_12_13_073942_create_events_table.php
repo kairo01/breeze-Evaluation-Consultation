@@ -14,6 +14,7 @@ return new class extends Migration
             $table->text('description')->nullable(); // Event description
             $table->timestamp('start'); // Start time of the event
             $table->timestamp('end')->nullable(); // End time of the event
+            $table->string('student_type');
             $table->timestamps(); // For created_at and updated_at
         });
     }

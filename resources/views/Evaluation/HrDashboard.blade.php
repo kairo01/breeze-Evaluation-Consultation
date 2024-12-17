@@ -10,18 +10,19 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/Evaluation/HrDashboard.css') }}">
 
-    <div class="py-12">
-        <!-- Container for Card Layout -->
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white shadow-lg rounded-lg p-8">
-                <!-- Title Section -->
-                <div class="text-center mb-8">
-                    <h1 class="text-4xl font-bold text-gray-800 mb-2 font-figtree">
-                        Evaluation System
-                    </h1>
-                    <p class="text-lg text-gray-600 mt-2">Academic Year: 2023-2024 1st Semester</p>
-                    <p class="text-lg text-gray-600">Evaluation Status: On-going</p>
-                </div>
+
+                <div class="max-w-7xl mx-auto py-10">
+        <!-- Welcome Section -->
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6 flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold" style="font-family: 'Bunny', sans-serif;">Welcome !!</h1>
+                <p class="text-gray-600" style="font-family: 'Bunny', sans-serif;">{{ Auth::user()->name }}</p>
+            </div>
+            <div>
+                <img src="{{ asset('css/GeneralResources/icon.jpg') }}" alt="Student Image" class="rounded-full w-20 h-20">
+            </div>
+        </div>
+
                 
                 <!-- Card Container -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
