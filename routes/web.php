@@ -82,12 +82,6 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
         Route::get('Evaluation.HrPicker', [HrPickerController::class, 'index'])
         ->name('Evaluation.HrPicker');
 
-        Route::get('HrCollege', [HrCollegeController::class, 'index'])
-
-        ->name('HrCollege');
-
-    Route::get('HrHighschool', [HrHighschoolController::class, 'index'])
-        ->name('HrHighschool');
 
     Route::get('EvaluationHistory', [EvaluationHistoryController::class, 'index'])
         ->name('EvaluationHistory');
@@ -154,7 +148,11 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
         Route::get('evaluation-form', [EvaluationController::class, 'showForm']);
         Route::post('evaluation-submit', [EvaluationController::class, 'submit']); // <-- Fixed here
     /*/
+    Route::get('Student.evaluation.CollegeStudent', [CollegePickerController::class, 'index'])
+    ->name('Student.evaluation.CollegeStudent');
 
+    Route::get('/Student.evaluation.StudentPicker', [StudentPickerController::class, 'index'])
+    ->name('Student.evaluation.StudentPicker');
 
     // Student Calendar
     Route::get('/student/StudentCalendar', [StudentCalendarController::class, 'index'])
@@ -166,15 +164,8 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
             Route::get('/create', [EvaluationFormController::class, 'create'])->name('evaluation.create');
             Route::post('/store', [EvaluationFormController::class, 'store'])->name('evaluation.store');
 
-            Route::get('/Student.evaluation.StudentPicker', [StudentPickerController::class, 'index'])
-            ->name('Student.evaluation.StudentPicker');
-
-            Route::get('Student.evaluation.CollegeStudent', [CollegePickerController::class, 'index'])
-            ->name('Student.evaluation.CollegeStudent');
 
 
-            Route::get('/Student.evaluation.HigSchoolStudent', [HighSchoolPickerController::class, 'index'])
-            ->name('Student.evaluation.HigSchoolStudent');
             
 Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
 

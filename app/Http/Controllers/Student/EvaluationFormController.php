@@ -22,6 +22,7 @@ class EvaluationFormController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'student_id' => 'required' ,
             'teacher_name' => 'required|string|max:255',
             'subject' => 'required|string|max:255',
             'teaching_skills' => 'required|array',
@@ -35,12 +36,14 @@ class EvaluationFormController extends Controller
         $facilitiesData = [];
         foreach ($request->facilities as $facility => $data) {
             $facilitiesData[$facility] = [
+                'student_id' => 'required' ,
                 'rating' => $data['rating'],
                 'comment' => $data['comment'] ?? null,
             ];
         }
     
         Evaluation::create([
+            'student_id' => $request->student_id,
             'teacher_name' => $request->teacher_name,
             'subject' => $request->subject,
             'teaching_skills' => $request->teaching_skills,
