@@ -1,13 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dp Calendar') }}
+            {{ __('Consultation Calendar') }}
         </h2>
     </x-slot>
 
-    <!-- Include FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ asset('css/Evaluation/HrCalendar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/calendar.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <div class="calendar-container flex space-x-4 mt-4 px-4">
@@ -35,7 +34,7 @@
                 <h5 class="text-lg font-semibold text-gray-800">Add Busy Slot</h5>
                 <button onclick="closeBusySlotModal()" class="text-gray-500 hover:text-gray-700 text-lg font-bold">&times;</button>
             </div>
-            <form action="{{ route('DepartmentHead.store.busy.slot') }}" method="POST">
+            <form action="{{ route('Consultation.store.busy.slot') }}" method="POST">
                 @csrf
                 <div class="mb-4">
                     <label for="title" class="block text-gray-700 font-medium">Title</label>
@@ -124,30 +123,27 @@
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
             events: [
-                ...@json($appointments), // Pass appointments
-                ...@json($busySlots),    // Pass busy slots
+                ...@json($appointments),
+                ...@json($busySlots),
             ],
             eventClick: function (info) {
-    const event = info.event;
+                const event = info.event;
 
-    if (event.extendedProps.type === 'appointment') {
-        // Appointment-specific logic
-        document.getElementById('modalTitleLabel').innerText = `Appointment: ${event.title}`;
-        document.getElementById('modalDescriptionLabel').innerText = event.extendedProps.description;
-    } else if (event.extendedProps.type === 'busy_slot') {
-        // Busy slot-specific logic
-        document.getElementById('modalTitleLabel').innerText = `Busy Slot: ${event.title}`;
-        document.getElementById('modalDescriptionLabel').innerText = event.extendedProps.description;
-    }
+                if (event.extendedProps.type === 'appointment') {
+                    document.getElementById('modalTitleLabel').innerText = `Appointment: ${event.title}`;
+                    document.getElementById('modalDescriptionLabel').innerText = event.extendedProps.description;
+                } else if (event.extendedProps.type === 'busy_slot') {
+                    document.getElementById('modalTitleLabel').innerText = `Busy Slot: ${event.title}`;
+                    document.getElementById('modalDescriptionLabel').innerText = event.extendedProps.description;
+                }
 
-    document.getElementById('modalDateLabel').innerText = event.start.toLocaleDateString();
-    document.getElementById('modalTimeLabel').innerText = event.allDay
-        ? 'All Day'
-        : `${event.start.toLocaleTimeString()} - ${event.end ? event.end.toLocaleTimeString() : 'N/A'}`;
+                document.getElementById('modalDateLabel').innerText = event.start.toLocaleDateString();
+                document.getElementById('modalTimeLabel').innerText = event.allDay
+                    ? 'All Day'
+                    : `${event.start.toLocaleTimeString()} - ${event.end ? event.end.toLocaleTimeString() : 'N/A'}`;
 
-    document.getElementById('eventModal').classList.remove('hidden');
-}
-
+                document.getElementById('eventModal').classList.remove('hidden');
+            }
         });
 
         calendar.render();
@@ -165,32 +161,33 @@
         });
         miniCalendar.render();
 
-            window.showBusySlotModal = function () {
-                document.getElementById('busySlotModal').classList.remove('hidden');
-            };
+        window.showBusySlotModal = function () {
+            document.getElementById('busySlotModal').classList.remove('hidden');
+        };
 
-            window.closeBusySlotModal = function () {
-                document.getElementById('busySlotModal').classList.add('hidden');
-            };
+        window.closeBusySlotModal = function () {
+            document.getElementById('busySlotModal').classList.add('hidden');
+        };
 
-            window.closeEventModal = function () {
-                document.getElementById('eventModal').classList.add('hidden');
-            };
+        window.closeEventModal = function () {
+            document.getElementById('eventModal').classList.add('hidden');
+        };
 
-            window.toggleTimeInputs = function () {
-                const isChecked = document.getElementById('busyAllDay').checked;
-                document.getElementById('from').disabled = isChecked;
-                document.getElementById('to').disabled = isChecked;
+        window.toggleTimeInputs = function () {
+            const isChecked = document.getElementById('busyAllDay').checked;
+            document.getElementById('from').disabled = isChecked;
+            document.getElementById('to').disabled = isChecked;
 
-                if (isChecked) {
-                    document.getElementById('from').value = '';
-                    document.getElementById('to').value = '';
-                }
-            };
+            if (isChecked) {
+                document.getElementById('from').value = '';
+                document.getElementById('to').value = '';
+            }
+        };
 
-            window.goBack = function () {
-                window.history.back();
-            };
-        });
+        window.goBack = function () {
+            window.history.back();
+        };
+    });
     </script>
 </x-app-layout>
+
