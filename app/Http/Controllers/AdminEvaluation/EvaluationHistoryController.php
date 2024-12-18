@@ -220,10 +220,13 @@ class EvaluationHistoryController extends Controller
         
     }
 
-    public function index() {
+    public function index(Request $request) {
 
-        $evaluations = Evaluation::all();
-        return view('Evaluation.HrHistory',compact('evaluations'));
+        $teacher_name = $request->query('teacher_name');
+
+        $evaluations = Evaluation::where('teacher_name', $teacher_name)->get();
+
+        return view('Evaluation.HrHistory',compact('evaluations', 'teacher_name'));
     }
 
     public function History() {
