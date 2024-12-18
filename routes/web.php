@@ -147,8 +147,6 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
         Route::get('evaluation-form', [EvaluationController::class, 'showForm']);
         Route::post('evaluation-submit', [EvaluationController::class, 'submit']); // <-- Fixed here
     /*/
-    Route::get('Student.evaluation.CollegeStudent', [CollegePickerController::class, 'index'])
-    ->name('Student.evaluation.CollegeStudent');
 
     Route::get('/Student.evaluation.StudentPicker', [StudentPickerController::class, 'index'])
     ->name('Student.evaluation.StudentPicker');

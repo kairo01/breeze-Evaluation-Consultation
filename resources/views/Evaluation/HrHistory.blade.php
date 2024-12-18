@@ -9,8 +9,9 @@
                         <th>Subject</th>
                         <th>Skills</th>
                         <th>Total Skills</th>
+                        <th>Total Facilities</th>
                         <th>Total Rating</th>
-                        <th>Year</th>
+                        <th>Percentage Breakdown</th>
                     </tr>
                 </thead>
                 
@@ -27,6 +28,10 @@
 
                             // Overall total
                             $totalRating = $skillsTotal + $facilitiesTotal;
+
+                            // Calculate percentages
+                            $skillsPercentage = $totalRating > 0 ? round(($skillsTotal / $totalRating) * 100, 2) : 0;
+                            $facilitiesPercentage = $totalRating > 0 ? round(($facilitiesTotal / $totalRating) * 100, 2) : 0;
                         @endphp
 
                         <!-- Main Row -->
@@ -42,8 +47,13 @@
                                 @endforeach
                             </td>
                             <td>{{ $skillsTotal }}</td>
+                            <td>{{ $facilitiesTotal }}</td>
                             <!-- Total Rating -->
                             <td><strong>{{ $totalRating }}</strong></td>
+                            <td>
+                                Skills: <strong>{{ $skillsPercentage }}%</strong>, 
+                                Facilities: <strong>{{ $facilitiesPercentage }}%</strong>
+                            </td>
                             <td>{{ $evaluation->year }}</td>
                         </tr>
                     @endforeach
