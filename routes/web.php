@@ -94,6 +94,10 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
     Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])
     ->name('Student.evaluation.evaluationform');
 
+    Route::get('/fetch-events', [HrCalendarController::class, 'fetchEvents'])->name('calendar.fetch');
+    Route::post('/create-event', [HrCalendarController::class, 'createEvent']);
+
+
 });
 
 // GUIDANCE == CONSULTATION
@@ -137,6 +141,7 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
     Route::get('/student/evaluation', [EvaluationFormController::class, 'index'])
         ->name('Student.evaluation.evaluationform');
 
+        Route::get('/evaluation/prepare/{teacher_name}', [EvaluationFormController::class, 'prepare'])->name('evaluation.prepare');
 
 /*/
         Route::get('evaluation-form', [EvaluationController::class, 'showForm']);
@@ -200,5 +205,3 @@ Route::get('/api/available-time-slots', [StudentAppointmentController::class, 'g
 Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 Route::post('/notifications/{notify}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
 
-
-Route::post('/create-event', [HrCalendarController::class, 'createEvent']);
