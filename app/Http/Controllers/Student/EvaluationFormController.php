@@ -4,12 +4,21 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller; // Ensure this is imported
 use App\Models\Evaluation;
+use App\Models\Event;
 use Illuminate\Http\Request;
 
 class EvaluationFormController extends Controller
 {
     public function index(Request $request)
 {
+    // Check if there is an active event with start_date in the future
+    $event = Event::where('start_date', '<=', now('Asia/Manila'))->first();
+
+    // If no active event, return an error or redirect
+    if (!$event) {
+        return redirect()->back()->with('error', 'No upcoming evaluation set. Please wait for the evaluation to be scheduled.');
+    }
+    
     $evaluations = Evaluation::all(); // Fetch all evaluations from the database
 
     $teacher_name = $request->query('teacher_name');
@@ -20,6 +29,14 @@ class EvaluationFormController extends Controller
     public function create(Request $request)
     {
 
+        // Check if there is an active event with start_date in the future
+        $event = Event::where('start_date', '<=', now('Asia/Manila'))->first();
+
+        // If no active event, return an error or redirect
+        if (!$event) {
+            return redirect()->back()->with('error', 'No upcoming evaluation set. Please wait for the evaluation to be scheduled.');
+        }
+        
         $teacher_name = $request->query('teacher_name');
 
         return view('Student.evaluation.evaluationform', compact('teacher_name'));

@@ -1,4 +1,11 @@
 <x-app-layout>
+    
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <x-slot name="header">
        <h2 class="header-title">
             {{ $department['name'] }}
