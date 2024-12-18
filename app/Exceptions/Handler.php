@@ -27,16 +27,4 @@ class Handler extends ExceptionHandler
             //
         });
     }
-    public function render($request, Throwable $exception)
-{
-    if ($exception instanceof \Exception) {
-        return response()->json([
-            'error' => 'An error occurred',
-            'message' => $exception->getMessage(),
-            'trace' => $exception->getTraceAsString()
-        ], 500);
-    }
-
-    return parent::render($request, $exception);
-}
 }

@@ -6,7 +6,7 @@
     </x-slot>
 
     @if ($errors->any())
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    <div class="alert alert-danger">
         <ul>
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -20,12 +20,6 @@
             @if(session('success'))
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
                     {{ session('success') }}
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                    {{ session('error') }}
                 </div>
             @endif
 
@@ -65,7 +59,7 @@
                     <select name="consultant_role" id="consultant_role" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <option value="">Select Consultant</option>
                         @foreach($users as $user)
-                            @if($user->role !== 'HumanResources')
+                            @if($user->role !== 'HumanResources') <!-- Exclude HumanResources -->
                                 <option value="{{ $user->id }}" data-role="{{ $user->role }}">{{ $user->role }}</option>
                             @endif
                         @endforeach
@@ -122,27 +116,13 @@
 
                 <!-- Date and Time -->
                 <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="date">
-                        Date:
-                    </label>
-                    <input type="date" name="date" id="date" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    @error('date')
-                        <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2" for="time_slot">
-                        Time Slot:
-                    </label>
-                    <select name="time_slot" id="time_slot" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                        <option value="">Select a time slot</option>
-                    </select>
-                    <div id="time_slot_loading" class="text-gray-500 text-sm mt-2" style="display: none;">Loading time slots...</div>
-                    <div id="time_slot_error" class="text-red-500 text-sm mt-2" style="display: none;"></div>
-                    @error('time_slot')
-                        <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                    @enderror
+    <label class="block text-gray-700 text-sm font-bold mb-2" for="date_time">
+        Date and Time:
+    </label>
+    <input type="datetime-local" name="date_time" id="date_time" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" min="{{ now()->format('Y-m-d\TH:i') }}" />
+    @error('date_time')
+        <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
+    @enderror
                 </div>
 
                 <!-- Submit Button -->
@@ -155,98 +135,56 @@
         </div>
     </div>
 
+    <!-- Tailwind JS for Conditional Display -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const consultantRoleSelect = document.getElementById('consultant_role');
-        const purposeSelect = document.getElementById('purpose');
-        const meetingModeSelect = document.getElementById('meeting_mode');
-        const meetingPreferenceContainer = document.getElementById('meeting_preference_container');
-        const dateInput = document.getElementById('date');
-        const timeSlotSelect = document.getElementById('time_slot');
-        const timeSlotLoading = document.getElementById('time_slot_loading');
-        const timeSlotError = document.getElementById('time_slot_error');
+        document.getElementById('date_time').addEventListener('change', function() {
+                        const selectedDateTime = new Date(this.value);
+                        const startHour = new Date(selectedDateTime);
+                        startHour.setHours(8, 0, 0); // 8 AM
+                        const endHour = new Date(selectedDateTime);
+                        endHour.setHours(17, 0, 0); // 5 PM
 
-        consultantRoleSelect.addEventListener('change', function() {
+                        if (selectedDateTime < startHour || selectedDateTime > endHour) {
+                            alert('Please select a time between 8 AM and 5 PM.');
+                            this.value = ''; // Clear the input
+                        }
+                    });
+        document.getElementById('consultant_role').addEventListener('change', function() {
+            const purposeSelect = document.getElementById('purpose');
             const selectedConsultant = this.selectedOptions[0].dataset.role;
+            const meetingPreferenceContainer = document.getElementById('meeting_preference_container');
             
+            // If the consultant is 'ComputerDepartment', show only 'Counseling'
             if (selectedConsultant === 'ComputerDepartment') {
                 Array.from(purposeSelect.options).forEach(function(option) {
                     if (option.value !== 'Counseling') {
-                        option.disabled = true;
+                        option.disabled = true;  // Disable all except 'Counseling'
                     }
                 });
-                purposeSelect.value = 'Counseling';
+                purposeSelect.value = 'Counseling'; // Set the default to 'Counseling'
             } else {
+                // Enable all options for other consultants
                 Array.from(purposeSelect.options).forEach(function(option) {
                     option.disabled = false;
                 });
             }
 
-            updateMeetingPreferenceVisibility();
-        });
-
-        meetingModeSelect.addEventListener('change', updateMeetingPreferenceVisibility);
-
-        function updateMeetingPreferenceVisibility() {
-            if (consultantRoleSelect.value && meetingModeSelect.value === 'Online') {
+            // Show/Hide Meeting Preference based on Meeting Mode
+            if (this.value && document.getElementById('meeting_mode').value === 'Online') {
                 meetingPreferenceContainer.style.display = 'block';
             } else {
                 meetingPreferenceContainer.style.display = 'none';
             }
-        }
-
-        dateInput.addEventListener('change', function() {
-            fetchAvailableTimeSlots(this.value);
         });
 
-        function fetchAvailableTimeSlots(date) {
-            timeSlotLoading.style.display = 'block';
-            timeSlotError.style.display = 'none';
-            timeSlotSelect.disabled = true;
-            timeSlotSelect.innerHTML = '<option value="">Loading time slots...</option>';
-
-            fetch(`/api/available-time-slots?date=${date}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        throw new Error(data.error);
-                    }
-                    timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
-                    if (data.availableSlots && data.availableSlots.length > 0) {
-                        data.availableSlots.forEach(slot => {
-                            const option = document.createElement('option');
-                            option.value = slot;
-                            option.textContent = `${slot} - ${addHour(slot)}`;
-                            timeSlotSelect.appendChild(option);
-                        });
-                    } else {
-                        timeSlotSelect.innerHTML = '<option value="">No available time slots</option>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    timeSlotError.textContent = `Error loading time slots: ${error.message}`;
-                    timeSlotError.style.display = 'block';
-                    timeSlotSelect.innerHTML = '<option value="">Error loading time slots</option>';
-                })
-                .finally(() => {
-                    timeSlotLoading.style.display = 'none';
-                    timeSlotSelect.disabled = false;
-                });
-        }
-
-        function addHour(time) {
-            const [hours, minutes] = time.split(':');
-            const date = new Date(2000, 0, 1, hours, minutes);
-            date.setHours(date.getHours() + 1);
-            return date.toTimeString().slice(0, 5);
-        }
-    });
+        // Ensure the meeting preference is hidden initially
+        document.getElementById('meeting_mode').addEventListener('change', function() {
+            const meetingPreferenceContainer = document.getElementById('meeting_preference_container');
+            if (this.value === 'Online') {
+                meetingPreferenceContainer.style.display = 'block';
+            } else {
+                meetingPreferenceContainer.style.display = 'none';
+            }
+        });
     </script>
 </x-app-layout>
-
