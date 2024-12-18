@@ -55,7 +55,7 @@
                 <tr>
                     <td>{{ $notification->data['title'] }}</td>
                     <td>{{ $notification->data['description'] ?? 'No description' }}</td>
-                    <td>{{ \Carbon\Carbon::parse($notification->data['start'])->format('F j, Y, g:i A') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($notification->data['start_date'])->format('F j, Y, g:i A') }}</td>
                     <td>
                         @if(isset($notification->data['end']))
                             {{ \Carbon\Carbon::parse($notification->data['end'])->format('F j, Y, g:i A') }}

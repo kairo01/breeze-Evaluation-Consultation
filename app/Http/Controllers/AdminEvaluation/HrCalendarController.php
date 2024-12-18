@@ -31,7 +31,7 @@ class HrCalendarController extends Controller
         $event = Event::create([
             'title' => $request->title,
             'description' => $request->description,
-            'start' => $request->start_date,
+            'start_date' => $request->start_date,
             'student_type' => 'required|in:highschool,college',
         ]);
        

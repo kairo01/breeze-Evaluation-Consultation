@@ -27,7 +27,7 @@ class EvaluationNotification extends Notification
         return [
             'title' => $this->event->title,
             'description' => $this->event->description,
-            'start' => $this->event->start,
+            'start_date' => $this->event->start_date,
             'student_type' => $notifiable->student_type, // Ensure student type is logged
         ];
     }
