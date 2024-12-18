@@ -41,8 +41,8 @@
                             <img src="{{ asset('css/GeneralResources/icon.jpg') }}" alt="Student Image" class="rounded-full w-16 h-16">
                         </div>
                        
-                        <h5 class="text-3xl font-bold text-gray-800">0</h5>
-                        <p class="text-lg text-gray-600">Total Evaluations</p>
+                        <h5 class="text-3xl font-bold text-gray-800">{{ $totalEvaluations }}</h5>
+                        <p class="text-lg text-gray-600">Total Students Evaluated</p>
                     </div>
                 </div>
             </div>
