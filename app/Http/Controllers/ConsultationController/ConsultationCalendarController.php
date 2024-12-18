@@ -5,34 +5,40 @@ namespace App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\BusySlot;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class ConsultationCalendarController extends Controller
 {
     public function index()
-    {
-        $appointments = Appointment::where('consultant_role', auth()->id())
-            ->where('status', 'Approved')
-            ->get()
-            ->map(function ($appointment) {
-                return array_merge($appointment->getEventData(), ['type' => 'appointment']);
-            });
+{
+    // Fetch all approved appointments
+    $appointments = Appointment::where('consultant_role', auth()->id())
+        ->where('status', 'Approved')
+        ->get()
+        ->map(function ($appointment) {
+            return array_merge($appointment->getEventData(), ['type' => 'appointment']);
+        });
 
-        $busySlots = BusySlot::where('consultant_role', auth()->user()->role)
-            ->get()
-            ->map(function ($slot) {
-                return [
-                    'title' => $slot->title,
-                    'start' => $slot->busy_all_day ? $slot->date : $slot->date . 'T' . $slot->from,
-                    'end' => $slot->busy_all_day ? null : $slot->date . 'T' . $slot->to,
-                    'description' => $slot->description,
-                    'color' => '#FF5733',
-                    'type' => 'busy_slot',
-                ];
-            });
+    // Fetch all busy slots
+    $busySlots = BusySlot::where('consultant_role', auth()->user()->role)
+        ->get()
+        ->map(function ($slot) {
+            return [
+                'title' => $slot->title,
+                'start' => $slot->busy_all_day ? $slot->date : $slot->date . 'T' . $slot->from,
+                'end' => $slot->busy_all_day ? null : $slot->date . 'T' . $slot->to,
+                'description' => $slot->description,
+                'color' => '#FF5733',
+                'type' => 'busy_slot',
+            ];
+        });
 
-        return view('Consultation.CtCalendar', compact('appointments', 'busySlots'));
-    }
+    // Pass both appointments and busy slots to the view
+    return view('Consultation.CtCalendar', compact('appointments', 'busySlots'));
+}
+
+
 
     public function storeBusySlot(Request $request)
     {
@@ -58,16 +64,4 @@ class ConsultationCalendarController extends Controller
 
         return redirect()->back()->with('success', 'Busy slot added successfully.');
     }
-
-    public function dashboard()
-    {
-        $user = auth()->user();
-        $totalAppointments = Appointment::where('consultant_role', $user->id)->count();
-        $approvedAppointments = Appointment::where('consultant_role', $user->id)->where('status', 'Approved')->count();
-        $pendingAppointments = Appointment::where('consultant_role', $user->id)->where('status', 'Pending')->count();
-        $declinedAppointments = Appointment::where('consultant_role', $user->id)->where('status', 'Declined')->count();
-
-        return view('Consultation.CtDashboard', compact('totalAppointments', 'approvedAppointments', 'pendingAppointments', 'declinedAppointments'));
-    }
 }
-
