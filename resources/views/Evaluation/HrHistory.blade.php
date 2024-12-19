@@ -16,6 +16,13 @@
                 </thead>
                 
                 <tbody>
+                    @php
+                        // Initialize accumulators for total percentages
+                        $totalSkills = 0;
+                        $totalFacilities = 0;
+                        $overallTotalRating = 0;
+                    @endphp
+
                     @foreach ($evaluations as $evaluation)
                         @php
                             // Calculate teaching skills total
@@ -28,6 +35,11 @@
 
                             // Overall total
                             $totalRating = $skillsTotal + $facilitiesTotal;
+
+                            // Update accumulators
+                            $totalSkills += $skillsTotal;
+                            $totalFacilities += $facilitiesTotal;
+                            $overallTotalRating += $totalRating;
 
                             // Calculate percentages
                             $skillsPercentage = $totalRating > 0 ? round(($skillsTotal / $totalRating) * 100, 2) : 0;
@@ -54,11 +66,23 @@
                                 Skills: <strong>{{ $skillsPercentage }}%</strong>, 
                                 Facilities: <strong>{{ $facilitiesPercentage }}%</strong>
                             </td>
-                            <td>{{ $evaluation->year }}</td>
                         </tr>
                     @endforeach
+
+                    @php
+                        // Calculate overall percentages
+                        $overallSkillsPercentage = $overallTotalRating > 0 ? round(($totalSkills / $overallTotalRating) * 100, 2) : 0;
+                        $overallFacilitiesPercentage = $overallTotalRating > 0 ? round(($totalFacilities / $overallTotalRating) * 100, 2) : 0;
+                    @endphp
                 </tbody>
             </table>
+        </div>
+
+        <!-- Total Percentage Breakdown -->
+        <div class="table-container" style="margin-top: 2rem; padding: 1rem;">
+            <h3>Total Percentage Breakdown:</h3>
+            <p>Skills: <strong>{{ $overallSkillsPercentage }}%</strong></p>
+            <p>Facilities: <strong>{{ $overallFacilitiesPercentage }}%</strong></p>
         </div>
 
         <!-- Facilities Tables -->
