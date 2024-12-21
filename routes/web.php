@@ -33,9 +33,7 @@ use App\Http\Controllers\DepartmentHeadController\DpCalendarController;
 
 
 use App\Http\Controllers\AdminEvaluation\EvaluationController;
-
-
-
+use App\Http\Controllers\AdminEvaluation\FacilitiesHistoryController;
 use App\Http\Controllers\Student\CollegeController;
 use App\Http\Controllers\Student\CollegePickerController;
 use App\Http\Controllers\Student\HighSchoolController;
@@ -97,6 +95,12 @@ Route::middleware(['auth', 'role:HumanResources'])->group(function () {
     Route::get('/fetch-events', [HrCalendarController::class, 'fetchEvents'])->name('calendar.fetch');
     Route::post('/create-event', [HrCalendarController::class, 'createEvent']);
 
+
+    // // Route to Facilities Blade
+    // Route::get('/facilities/{evaluation}', [FacilitiesHistoryController::class, 'show'])->name('facilities.show');
+    
+    Route::get('Evaluation.FacilitiesHistory', [FacilitiesHistoryController::class, 'index'])->name('Evaluation.FacilitiesHistory');
+    
 
 });
 

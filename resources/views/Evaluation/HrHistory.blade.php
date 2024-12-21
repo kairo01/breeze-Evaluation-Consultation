@@ -21,6 +21,10 @@
                         $totalSkills = 0;
                         $totalFacilities = 0;
                         $overallTotalRating = 0;
+
+                        // Define maximum possible scores
+                        $maxSkillsScore = 20;
+                        $maxFacilitiesScore = 25;
                     @endphp
 
                     @foreach ($evaluations as $evaluation)
@@ -41,9 +45,9 @@
                             $totalFacilities += $facilitiesTotal;
                             $overallTotalRating += $totalRating;
 
-                            // Calculate percentages
-                            $skillsPercentage = $totalRating > 0 ? round(($skillsTotal / $totalRating) * 100, 2) : 0;
-                            $facilitiesPercentage = $totalRating > 0 ? round(($facilitiesTotal / $totalRating) * 100, 2) : 0;
+                            // Calculate percentages based on respective criteria totals
+                            $skillsPercentage = $maxSkillsScore > 0 ? round(($skillsTotal / $maxSkillsScore) * 100, 2) : 0;
+                            $facilitiesPercentage = $maxFacilitiesScore > 0 ? round(($facilitiesTotal / $maxFacilitiesScore) * 100, 2) : 0;
                         @endphp
 
                         <!-- Main Row -->
@@ -58,8 +62,8 @@
                                     </div>
                                 @endforeach
                             </td>
-                            <td>{{ $skillsTotal }}</td>
-                            <td>{{ $facilitiesTotal }}</td>
+                            <td>{{ $skillsTotal }} ({{ $skillsPercentage }}%)</td>
+                            <td>{{ $facilitiesTotal }} ({{ $facilitiesPercentage }}%)</td>
                             <!-- Total Rating -->
                             <td><strong>{{ $totalRating }}</strong></td>
                             <td>
@@ -71,50 +75,20 @@
 
                     @php
                         // Calculate overall percentages
-                        $overallSkillsPercentage = $overallTotalRating > 0 ? round(($totalSkills / $overallTotalRating) * 100, 2) : 0;
-                        $overallFacilitiesPercentage = $overallTotalRating > 0 ? round(($totalFacilities / $overallTotalRating) * 100, 2) : 0;
+                        $overallSkillsPercentage = $totalSkills > 0 ? round(($totalSkills / ($maxSkillsScore * count($evaluations))) * 100, 2) : 0;
+                        $overallFacilitiesPercentage = $totalFacilities > 0 ? round(($totalFacilities / ($maxFacilitiesScore * count($evaluations))) * 100, 2) : 0;
                     @endphp
                 </tbody>
             </table>
         </div>
 
         <!-- Total Percentage Breakdown -->
-        <div class="table-container" style="margin-top: 2rem; padding: 1rem;">
+        <div class="table-container printable-section" style="margin-top: 2rem; padding: 1rem;">
             <h3>Total Percentage Breakdown:</h3>
             <p>Skills: <strong>{{ $overallSkillsPercentage }}%</strong></p>
             <p>Facilities: <strong>{{ $overallFacilitiesPercentage }}%</strong></p>
+            <button onclick="printSection()" class="print-button">Print</button>
         </div>
-
-        <!-- Facilities Tables -->
-        @foreach ($evaluations as $evaluation)
-            <div class="table-container" style="margin-top: 2rem;">
-                <h4 style="color: #2563eb; margin-bottom: 0.5rem;">
-                    Facilities for {{ $evaluation->teacher_name }} ({{ $evaluation->subject }})
-                </h4>
-                <table class="evaluation-table">
-                    <thead>
-                        <tr>
-                            <th>Facility</th>
-                            <th>Rating</th>
-                            <th>Comment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($evaluation->facilities as $facility => $details)
-                            <tr>
-                                <td>{{ $facility }}</td>
-                                <td>{{ $details['rating'] }}</td>
-                                <td>{{ $details['comment'] }}</td>
-                            </tr>
-                        @endforeach
-                        <tr>
-                            <td colspan="2"><strong>Total Facilities Rating:</strong></td>
-                            <td>{{ collect($evaluation->facilities)->pluck('rating')->sum() }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        @endforeach
     </div>
 
     <style>
@@ -166,5 +140,29 @@
             font-size: 1.25rem;
             font-weight: bold;
         }
+        .print-button {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .print-button:hover {
+            background-color: #1e40af;
+        }
     </style>
+
+    <script>
+        function printSection() {
+            const section = document.querySelector('.printable-section');
+            const printWindow = window.open('', '_blank', 'width=800,height=600');
+            printWindow.document.write('<html><head><title>Print Section</title></head><body>');
+            printWindow.document.write(section.outerHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+    </script>
 </x-app-layout>
