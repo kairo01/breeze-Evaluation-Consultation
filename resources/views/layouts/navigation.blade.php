@@ -8,29 +8,41 @@
                         @if(Auth::user()->role == 'Student') 
                             @if(Auth::user()->student_type == 'College')
                                 <a href="{{ route('Student.CollegeDashboard') }}">
-                                    <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                                     <img src="{{ asset('css/GeneralResources/collegelogo.jpg') }}" 
+                                         class="block h-10 w-10 border border-gray-500 rounded-full" 
+                                          alt="College Logo" />
                                 </a>
                             @elseif(Auth::user()->student_type == 'HighSchool')
                                 <a href="{{ route('Student.HighSchoolDashboard') }}">
-                                    <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                                     <img src="{{ asset('css/GeneralResources/collegelogo.jpg') }}" 
+                                       class="block h-10 w-10 border border-gray-500 rounded-full" 
+                                        alt="College Logo" />
                                 </a>
                             @endif
                         @elseif(Auth::user()->role == 'HumanResources')
-                            <a href="{{ route('HrDashboard') }}">
-                                <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                             <a href="{{ route('HrDashboard') }}">
+                                 <img src="{{ asset('css/GeneralResources/collegelogo.jpg') }}" 
+                                  class="block h-10 w-10 border border-gray-500 rounded-full" 
+                                    alt="College Logo" />
                             </a>
                         @elseif(Auth::user()->role == 'Guidance')
                             <a href="{{ route('Consultation.CtDashboard') }}">
-                                <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                                 <img src="{{ asset('css/GeneralResources/collegelogo.jpg') }}" 
+                                 class="block h-10 w-10 border border-gray-500 rounded-full" 
+                                 alt="College Logo" />
                             </a>
                         @elseif(Auth::user()->role == 'ComputerDepartment')
                             <a href="{{ route('DepartmentHead.DpDashboard') }}">
-                                <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                                 <img src="{{ asset('css/GeneralResources/collegelogo.jpg') }}" 
+                                  class="block h-10 w-10 border border-gray-500 rounded-full" 
+                                 alt="College Logo" />
                             </a>
                         @endif
                     @else
                         <a href="{{ route('welcome') }}">
-                            <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                             <img src="{{ asset('css/GeneralResources/collegelogo.jpg') }}" 
+                         class="block h-10 w-10 border border-gray-500 rounded-full" 
+                         alt="College Logo" />
                         </a>
                     @endauth
                 </div>
@@ -116,7 +128,7 @@
                             <div>{{ Auth::user()->name }}</div>
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    <path fill-rule="evenodd" d="M5.2103 7.2103a1 1 0 011.414 0L10 10.586l3.2103-3.2103a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
                             </div>
                         </button>
