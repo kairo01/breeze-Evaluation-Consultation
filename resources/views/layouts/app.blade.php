@@ -5,17 +5,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
-
+          <title>@yield('title')</title>
+          <link rel="icon" href="{{  asset('css/GeneralResources/collegelogo.jpg') }}" type="image/x-icon">
+          
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
 <!-- Tailwind CSS -->
-<link href="{{ asset('css/app.css') }}" rel="stylesheet">
+          <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
 <!-- FullCalendar CSS -->
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
+     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
 
         <!-- Tailwind CSS via Vite -->
         @vite('resources/css/app.css')

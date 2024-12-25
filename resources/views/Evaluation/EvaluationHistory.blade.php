@@ -28,4 +28,7 @@
             @endforeach
         </div>
     </div>
+ @section('title')
+   View Evaluation History
+@endsection
 </x-app-layout>

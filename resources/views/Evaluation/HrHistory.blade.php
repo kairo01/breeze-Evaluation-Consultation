@@ -165,4 +165,9 @@
             printWindow.print();
         }
     </script>
+
+@section('title')
+    Evaluation History
+@endsection
+
 </x-app-layout>
