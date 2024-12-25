@@ -9,22 +9,18 @@
                         <th>Subject</th>
                         <th>Skills</th>
                         <th>Total Skills</th>
-                        <th>Total Facilities</th>
                         <th>Total Rating</th>
                         <th>Percentage Breakdown</th>
                     </tr>
                 </thead>
-                
                 <tbody>
                     @php
                         // Initialize accumulators for total percentages
                         $totalSkills = 0;
-                        $totalFacilities = 0;
                         $overallTotalRating = 0;
 
                         // Define maximum possible scores
                         $maxSkillsScore = 20;
-                        $maxFacilitiesScore = 25;
                     @endphp
 
                     @foreach ($evaluations as $evaluation)
@@ -32,22 +28,15 @@
                             // Calculate teaching skills total
                             $skillsTotal = array_sum($evaluation->teaching_skills);
 
-                            // Calculate facilities total
-                            $facilitiesTotal = collect($evaluation->facilities)
-                                ->pluck('rating')
-                                ->sum();
-
                             // Overall total
-                            $totalRating = $skillsTotal + $facilitiesTotal;
+                            $totalRating = $skillsTotal;
 
                             // Update accumulators
                             $totalSkills += $skillsTotal;
-                            $totalFacilities += $facilitiesTotal;
                             $overallTotalRating += $totalRating;
 
                             // Calculate percentages based on respective criteria totals
                             $skillsPercentage = $maxSkillsScore > 0 ? round(($skillsTotal / $maxSkillsScore) * 100, 2) : 0;
-                            $facilitiesPercentage = $maxFacilitiesScore > 0 ? round(($facilitiesTotal / $maxFacilitiesScore) * 100, 2) : 0;
                         @endphp
 
                         <!-- Main Row -->
@@ -63,26 +52,81 @@
                                 @endforeach
                             </td>
                             <td>{{ $skillsTotal }} ({{ $skillsPercentage }}%)</td>
-                            <td>{{ $facilitiesTotal }} ({{ $facilitiesPercentage }}%)</td>
                             <!-- Total Rating -->
                             <td><strong>{{ $totalRating }}</strong></td>
-                            <td>
-                                Skills: <strong>{{ $skillsPercentage }}%</strong>, 
-                                Facilities: <strong>{{ $facilitiesPercentage }}%</strong>
-                            </td>
+                            <td>Skills: <strong>{{ $skillsPercentage }}%</strong></td>
                         </tr>
                     @endforeach
 
                     @php
                         // Calculate overall percentages
                         $overallSkillsPercentage = $totalSkills > 0 ? round(($totalSkills / ($maxSkillsScore * count($evaluations))) * 100, 2) : 0;
-                        $overallFacilitiesPercentage = $totalFacilities > 0 ? round(($totalFacilities / ($maxFacilitiesScore * count($evaluations))) * 100, 2) : 0;
                     @endphp
                 </tbody>
             </table>
         </div>
 
-        <!-- Total Percentage Breakdown -->
+        <!-- Facilities Table -->
+        <div class="table-container" style="margin-top: 2rem;">
+            <h3>Facilities Ratings and Comments:</h3>
+            <table class="evaluation-table">
+                <thead>
+                    <tr>
+                        <th>Teacher</th>
+                        <th>Facility</th>
+                        <th>Rating</th>
+                        <th>Comment</th>
+                        <th>Facilities Total</th>
+                        <th>Facilities Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $totalFacilities = 0;
+                        $maxFacilitiesScore = 25;
+                    @endphp
+
+                    @foreach ($evaluations as $evaluation)
+                        @php
+                            // Calculate facilities total
+                            $facilitiesTotal = collect($evaluation->facilities)
+                                ->pluck('rating')
+                                ->sum();
+                            $totalFacilities += $facilitiesTotal;
+
+                            // Calculate facilities percentage
+                            $facilitiesPercentage = $maxFacilitiesScore > 0 ? round(($facilitiesTotal / $maxFacilitiesScore) * 100, 2) : 0;
+                        @endphp
+
+                        @foreach ($evaluation->facilities as $facility => $details)
+                            <tr>
+                                <td>{{ $evaluation->teacher_name }}</td>
+                                <td>{{ $facility }}</td>
+                                <td>{{ $details['rating'] }}</td>
+                                <td>{{ $details['comment'] ?? 'No comment provided' }}</td>
+                                <td>{{ $facilitiesTotal }}</td>
+                                <td>{{ $facilitiesPercentage }}%</td>
+                            </tr>
+                        @endforeach
+                    @endforeach
+
+                    @php
+                        // Calculate overall facilities percentage
+                        $overallFacilitiesPercentage = $totalFacilities > 0 ? round(($totalFacilities / ($maxFacilitiesScore * count($evaluations))) * 100, 2) : 0;
+                    @endphp
+                </tbody>
+            </table>
+
+            <!-- Facilities Total and Percentage Summary -->
+            <div class="summary">
+                <strong>Total Facilities Rating:</strong> {{ $totalFacilities }}<br>
+                <strong>Facilities Total Percentage:</strong> {{ $overallFacilitiesPercentage }}%
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Percentage Breakdown Section -->
+    <div class="container">
         <div class="table-container printable-section" style="margin-top: 2rem; padding: 1rem;">
             <h3>Total Percentage Breakdown:</h3>
             <p>Skills: <strong>{{ $overallSkillsPercentage }}%</strong></p>
@@ -139,6 +183,13 @@
         h4 {
             font-size: 1.25rem;
             font-weight: bold;
+        }
+        .summary {
+            padding: 1rem;
+            background-color: #f9fafb;
+            border-radius: 8px;
+            margin-top: 1rem;
+            border: 1px solid #e5e7eb;
         }
         .print-button {
             margin-top: 1rem;
