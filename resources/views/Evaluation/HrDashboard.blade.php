@@ -31,8 +31,8 @@
                         <div class="mb-4 flex items-center justify-center">
                             <img src="{{ asset('css/GeneralResources/icon.jpg') }}" alt="Student Image" class="rounded-full w-16 h-16">
                         </div>
-                        <h5 class="text-3xl font-bold text-gray-800">5</h5>
-                        <p class="text-lg text-gray-600">Total Faculty</p>
+                        <h5 class="text-3xl font-bold text-gray-800">{{ $totalTeachers }}</h5>
+                        <p class="text-lg text-gray-600">Total Instructor</p>
                     </div>
 
                     <!-- Total Evaluations Card -->
@@ -48,4 +48,7 @@
             </div>
         </div>
     </div>
+ @section('title')
+    HumanResources Dashboard
+@endsection
 </x-app-layout>
