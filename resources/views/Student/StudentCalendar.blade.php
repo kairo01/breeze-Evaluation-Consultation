@@ -103,4 +103,10 @@
             });
         });
     </script>
+
+@section('title')
+   Student Calendar
+@endsection
+
+
 </x-app-layout>

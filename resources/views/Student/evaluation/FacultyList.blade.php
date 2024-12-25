@@ -42,4 +42,9 @@
             @endforeach
         </div>
     </div>
+
+ @section('title')
+   Student Faculty Evaluate
+@endsection
+
 </x-app-layout>

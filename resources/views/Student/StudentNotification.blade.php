@@ -67,4 +67,9 @@
             @endforeach
         </tbody>
     </table>
+
+@section('title')
+   Student Notification
+@endsection
+
 </x-app-layout>

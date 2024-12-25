@@ -268,4 +268,8 @@
 
         <button type="submit">Submit</button>
     </form>
+
+@section('title')
+   Student Evaluation Form
+@endsection
 </x-app-layout>

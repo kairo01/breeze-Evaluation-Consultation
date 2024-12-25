@@ -40,4 +40,9 @@
 
         </div>
     </div>
+
+@section('title')
+   Student Select Department
+@endsection
+
 </x-app-layout>

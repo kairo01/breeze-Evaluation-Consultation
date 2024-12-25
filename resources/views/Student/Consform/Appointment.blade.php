@@ -248,5 +248,10 @@
         }
     });
     </script>
+
+@section('title')
+   Student Appointment Form
+@endsection
+
 </x-app-layout>
 

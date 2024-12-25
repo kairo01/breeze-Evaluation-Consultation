@@ -14,7 +14,7 @@
                                 </a>
                             @elseif(Auth::user()->student_type == 'HighSchool')
                                 <a href="{{ route('Student.HighSchoolDashboard') }}">
-                                     <img src="{{ asset('css/GeneralResources/collegelogo.jpg') }}" 
+                                     <img src="{{ asset('css/GeneralResources/hslogo.jpg') }}" 
                                        class="block h-10 w-10 border border-gray-500 rounded-full" 
                                         alt="College Logo" />
                                 </a>

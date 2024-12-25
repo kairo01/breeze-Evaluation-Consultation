@@ -94,4 +94,9 @@
             </div>
         </div>
     </div>
+
+ @section('title')
+   Student Appointment History
+@endsection
+
 </x-app-layout>
