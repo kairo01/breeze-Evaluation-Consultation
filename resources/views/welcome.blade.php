@@ -48,7 +48,7 @@
     <!-- Main Content -->
     <!-- Title -->
     <h1 class="text-xl sm:text-xl font-extrabold text-black text-center px-4 -mt-32">
-        EASTWOOD PROFESSIONAL COLLEGE OF SCIENCE AND TECHNOLOGY
+        EASTWOODS PROFESSIONAL COLLEGE OF SCIENCE AND TECHNOLOGY
     </h1>
     
     <!-- Cards Section -->
@@ -74,7 +74,7 @@
             </svg>
         </div>
         <div class="absolute bottom-4 w-full text-center">
-            <p class="text-sm text-white">© 2024 Eastwood Professional College. All rights reserved.</p>
+            <p class="text-sm text-white">© 2024 EastwoodS Professional College. All rights reserved.</p>
         </div>
     </footer>
 </body>
