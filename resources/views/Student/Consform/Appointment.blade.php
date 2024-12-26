@@ -29,7 +29,13 @@
                 </div>
             @endif
 
-            <form action="{{ route('Student.Consform.Appointment.store') }}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            @if($pendingAppointment)
+                <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
+                    You already have a pending appointment. Please wait for it to be approved before making a new one.
+                </div>
+            @endif
+
+            <form action="{{ route('Student.Consform.Appointment.store') }}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @if($pendingAppointment) onsubmit="return false;" @endif>
                 @csrf
 
                 <!-- Name (Display only) -->
@@ -47,10 +53,16 @@
                     </label>
                     <select name="course" id="course" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <option value="">Select Course</option>
-                        <option value="BSIT/1ST YEAR/101">BSIT/1ST YEAR/101 - BSIT</option>
-                        <option value="BSIT/2ND YEAR/202">BSIT/2ND YEAR/202 - BSIT</option>
-                        <option value="BSIT/3RD YEAR/301">BSIT/3RD YEAR/301 - BSIT</option>
-                        <option value="BSIT/4TH YEAR/401">BSIT/4TH YEAR/401 - BSIT</option>
+                        @if(auth()->user()->student_type === 'College')
+                            <option value="BSIT/1ST YEAR/101">BSIT/1ST YEAR/101 - BSIT</option>
+                            <option value="BSIT/2ND YEAR/202">BSIT/2ND YEAR/202 - BSIT</option>
+                            <option value="BSIT/3RD YEAR/301">BSIT/3RD YEAR/301 - BSIT</option>
+                            <option value="BSIT/4TH YEAR/401">BSIT/4TH YEAR/401 - BSIT</option>
+                        @else
+                            @for($grade = 7; $grade <= 12; $grade++)
+                                <option value="Grade {{ $grade }}/Section 1">Grade {{ $grade }}/Section 1</option>
+                            @endfor
+                        @endif
                     </select>
                     @error('course')
                         <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
@@ -65,7 +77,8 @@
                     <select name="consultant_role" id="consultant_role" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <option value="">Select Consultant</option>
                         @foreach($users as $user)
-                            @if($user->role !== 'HumanResources')
+                            @if((auth()->user()->student_type === 'HighSchool' && $user->role === 'HighSchoolDepartment') || 
+                                (auth()->user()->student_type === 'College' && in_array($user->role, ['HmDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'ComputerDepartment', 'Guidance'])))
                                 <option value="{{ $user->id }}" data-role="{{ $user->role }}">{{ $user->role }}</option>
                             @endif
                         @endforeach
@@ -125,7 +138,7 @@
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="date">
                         Date:
                     </label>
-                    <input type="date" name="date" id="date" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <input type="date" name="date" id="date" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" min="{{ date('Y-m-d') }}">
                     @error('date')
                         <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
                     @enderror
@@ -168,11 +181,13 @@
 
         consultantRoleSelect.addEventListener('change', function() {
             const selectedConsultant = this.selectedOptions[0].dataset.role;
-            
-            if (selectedConsultant === 'ComputerDepartment') {
+    
+            if (['HmDepartment', 'HighSchoolDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'ComputerDepartment'].includes(selectedConsultant)) {
                 Array.from(purposeSelect.options).forEach(function(option) {
                     if (option.value !== 'Counseling') {
                         option.disabled = true;
+                    } else {
+                        option.disabled = false;
                     }
                 });
                 purposeSelect.value = 'Counseling';
@@ -205,7 +220,8 @@
             timeSlotSelect.disabled = true;
             timeSlotSelect.innerHTML = '<option value="">Loading time slots...</option>';
 
-            fetch(`/api/available-time-slots?date=${date}`)
+            const consultantId = document.getElementById('consultant_role').value;
+            fetch(`/api/available-time-slots?date=${date}&consultant_id=${consultantId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -246,6 +262,14 @@
             date.setHours(date.getHours() + 1);
             return date.toTimeString().slice(0, 5);
         }
+
+        consultantRoleSelect.addEventListener('change', function() {
+            timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
+            timeSlotSelect.disabled = true;
+            if (dateInput.value) {
+                fetchAvailableTimeSlots(dateInput.value);
+            }
+        });
     });
     </script>
 

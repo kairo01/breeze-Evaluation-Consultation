@@ -42,7 +42,6 @@ class Appointment extends Model
     {
         return Carbon::parse($this->date->format('Y-m-d') . ' ' . $this->time->format('H:i:s'))->format('M d, Y h:i A');
     }
-    
 
     public function getEventData()
     {

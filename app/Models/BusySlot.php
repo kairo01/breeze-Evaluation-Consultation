@@ -18,4 +18,10 @@ class BusySlot extends Model
         'busy_all_day',
         'consultant_role',
     ];
+
+    public function consultant()
+    {
+        return $this->belongsTo(User::class, 'consultant_role');
+    }
 }
+

@@ -17,7 +17,7 @@ use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Student\EvaluationFormController;
 use App\Http\Controllers\Student\StudentAppointmentController;
 use App\Http\Controllers\AdminEvaluation\HrCollege;
-
+use App\Http\Controllers\NotifyController;
 
 use App\Http\Controllers\AdminEvaluation\HrCollegeController;
 
@@ -183,6 +183,7 @@ Route::prefix('student')->name('Student.')->group(function () {
 
 // Routes for Consultation
 Route::prefix('consultation')->name('Consultation.')->middleware('role:Guidance')->group(function () {
+    Route::get('/CtDashboard', [ConsultationDbController::class, 'index'])->name('CtDashboard');
     Route::get('/approval', [ConsultationApprovalController::class, 'index'])->name('CtApproval');
     Route::post('/approval/approve', [ConsultationApprovalController::class, 'approve'])->name('CtApproval.approve');
     Route::post('/approval/decline', [ConsultationApprovalController::class, 'decline'])->name('CtApproval.decline');
@@ -203,5 +204,5 @@ Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->g
 Route::get('/api/available-time-slots', [StudentAppointmentController::class, 'getAvailableTimeSlots']);
 
 // Notification routes
-Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
-Route::post('/notifications/{notify}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
+Route::get('/notifications', [NotifyController::class, 'index'])->name('notifications.index');
+Route::post('/notifications/{notify}/mark-as-read', [NotifyController::class, 'markAsRead'])->name('notifications.mark-as-read');

@@ -5,7 +5,6 @@
         </h2>
     </x-slot>
 
-    <!-- Include FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/Evaluation/HrCalendar.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -54,13 +53,12 @@
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
                 events: [
-                    ...@json($appointments), // Student's approved appointments
-                    ...@json($busySlots),    // All busy slots
+                    ...@json($appointments),
+                    ...@json($busySlots),
                 ],
                 eventClick: function (info) {
                     const event = info.event;
 
-                    // Determine event type and populate modal
                     if (event.extendedProps.type === 'appointment') {
                         document.getElementById('modalTitle').innerText = `Appointment: ${event.title}`;
                     } else if (event.extendedProps.type === 'busy_slot') {
@@ -110,3 +108,4 @@
 
 
 </x-app-layout>
+

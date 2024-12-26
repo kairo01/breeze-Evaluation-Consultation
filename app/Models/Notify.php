@@ -38,3 +38,4 @@ class Notify extends Model
         $this->save();
     }
 }
+

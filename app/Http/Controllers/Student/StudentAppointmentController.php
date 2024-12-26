@@ -17,11 +17,21 @@ class StudentAppointmentController extends Controller
     public function index()
     {
         $users = User::where('role', '!=', 'student')->get();
-        return view('Student.Consform.Appointment', compact('users'));
+        $pendingAppointment = Appointment::where('student_id', auth()->id())
+                                     ->where('status', 'Pending')
+                                     ->exists();
+        return view('Student.Consform.Appointment', compact('users', 'pendingAppointment'));
     }
 
     public function store(Request $request)
     {
+        $pendingAppointment = Appointment::where('student_id', auth()->id())
+                                 ->where('status', 'Pending')
+                                 ->exists();
+        if ($pendingAppointment) {
+            return redirect()->back()->with('error', 'You already have a pending appointment. Please wait for it to be approved before making a new one.');
+        }
+
         $request->validate([
             'consultant_role' => 'required|exists:users,id',
             'course' => 'required|string',
@@ -47,11 +57,15 @@ class StudentAppointmentController extends Controller
             return redirect()->back()->with('error', 'You can only make one appointment per week. Your next available appointment date is ' . $endOfWeek->addDay()->format('M d, Y') . '.');
         }
 
-        // Check if the slot is still available
         $availableSlots = $this->getAvailableTimeSlots(new Request(['date' => $date]));
-        if (!in_array($timeSlot, $availableSlots->original['availableSlots'])) {
+
+        // Ensure the response has the expected structure
+        $availableSlotsArray = $availableSlots->original['availableSlots'] ?? [];
+        
+        if (!in_array($timeSlot, $availableSlotsArray)) {
             return redirect()->back()->with('error', 'The selected time slot is no longer available. Please choose another.');
         }
+        
 
         try {
             $appointment = Appointment::create([
@@ -81,22 +95,24 @@ class StudentAppointmentController extends Controller
         }
     }
 
-    public function getAvailableTimeSlots(Request $request)
+   public function getAvailableTimeSlots(Request $request)
     {
         try {
             $date = $request->input('date');
-            if (!$date) {
-                throw new \Exception('Date is required');
+            $consultantId = $request->input('consultant_id');
+            if (!$date || !$consultantId) {
+                throw new \Exception('Date and consultant ID are required');
             }
 
             $allSlots = $this->generateTimeSlots();
-            $bookedSlots = $this->getBookedSlots($date);
-            $busySlots = $this->getBusySlots($date);
+            $bookedSlots = $this->getBookedSlots($date, $consultantId);
+            $busySlots = $this->getBusySlots($date, $consultantId);
 
             $availableSlots = array_diff($allSlots, $bookedSlots, $busySlots);
 
             Log::info('Available time slots', [
                 'date' => $date,
+                'consultant_id' => $consultantId,
                 'allSlots' => $allSlots,
                 'bookedSlots' => $bookedSlots,
                 'busySlots' => $busySlots,
@@ -107,6 +123,7 @@ class StudentAppointmentController extends Controller
         } catch (\Exception $e) {
             Log::error('Error in getAvailableTimeSlots: ' . $e->getMessage(), [
                 'date' => $request->input('date'),
+                'consultant_id' => $request->input('consultant_id'),
                 'trace' => $e->getTraceAsString()
             ]);
             return response()->json(['error' => 'An error occurred while fetching available time slots: ' . $e->getMessage()], 500);
@@ -116,16 +133,20 @@ class StudentAppointmentController extends Controller
     private function generateTimeSlots()
     {
         $slots = [];
-        for ($hour = 8; $hour < 17; $hour++) {
-            $slots[] = sprintf('%02d:00', $hour);
+        $start = strtotime('08:00');
+        $end = strtotime('17:00');
+        while ($start < $end) {
+            $slots[] = date('H:i', $start);
+            $start = strtotime('+30 minutes', $start);
         }
         return $slots;
     }
 
-    private function getBookedSlots($date)
+    private function getBookedSlots($date, $consultantId)
     {
         try {
             return Appointment::whereDate('date', $date)
+                ->where('consultant_role', $consultantId)
                 ->get()
                 ->flatMap(function ($appointment) {
                     $start = $appointment->time->format('H:i');
@@ -139,16 +160,18 @@ class StudentAppointmentController extends Controller
         } catch (\Exception $e) {
             Log::error('Error in getBookedSlots: ' . $e->getMessage(), [
                 'date' => $date,
+                'consultant_id' => $consultantId,
                 'trace' => $e->getTraceAsString()
             ]);
             return [];
         }
     }
 
-    private function getBusySlots($date)
+    private function getBusySlots($date, $consultantId)
     {
         try {
             return BusySlot::whereDate('date', $date)
+                ->where('consultant_role', $consultantId)
                 ->get()
                 ->flatMap(function ($busySlot) {
                     if ($busySlot->busy_all_day) {
@@ -169,6 +192,7 @@ class StudentAppointmentController extends Controller
         } catch (\Exception $e) {
             Log::error('Error in getBusySlots: ' . $e->getMessage(), [
                 'date' => $date,
+                'consultant_id' => $consultantId,
                 'trace' => $e->getTraceAsString()
             ]);
             return [];
@@ -186,7 +210,8 @@ class StudentAppointmentController extends Controller
             'message' => 'Your appointment has been approved.',
             'type' => 'appointment_approved',
             'read' => false,
-            'link' => route('student.appointment.show', $appointment->id),
+            'link' => route('StudentHistory'),
+            'appointment_id' => $appointment->id,
         ]);
 
         return redirect()->back()->with('success', 'Appointment approved successfully.');
@@ -204,7 +229,8 @@ class StudentAppointmentController extends Controller
             'message' => 'Your appointment has been declined.',
             'type' => 'appointment_declined',
             'read' => false,
-            'link' => route('student.appointment.show', $appointment->id),
+            'link' => route('StudentHistory'),
+            'appointment_id' => $appointment->id,
         ]);
 
         return redirect()->back()->with('success', 'Appointment declined successfully.');

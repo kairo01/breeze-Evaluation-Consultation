@@ -1,10 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight" style="font-family: 'Bunny', sans-serif;">
-            {{ __('College Dashboard') }}
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('College Student Dashboard') }}
         </h2>
     </x-slot>
-
     <div class="max-w-7xl mx-auto py-10">
         <!-- Welcome Section -->
         <div class="bg-white shadow-md rounded-lg p-6 mb-6 flex items-center justify-between">
@@ -18,15 +17,7 @@
             </div>
         </div>
 
-        <!-- Appointments and Calendar Section -->
-        <div class="grid grid-cols-2 gap-6 mb-6">
-            <div class="bg-white shadow-md rounded-lg p-6">
-                <h3 class="text-lg font-semibold mb-4" style="font-family: 'Bunny', sans-serif;">Appointments</h3>
-                <div class="border p-4 mb-4">
-                    Records display here
-                </div>
-                <button class="text-blue-500 hover:underline" style="font-family: 'Bunny', sans-serif;">More...</button>
-        </div>
+
 
         <!-- History Section -->
         <div class="bg-white shadow-md rounded-lg p-6">
@@ -37,9 +28,43 @@
             <button class="text-blue-500 hover:underline" style="font-family: 'Bunny', sans-serif;">More...</button>
         </div>
     </div>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <h3 class="text-lg font-semibold mb-4">Appointment Statistics</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <div class="bg-blue-100 p-4 rounded-lg">
+                            <p class="text-xl font-bold">{{ $totalAppointments }}</p>
+                            <p class="text-sm">Total Appointments</p>
+                        </div>
+                        <div class="bg-green-100 p-4 rounded-lg">
+                            <p class="text-xl font-bold">{{ $approvedAppointments }}</p>
+                            <p class="text-sm">Approved Appointments</p>
+                        </div>
+                        <div class="bg-yellow-100 p-4 rounded-lg">
+                            <p class="text-xl font-bold">{{ $pendingAppointments }}</p>
+                            <p class="text-sm">Pending Appointments</p>
+                        </div>
+                        <div class="bg-red-100 p-4 rounded-lg">
+                            <p class="text-xl font-bold">{{ $declinedAppointments }}</p>
+                            <p class="text-sm">Declined Appointments</p>
+                        </div>
+                    </div>
 
+<<<<<<< Updated upstream
 @section('title')
     Student College Dashboard
 @endsection
 
+=======
+                
+                          
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+>>>>>>> Stashed changes
 </x-app-layout>
+

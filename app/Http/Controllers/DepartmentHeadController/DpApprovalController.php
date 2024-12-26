@@ -21,14 +21,16 @@ class DpApprovalController extends Controller
         $appointment = Appointment::findOrFail($request->appointment_id);
         $appointment->update(['status' => 'Approved']);
         
-        // Optionally notify the student here
-
+        // Notify the student or take other actions if necessary
+        
+        // Redirect to consultation calendar or back to approval page
         return back()->with('success', 'Appointment approved successfully.');
     }
 
     public function decline(Request $request)
     {
         $appointment = Appointment::findOrFail($request->appointment_id);
+
         $validated = $request->validate([
             'decline_reason' => 'required|string|max:255',
         ]);
@@ -37,6 +39,8 @@ class DpApprovalController extends Controller
             'status' => 'Declined',
             'decline_reason' => $validated['decline_reason'],
         ]);
+
+        // Optionally, notify the student about the decline
 
         return back()->with('success', 'Appointment declined successfully.');
     }
