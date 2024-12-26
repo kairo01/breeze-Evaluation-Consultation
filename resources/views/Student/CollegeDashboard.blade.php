@@ -52,12 +52,11 @@
                         </div>
                     </div>
 
-<<<<<<< Updated upstream
 @section('title')
     Student College Dashboard
 @endsection
 
-=======
+
                 
                           
                     </div>
@@ -65,6 +64,6 @@
             </div>
         </div>
     </div>
->>>>>>> Stashed changes
+
 </x-app-layout>
 
