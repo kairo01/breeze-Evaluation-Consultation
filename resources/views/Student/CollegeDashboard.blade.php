@@ -52,11 +52,6 @@
                         </div>
                     </div>
 
-@section('title')
-    Student College Dashboard
-@endsection
-
-
                 
                           
                     </div>
@@ -64,6 +59,5 @@
             </div>
         </div>
     </div>
-
 </x-app-layout>
 
