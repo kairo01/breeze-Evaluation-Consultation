@@ -32,5 +32,9 @@
             </div>
         </div>
     </div>
+
+    @section('title')
+      Department Head Dashboard
+   @endsection
 </x-app-layout>
 

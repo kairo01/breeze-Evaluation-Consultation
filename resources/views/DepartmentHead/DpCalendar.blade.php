@@ -189,5 +189,8 @@
         };
     });
     </script>
+    @section('title')
+      Department Head Calendar
+   @endsection
 </x-app-layout>
 

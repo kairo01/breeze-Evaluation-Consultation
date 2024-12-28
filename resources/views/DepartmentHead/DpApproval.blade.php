@@ -126,4 +126,8 @@
             document.getElementById('declineModal' + id).style.display = 'none';
         }
     </script>
+
+   @section('title')
+      Department Head Approval
+   @endsection
 </x-app-layout>
