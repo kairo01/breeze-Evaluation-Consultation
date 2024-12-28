@@ -14,4 +14,7 @@
             </div>
         </div>
     </div>
+    @section('title')
+      Guidance Counselor Message
+   @endsection
 </x-app-layout>

@@ -73,6 +73,19 @@ class UserSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            [
+                'name' => 'Jayvanz',
+                'student_id' => '23-0507',
+                'email' => 'Jayvanz@example.com',
+                'password' => Hash::make('password123'),
+                'role' => 'Student',
+                'student_type' => 'college',
+                'status' => 'active',
+                'remember_token' => null,  // Add remember_token here
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

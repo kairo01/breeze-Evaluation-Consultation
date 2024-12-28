@@ -75,6 +75,9 @@
             </div>
         </div>
     </div>
+    @section('title')
+      Guidance Counselor History
+   @endsection
 </x-app-layout>
 
     

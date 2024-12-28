@@ -19,7 +19,7 @@
                 <p class="text-gray-600" style="font-family: 'Bunny', sans-serif;">{{ Auth::user()->name }}</p>
             </div>
             <div>
-                <img src="{{ asset('css/GeneralResources/icon.jpg') }}" alt="Student Image" class="rounded-full w-20 h-20">
+                <img src="{{ asset('css/GeneralResources/admin2.png') }}" alt="Admin Image" class="rounded-full w-20 h-20">
             </div>
         </div>
 
@@ -29,20 +29,20 @@
                     <!-- Total Students Card -->
                     <div class="bg-white rounded-lg shadow-md p-6 flex flex-col items-center text-center">
                         <div class="mb-4 flex items-center justify-center">
-                            <img src="{{ asset('css/GeneralResources/icon.jpg') }}" alt="Student Image" class="rounded-full w-16 h-16">
+                           <img src="{{ asset('css/GeneralResources/totalinstructor.png') }}" alt="Instructor Image" class="w-20 h-20">
                         </div>
-                        <h5 class="text-3xl font-bold text-gray-800">{{ $totalTeachers }}</h5>
-                        <p class="text-lg text-gray-600">Total Instructor</p>
+                          <h5 class="text-3xl font-bold text-gray-800" style="font-family: 'Bunny', sans-serif;">{{ $totalTeachers }}</h5>
+                          <p class="text-lg text-gray-600" style="font-family: 'Bunny', sans-serif;">Total Instructor</p>
                     </div>
 
                     <!-- Total Evaluations Card -->
                     <div class="bg-white rounded-lg shadow-md p-6 flex flex-col items-center text-center">
                         <div class="mb-4 flex items-center justify-center">
-                            <img src="{{ asset('css/GeneralResources/icon.jpg') }}" alt="Student Image" class="rounded-full w-16 h-16">
+                            <img src="{{ asset('css/GeneralResources/evaluation.png') }}" alt="Student Image" class="w-18 h-20">
                         </div>
                        
-                        <h5 class="text-3xl font-bold text-gray-800">{{ $totalEvaluations }}</h5>
-                        <p class="text-lg text-gray-600">Total Students Evaluated</p>
+                        <h5 class="text-3xl font-bold text-gray-800" style="font-family: 'Bunny', sans-serif;">{{ $totalEvaluations }}</h5>
+                        <p class="text-lg text-gray-600" style="font-family: 'Bunny', sans-serif;">Total Students Evaluated</p>
                     </div>
                 </div>
             </div>
