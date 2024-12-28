@@ -19,15 +19,17 @@ class StudentCalendarController extends Controller
                 return array_merge($appointment->getEventData(), ['type' => 'appointment']);
             });
 
-        $busySlots = BusySlot::all()
+        $busySlots = BusySlot::with('consultant')->get()
             ->map(function ($slot) {
                 return [
                     'title' => $slot->title,
                     'start' => $slot->busy_all_day ? $slot->date : $slot->date . 'T' . $slot->from,
-                    'end' => $slot->busy_all_day ? null : $slot->date . 'T' . $slot->to,
+                    'end' => $slot->busy_all_day ? $slot->date : $slot->date . 'T' . $slot->to,
                     'description' => $slot->description,
                     'color' => '#FF5733',
                     'type' => 'busy_slot',
+                    'consultant_name' => $slot->consultant->name,
+                    'consultant_role' => $slot->consultant_role,
                 ];
             });
 

@@ -18,13 +18,13 @@ class DpCalendarController extends Controller
                 return array_merge($appointment->getEventData(), ['type' => 'appointment']);
             });
 
-        $busySlots = BusySlot::where('consultant_role', auth()->user()->role)
+        $busySlots = BusySlot::where('consultant_id', auth()->id())
             ->get()
             ->map(function ($slot) {
                 return [
                     'title' => $slot->title,
                     'start' => $slot->busy_all_day ? $slot->date : $slot->date . 'T' . $slot->from,
-                    'end' => $slot->busy_all_day ? null : $slot->date . 'T' . $slot->to,
+                    'end' => $slot->busy_all_day ? $slot->date : $slot->date . 'T' . $slot->to,
                     'description' => $slot->description,
                     'color' => '#FF5733',
                     'type' => 'busy_slot',
@@ -54,6 +54,7 @@ class DpCalendarController extends Controller
             'to' => $busyAllDay ? null : $validated['to'],
             'busy_all_day' => $busyAllDay,
             'consultant_role' => auth()->user()->role,
+            'consultant_id' => auth()->id(),
         ]);
 
         return redirect()->back()->with('success', 'Busy slot added successfully.');

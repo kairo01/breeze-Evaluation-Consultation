@@ -17,11 +17,12 @@ class BusySlot extends Model
         'to',
         'busy_all_day',
         'consultant_role',
+        'consultant_id',
     ];
 
     public function consultant()
     {
-        return $this->belongsTo(User::class, 'consultant_role');
+        return $this->belongsTo(User::class, 'consultant_id');
     }
 }
 

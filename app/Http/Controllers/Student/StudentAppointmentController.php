@@ -16,7 +16,7 @@ class StudentAppointmentController extends Controller
 {
     public function index()
     {
-        $users = User::where('role', '!=', 'student')->get();
+        $users = User::whereIn('role', ['Guidance', 'ComputerDepartment', 'EngineeringDeparment', 'HighSchoolDepartment', 'TesdaDepartment', 'HmDepartment'])->get();
         $pendingAppointment = Appointment::where('student_id', auth()->id())
                                      ->where('status', 'Pending')
                                      ->exists();
@@ -26,8 +26,8 @@ class StudentAppointmentController extends Controller
     public function store(Request $request)
     {
         $pendingAppointment = Appointment::where('student_id', auth()->id())
-                                 ->where('status', 'Pending')
-                                 ->exists();
+                             ->where('status', 'Pending')
+                             ->exists();
         if ($pendingAppointment) {
             return redirect()->back()->with('error', 'You already have a pending appointment. Please wait for it to be approved before making a new one.');
         }
@@ -44,6 +44,7 @@ class StudentAppointmentController extends Controller
 
         $date = $request->input('date');
         $timeSlot = $request->input('time_slot');
+        $consultantId = $request->input('consultant_role');
 
         // Check if the student has already made an appointment this week
         $startOfWeek = Carbon::parse($date)->startOfWeek();
@@ -57,20 +58,25 @@ class StudentAppointmentController extends Controller
             return redirect()->back()->with('error', 'You can only make one appointment per week. Your next available appointment date is ' . $endOfWeek->addDay()->format('M d, Y') . '.');
         }
 
-        $availableSlots = $this->getAvailableTimeSlots(new Request(['date' => $date]));
+        $availableSlotsResponse = $this->getAvailableTimeSlots(new Request([
+            'date' => $date,
+            'consultant_id' => $consultantId
+        ]));
 
-        // Ensure the response has the expected structure
-        $availableSlotsArray = $availableSlots->original['availableSlots'] ?? [];
-        
-        if (!in_array($timeSlot, $availableSlotsArray)) {
+        $availableSlots = $availableSlotsResponse->getData(true);
+
+        if (isset($availableSlots['error'])) {
+            return redirect()->back()->with('error', $availableSlots['error']);
+        }
+
+        if (!in_array($timeSlot, $availableSlots['availableSlots'])) {
             return redirect()->back()->with('error', 'The selected time slot is no longer available. Please choose another.');
         }
-        
 
         try {
             $appointment = Appointment::create([
                 'student_id' => auth()->id(),
-                'consultant_role' => $request->input('consultant_role'),
+                'consultant_role' => $consultantId,
                 'course' => $request->input('course'),
                 'purpose' => $request->input('purpose'),
                 'meeting_mode' => $request->input('meeting_mode'),
@@ -82,7 +88,7 @@ class StudentAppointmentController extends Controller
 
             // Create notification for the consultant
             Notify::create([
-                'user_id' => $request->input('consultant_role'),
+                'user_id' => $consultantId,
                 'message' => 'New appointment request from ' . auth()->user()->name,
                 'type' => 'new_appointment',
                 'read' => false,
@@ -95,51 +101,58 @@ class StudentAppointmentController extends Controller
         }
     }
 
-   public function getAvailableTimeSlots(Request $request)
+
+    public function getAvailableTimeSlots(Request $request)
     {
         try {
             $date = $request->input('date');
             $consultantId = $request->input('consultant_id');
+
             if (!$date || !$consultantId) {
-                throw new \Exception('Date and consultant ID are required');
+                return response()->json(['error' => 'Missing date or consultant ID'], 400);
             }
 
-            $allSlots = $this->generateTimeSlots();
-            $bookedSlots = $this->getBookedSlots($date, $consultantId);
-            $busySlots = $this->getBusySlots($date, $consultantId);
+            $availableSlots = $this->generateAvailableTimeSlots($date, $consultantId);
 
-            $availableSlots = array_diff($allSlots, $bookedSlots, $busySlots);
-
-            Log::info('Available time slots', [
-                'date' => $date,
-                'consultant_id' => $consultantId,
-                'allSlots' => $allSlots,
-                'bookedSlots' => $bookedSlots,
-                'busySlots' => $busySlots,
-                'availableSlots' => $availableSlots
-            ]);
-
-            return response()->json(['availableSlots' => array_values($availableSlots)]);
+            return response()->json(['availableSlots' => $availableSlots]);
         } catch (\Exception $e) {
-            Log::error('Error in getAvailableTimeSlots: ' . $e->getMessage(), [
-                'date' => $request->input('date'),
-                'consultant_id' => $request->input('consultant_id'),
-                'trace' => $e->getTraceAsString()
-            ]);
-            return response()->json(['error' => 'An error occurred while fetching available time slots: ' . $e->getMessage()], 500);
+            \Log::error('Error in getAvailableTimeSlots: ' . $e->getMessage());
+            return response()->json(['error' => 'An error occurred while fetching time slots'], 500);
         }
     }
 
-    private function generateTimeSlots()
+    private function generateAvailableTimeSlots($date, $consultantId)
     {
-        $slots = [];
-        $start = strtotime('08:00');
-        $end = strtotime('17:00');
+        // Generate time slots from 8 AM to 5 PM
+        $allSlots = [];
+        $start = Carbon::parse($date)->setTime(8, 0);
+        $end = Carbon::parse($date)->setTime(17, 0);
+
         while ($start < $end) {
-            $slots[] = date('H:i', $start);
-            $start = strtotime('+30 minutes', $start);
+            $allSlots[] = $start->format('H:i');
+            $start->addMinutes(30);
         }
-        return $slots;
+
+        // Get booked appointments for the given date and consultant
+        $bookedAppointments = Appointment::where('consultant_role', $consultantId)
+            ->whereDate('date', $date)
+            ->where('status', '!=', 'Declined')
+            ->get()
+            ->flatMap(function ($appointment) {
+                $start = Carbon::parse($appointment->date->format('Y-m-d') . ' ' . $appointment->time->format('H:i'));
+                return [
+                    $start->format('H:i'),
+                    $start->addMinutes(30)->format('H:i'),
+                ];
+            })
+            ->unique()
+            ->values()
+            ->toArray();
+
+        // Remove booked slots from available slots
+        $availableSlots = array_diff($allSlots, $bookedAppointments);
+
+        return array_values($availableSlots);
     }
 
     private function getBookedSlots($date, $consultantId)
@@ -147,15 +160,17 @@ class StudentAppointmentController extends Controller
         try {
             return Appointment::whereDate('date', $date)
                 ->where('consultant_role', $consultantId)
+                ->where('status', '!=', 'Declined')
                 ->get()
                 ->flatMap(function ($appointment) {
-                    $start = $appointment->time->format('H:i');
+                    $start = Carbon::parse($appointment->date->format('Y-m-d') . ' ' . $appointment->time->format('H:i'));
                     return [
-                        $start,
-                        date('H:i', strtotime('+30 minutes', strtotime($start))),
+                        $start->format('H:i'),
+                        $start->addMinutes(30)->format('H:i'),
                     ];
                 })
                 ->unique()
+                ->values()
                 ->toArray();
         } catch (\Exception $e) {
             Log::error('Error in getBookedSlots: ' . $e->getMessage(), [
@@ -171,7 +186,7 @@ class StudentAppointmentController extends Controller
     {
         try {
             return BusySlot::whereDate('date', $date)
-                ->where('consultant_role', $consultantId)
+                ->where('consultant_id', $consultantId)
                 ->get()
                 ->flatMap(function ($busySlot) {
                     if ($busySlot->busy_all_day) {
@@ -188,6 +203,7 @@ class StudentAppointmentController extends Controller
                     }
                 })
                 ->unique()
+                ->values()
                 ->toArray();
         } catch (\Exception $e) {
             Log::error('Error in getBusySlots: ' . $e->getMessage(), [
@@ -197,6 +213,18 @@ class StudentAppointmentController extends Controller
             ]);
             return [];
         }
+    }
+
+    private function generateTimeSlots()
+    {
+        $slots = [];
+        $start = strtotime('08:00');
+        $end = strtotime('17:00');
+        while ($start < $end) {
+            $slots[] = date('H:i', $start);
+            $start = strtotime('+30 minutes', $start);
+        }
+        return $slots;
     }
 
     public function approve(Appointment $appointment)
