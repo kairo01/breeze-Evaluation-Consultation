@@ -17,17 +17,7 @@
             </div>
         </div>
 
-
-
-        <!-- History Section -->
-        <div class="bg-white shadow-md rounded-lg p-6">
-            <h3 class="text-lg font-semibold mb-4" style="font-family: 'Bunny', sans-serif;">History</h3>
-            <div class="border p-4 mb-4">
-                history display here
-            </div>
-            <button class="text-blue-500 hover:underline" style="font-family: 'Bunny', sans-serif;">More...</button>
-        </div>
-    </div>
+    
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">

@@ -189,5 +189,9 @@
         };
     });
     </script>
+
+  @section('title')
+      Guidance Counselor Calendar
+   @endsection
 </x-app-layout>
 

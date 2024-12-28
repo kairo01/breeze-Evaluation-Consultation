@@ -32,5 +32,9 @@
             </div>
         </div>
     </div>
+
+    @section('title')
+      Guidance Counselor Dashboard
+   @endsection
 </x-app-layout>
 

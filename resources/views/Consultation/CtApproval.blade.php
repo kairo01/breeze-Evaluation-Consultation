@@ -125,4 +125,8 @@
             document.getElementById('declineModal' + id).style.display = 'none';
         }
     </script>
+
+    @section('title')
+      Guidance Counselor Approval
+   @endsection
 </x-app-layout>
