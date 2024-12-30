@@ -49,5 +49,8 @@
             </div>
         </div>
     </div>
+@section('title')
+   Student Dashboard
+@endsection
 </x-app-layout>
 
