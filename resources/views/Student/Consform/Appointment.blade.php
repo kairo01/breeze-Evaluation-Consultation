@@ -35,6 +35,10 @@
                 </div>
             @endif
 
+            <div id="busyDayMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                This day is busy. Please pick another date and time.
+            </div>
+
             <form action="{{ route('Student.Consform.Appointment.store') }}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @if($pendingAppointment) onsubmit="return false;" @endif>
                 @csrf
 
@@ -169,108 +173,106 @@
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const consultantRoleSelect = document.getElementById('consultant_role');
-        const purposeSelect = document.getElementById('purpose');
-        const meetingModeSelect = document.getElementById('meeting_mode');
-        const meetingPreferenceContainer = document.getElementById('meeting_preference_container');
-        const dateInput = document.getElementById('date');
-        const timeSlotSelect = document.getElementById('time_slot');
-        const timeSlotLoading = document.getElementById('time_slot_loading');
-        const timeSlotError = document.getElementById('time_slot_error');
+document.addEventListener('DOMContentLoaded', function() {
+    const consultantRoleSelect = document.getElementById('consultant_role');
+    const purposeSelect = document.getElementById('purpose');
+    const meetingModeSelect = document.getElementById('meeting_mode');
+    const meetingPreferenceContainer = document.getElementById('meeting_preference_container');
+    const dateInput = document.getElementById('date');
+    const timeSlotSelect = document.getElementById('time_slot');
+    const timeSlotLoading = document.getElementById('time_slot_loading');
+    const timeSlotError = document.getElementById('time_slot_error');
 
-        consultantRoleSelect.addEventListener('change', function() {
-            const selectedConsultant = this.selectedOptions[0].dataset.role;
-    
-            if (['HmDepartment', 'HighSchoolDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'ComputerDepartment'].includes(selectedConsultant)) {
-                Array.from(purposeSelect.options).forEach(function(option) {
-                    if (option.value !== 'Counseling') {
-                        option.disabled = true;
-                    } else {
-                        option.disabled = false;
-                    }
-                });
-                purposeSelect.value = 'Counseling';
-            } else {
-                Array.from(purposeSelect.options).forEach(function(option) {
+    consultantRoleSelect.addEventListener('change', function() {
+        const selectedConsultant = this.selectedOptions[0].dataset.role;
+
+        if (['HmDepartment', 'HighSchoolDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'ComputerDepartment'].includes(selectedConsultant)) {
+            Array.from(purposeSelect.options).forEach(function(option) {
+                if (option.value !== 'Counseling') {
+                    option.disabled = true;
+                } else {
                     option.disabled = false;
-                });
-            }
-
-            updateMeetingPreferenceVisibility();
-        });
-
-        meetingModeSelect.addEventListener('change', updateMeetingPreferenceVisibility);
-
-        function updateMeetingPreferenceVisibility() {
-            if (consultantRoleSelect.value && meetingModeSelect.value === 'Online') {
-                meetingPreferenceContainer.style.display = 'block';
-            } else {
-                meetingPreferenceContainer.style.display = 'none';
-            }
+                }
+            });
+            purposeSelect.value = 'Counseling';
+        } else {
+            Array.from(purposeSelect.options).forEach(function(option) {
+                option.disabled = false;
+            });
         }
 
-        dateInput.addEventListener('change', function() {
-            fetchAvailableTimeSlots(this.value);
-        });
-
-        function fetchAvailableTimeSlots(date) {
-            timeSlotLoading.style.display = 'block';
-            timeSlotError.style.display = 'none';
-            timeSlotSelect.disabled = true;
-            timeSlotSelect.innerHTML = '<option value="">Loading time slots...</option>';
-
-            const consultantId = document.getElementById('consultant_role').value;
-            fetch(`/api/available-time-slots?date=${date}&consultant_id=${consultantId}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        throw new Error(data.error);
-                    }
-                    timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
-                    if (data.availableSlots && data.availableSlots.length > 0) {
-                        data.availableSlots.forEach(slot => {
-                            const option = document.createElement('option');
-                            option.value = slot;
-                            option.textContent = `${slot} - ${addHour(slot)}`;
-                            timeSlotSelect.appendChild(option);
-                        });
-                    } else {
-                        timeSlotSelect.innerHTML = '<option value="">No available time slots</option>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    timeSlotError.textContent = `Error loading time slots: ${error.message}`;
-                    timeSlotError.style.display = 'block';
-                    timeSlotSelect.innerHTML = '<option value="">Error loading time slots</option>';
-                })
-                .finally(() => {
-                    timeSlotLoading.style.display = 'none';
-                    timeSlotSelect.disabled = false;
-                });
-        }
-
-        function addHour(time) {
-            const [hours, minutes] = time.split(':');
-            const date = new Date(2000, 0, 1, hours, minutes);
-            date.setHours(date.getHours() + 1);
-            return date.toTimeString().slice(0, 5);
-        }
-
-        consultantRoleSelect.addEventListener('change', function() {
-            timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
-            timeSlotSelect.disabled = true;
-            if (dateInput.value) {
-                fetchAvailableTimeSlots(dateInput.value);
-            }
-        });
+        updateMeetingPreferenceVisibility();
     });
+
+    meetingModeSelect.addEventListener('change', updateMeetingPreferenceVisibility);
+
+    function updateMeetingPreferenceVisibility() {
+        if (consultantRoleSelect.value && meetingModeSelect.value === 'Online') {
+            meetingPreferenceContainer.style.display = 'block';
+        } else {
+            meetingPreferenceContainer.style.display = 'none';
+        }
+    }
+
+    dateInput.addEventListener('change', function() {
+        fetchAvailableTimeSlots(this.value);
+    });
+
+    function fetchAvailableTimeSlots(date) {
+        timeSlotLoading.style.display = 'block';
+        timeSlotError.style.display = 'none';
+        timeSlotSelect.disabled = true;
+        timeSlotSelect.innerHTML = '<option value="">Loading time slots...</option>';
+
+        const consultantId = document.getElementById('consultant_role').value;
+        fetch(`/api/available-time-slots?date=${date}&consultant_id=${consultantId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
+                if (data.availableSlots && data.availableSlots.length > 0) {
+                    data.availableSlots.forEach(slot => {
+                        const option = document.createElement('option');
+                        option.value = slot;
+                        option.textContent = `${slot} - ${addHour(slot)}`;
+                        timeSlotSelect.appendChild(option);
+                    });
+                    document.getElementById('busyDayMessage').classList.add('hidden');
+                } else {
+                    timeSlotSelect.innerHTML = '<option value="">No available time slots</option>';
+                    document.getElementById('busyDayMessage').classList.remove('hidden');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                timeSlotError.textContent = `Error loading time slots: ${error.message}`;
+                timeSlotError.style.display = 'block';
+                timeSlotSelect.innerHTML = '<option value="">Error loading time slots</option>';
+            })
+            .finally(() => {
+                timeSlotLoading.style.display = 'none';
+                timeSlotSelect.disabled = false;
+            });
+    }
+
+
+    function addHour(time) {
+        const [hours, minutes] = time.split(':');
+        const date = new Date(2000, 0, 1, hours, minutes);
+        date.setHours(date.getHours() + 1);
+        return date.toTimeString().slice(0, 5);
+    }
+
+    consultantRoleSelect.addEventListener('change', function() {
+        timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
+        timeSlotSelect.disabled = true;
+        if (dateInput.value) {
+            fetchAvailableTimeSlots(dateInput.value);
+        }
+    });
+});
     </script>
 
 @section('title')

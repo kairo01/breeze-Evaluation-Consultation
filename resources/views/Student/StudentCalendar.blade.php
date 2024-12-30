@@ -65,7 +65,12 @@
                         document.getElementById('modalTitle').innerText = `Busy Slot: ${event.title}`;
                     }
 
-                    document.getElementById('modalDescription').innerText = event.extendedProps.description || 'No description available';
+                    let description = event.extendedProps.description || 'No description available';
+                    if (event.extendedProps.type === 'busy_slot') {
+                        description += `\nConsultant: ${event.extendedProps.consultant_name} (${event.extendedProps.consultant_role})`;
+                    }
+                    document.getElementById('modalDescription').innerText = description;
+
                     document.getElementById('modalDateTime').innerText = event.start.toLocaleDateString() +
                         (event.start.toLocaleTimeString() ? ` - ${event.start.toLocaleTimeString()}` : '');
 

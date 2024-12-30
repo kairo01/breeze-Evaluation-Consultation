@@ -17,6 +17,7 @@ class CreateBusySlotsTable extends Migration
             $table->time('to')->nullable();
             $table->boolean('busy_all_day')->default(false);
             $table->string('consultant_role');
+            $table->foreignId('consultant_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -26,3 +27,4 @@ class CreateBusySlotsTable extends Migration
         Schema::dropIfExists('busy_slots');
     }
 }
+
