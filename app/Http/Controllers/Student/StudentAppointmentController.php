@@ -101,7 +101,6 @@ class StudentAppointmentController extends Controller
         }
     }
 
-
     public function getAvailableTimeSlots(Request $request)
     {
         try {
@@ -112,50 +111,145 @@ class StudentAppointmentController extends Controller
                 return response()->json(['error' => 'Missing date or consultant ID'], 400);
             }
 
+            Log::info('Fetching available time slots', ['date' => $date, 'consultant_id' => $consultantId]);
+
             $availableSlots = $this->generateAvailableTimeSlots($date, $consultantId);
+
+            Log::info('Available time slots', ['slots' => $availableSlots]);
 
             return response()->json(['availableSlots' => $availableSlots]);
         } catch (\Exception $e) {
-            \Log::error('Error in getAvailableTimeSlots: ' . $e->getMessage());
-            return response()->json(['error' => 'An error occurred while fetching time slots'], 500);
+            Log::error('Error in getAvailableTimeSlots: ' . $e->getMessage(), [
+                'date' => $request->input('date'),
+                'consultant_id' => $request->input('consultant_id'),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json(['error' => 'An error occurred while fetching time slots: ' . $e->getMessage()], 500);
         }
     }
 
     private function generateAvailableTimeSlots($date, $consultantId)
     {
-        // Generate time slots from 8 AM to 5 PM
-        $allSlots = [];
-        $start = Carbon::parse($date)->setTime(8, 0);
-        $end = Carbon::parse($date)->setTime(17, 0);
+        try {
+            // Generate time slots from 8 AM to 5 PM
+            $allSlots = [];
+            $start = Carbon::parse($date)->setTime(8, 0);
+            $end = Carbon::parse($date)->setTime(17, 0);
 
-        while ($start < $end) {
-            $allSlots[] = $start->format('H:i');
-            $start->addMinutes(30);
+            while ($start < $end) {
+                $allSlots[] = $start->format('H:i');
+                $start->addMinutes(30);
+            }
+
+            // Get booked appointments for the given date and consultant
+            $bookedAppointments = $this->getBookedSlots($date, $consultantId);
+
+            // Get busy slots for the given date and consultant
+            $busySlots = $this->getBusySlots($date, $consultantId);
+
+            // Combine booked appointments and busy slots
+            $unavailableSlots = array_merge($bookedAppointments, $busySlots);
+
+            // Remove unavailable slots from all slots
+            $availableSlots = array_diff($allSlots, $unavailableSlots);
+
+            return array_values($availableSlots);
+        } catch (\Exception $e) {
+            Log::error('Error in generateAvailableTimeSlots: ' . $e->getMessage(), [
+                'date' => $date,
+                'consultant_id' => $consultantId,
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw $e;
         }
-
-        // Get booked appointments for the given date and consultant
-        $bookedAppointments = Appointment::where('consultant_role', $consultantId)
-            ->whereDate('date', $date)
-            ->where('status', '!=', 'Declined')
-            ->get()
-            ->flatMap(function ($appointment) {
-                $start = Carbon::parse($appointment->date->format('Y-m-d') . ' ' . $appointment->time->format('H:i'));
-                return [
-                    $start->format('H:i'),
-                    $start->addMinutes(30)->format('H:i'),
-                ];
-            })
-            ->unique()
-            ->values()
-            ->toArray();
-
-        // Remove booked slots from available slots
-        $availableSlots = array_diff($allSlots, $bookedAppointments);
-
-        return array_values($availableSlots);
     }
 
     private function getBookedSlots($date, $consultantId)
+    {
+        try {
+            return Appointment::whereDate('date', $date)
+                ->where('consultant_role', $consultantId)
+                ->where('status', '!=', 'Declined')
+                ->get()
+                ->flatMap(function ($appointment) {
+                    $start = Carbon::parse($appointment->date->format('Y-m-d') . ' ' . $appointment->time->format('H:i'));
+                    return [
+                        $start->format('H:i'),
+                        $start->addMinutes(30)->format('H:i'),
+                    ];
+                })
+                ->unique()
+                ->values()
+                ->toArray();
+        } catch (\Exception $e) {
+            Log::error('Error in getBookedSlots: ' . $e->getMessage(), [
+                'date' => $date,
+                'consultant_id' => $consultantId,
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw $e;
+        }
+    }
+
+    private function getBusySlots($date, $consultantId)
+    {
+        try {
+            $busySlots = BusySlot::whereDate('date', $date)
+                ->where('consultant_id', $consultantId)
+                ->get();
+
+            $unavailableSlots = [];
+
+            foreach ($busySlots as $busySlot) {
+                if ($busySlot->busy_all_day) {
+                    // If it's an all-day busy slot, mark all slots as unavailable
+                    $unavailableSlots = $this->generateAllDaySlots();
+                    break; // No need to check other slots if there's an all-day busy slot
+                } else {
+                    $start = Carbon::parse($busySlot->date->format('Y-m-d') . ' ' . $busySlot->from);
+                    $end = Carbon::parse($busySlot->date->format('Y-m-d') . ' ' . $busySlot->to);
+
+                    while ($start < $end) {
+                        $unavailableSlots[] = $start->format('H:i');
+                        $start->addMinutes(30);
+                    }
+                }
+            }
+
+            return array_unique($unavailableSlots);
+        } catch (\Exception $e) {
+            Log::error('Error in getBusySlots: ' . $e->getMessage(), [
+                'date' => $date,
+                'consultant_id' => $consultantId,
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw $e;
+        }
+    }
+
+    private function generateAllDaySlots()
+    {
+        $allDaySlots = [];
+        $start = Carbon::createFromTime(8, 0);
+        $end = Carbon::createFromTime(17, 0);
+
+        while ($start < $end) {
+            $allDaySlots[] = $start->format('H:i');
+            $start->addMinutes(30);
+        }
+
+        return $allDaySlots;
+    }
+
+    private function getBookedSlotsOld($date, $consultantId)
     {
         try {
             return Appointment::whereDate('date', $date)
@@ -182,7 +276,7 @@ class StudentAppointmentController extends Controller
         }
     }
 
-    private function getBusySlots($date, $consultantId)
+    private function getBusySlotsOld($date, $consultantId)
     {
         try {
             return BusySlot::whereDate('date', $date)

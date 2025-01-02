@@ -29,7 +29,7 @@
             <div class="text-gray-700">
                 <p id="modalDescription" class="text-sm mb-4"></p>
                 <p class="font-semibold text-sm">Date and Time:</p>
-                <p id="modalDateTime" class="text-sm font-medium"></p>
+                <p id="modalDateTime" class="text-sm mb-2"></p>
             </div>
         </div>
     </div>
@@ -71,8 +71,20 @@
                     }
                     document.getElementById('modalDescription').innerText = description;
 
-                    document.getElementById('modalDateTime').innerText = event.start.toLocaleDateString() +
-                        (event.start.toLocaleTimeString() ? ` - ${event.start.toLocaleTimeString()}` : '');
+                    const startDate = event.start.toLocaleDateString();
+                    const startTime = event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    let dateTimeText = `${startDate} - ${startTime}`;
+                    
+                    if (event.end) {
+                        const endTime = event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        dateTimeText += ` to ${endTime}`;
+                    }
+                    
+                    if (event.allDay) {
+                        dateTimeText += ' (All Day)';
+                    }
+                    
+                    document.getElementById('modalDateTime').innerText = dateTimeText;
 
                     document.getElementById('eventModal').classList.remove('hidden');
                 }

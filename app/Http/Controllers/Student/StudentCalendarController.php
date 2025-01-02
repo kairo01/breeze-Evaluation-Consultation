@@ -21,15 +21,18 @@ class StudentCalendarController extends Controller
 
         $busySlots = BusySlot::with('consultant')->get()
             ->map(function ($slot) {
+                $start = $slot->busy_all_day ? $slot->date : $slot->date . 'T' . $slot->from;
+                $end = $slot->busy_all_day ? $slot->date : $slot->date . 'T' . $slot->to;
                 return [
                     'title' => $slot->title,
-                    'start' => $slot->busy_all_day ? $slot->date : $slot->date . 'T' . $slot->from,
-                    'end' => $slot->busy_all_day ? $slot->date : $slot->date . 'T' . $slot->to,
+                    'start' => $start,
+                    'end' => $end,
                     'description' => $slot->description,
                     'color' => '#FF5733',
                     'type' => 'busy_slot',
                     'consultant_name' => $slot->consultant->name,
                     'consultant_role' => $slot->consultant_role,
+                    'allDay' => $slot->busy_all_day,
                 ];
             });
 

@@ -201,7 +201,7 @@ Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->g
     Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('DepartmentHead.store.busy.slot');
 });
 
-Route::get('/api/available-time-slots', [StudentAppointmentController::class, 'getAvailableTimeSlots']);
+Route::get('/api/available-time-slots', [StudentAppointmentController::class, 'getAvailableTimeSlots'])->name('api.available-time-slots');
 
 // Notification routes
 Route::get('/notifications', [NotifyController::class, 'index'])->name('notifications.index');
