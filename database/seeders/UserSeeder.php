@@ -86,6 +86,59 @@ class UserSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            [
+                'name' => 'John Doe',
+                'student_id' => '21-0123',
+                'email' => 'johndoe@example.com',
+                'password' => Hash::make('password123'),
+                'role' => 'Student',
+                'student_type' => 'college',
+                'status' => 'active',
+                'remember_token' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'name' => 'Alice Brown',
+                'student_id' => '21-0124',
+                'email' => 'alicebrown@example.com',
+                'password' => Hash::make('password123'),
+                'role' => 'Student',
+                'student_type' => 'college',
+                'status' => 'active',
+                'remember_token' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'name' => 'Mark Johnson',
+                'student_id' => '21-0125',
+                'email' => 'markjohnson@example.com',
+                'password' => Hash::make('password123'),
+                'role' => 'Student',
+                'student_type' => 'college',
+                'status' => 'inactive',
+                'remember_token' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'name' => 'Sophia White',
+                'student_id' => '21-0126',
+                'email' => 'sophiawhite@example.com',
+                'password' => Hash::make('password123'),
+                'role' => 'Student',
+                'student_type' => 'college',
+                'status' => 'active',
+                'remember_token' => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            
         ]);
     }
 }
