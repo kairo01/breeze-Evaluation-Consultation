@@ -20,6 +20,11 @@ class BusySlot extends Model
         'consultant_id',
     ];
 
+    protected $casts = [
+        'date' => 'date',
+        'busy_all_day' => 'boolean',
+    ];
+
     public function consultant()
     {
         return $this->belongsTo(User::class, 'consultant_id');

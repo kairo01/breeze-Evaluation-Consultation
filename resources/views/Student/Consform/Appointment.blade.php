@@ -202,6 +202,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         updateMeetingPreferenceVisibility();
+        if (dateInput.value) {
+            fetchAvailableTimeSlots();
+        }
     });
 
     meetingModeSelect.addEventListener('change', updateMeetingPreferenceVisibility);
@@ -214,49 +217,64 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    dateInput.addEventListener('change', function() {
-        fetchAvailableTimeSlots(this.value);
-    });
+    dateInput.addEventListener('change', fetchAvailableTimeSlots);
 
-    function fetchAvailableTimeSlots(date) {
+    function fetchAvailableTimeSlots() {
+        const date = dateInput.value;
+        const consultantId = consultantRoleSelect.value;
+
+        if (!date || !consultantId) {
+            return;
+        }
+
         timeSlotLoading.style.display = 'block';
         timeSlotError.style.display = 'none';
         timeSlotSelect.disabled = true;
         timeSlotSelect.innerHTML = '<option value="">Loading time slots...</option>';
 
-        const consultantId = document.getElementById('consultant_role').value;
-        fetch(`/api/available-time-slots?date=${date}&consultant_id=${consultantId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-                timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
-                if (data.availableSlots && data.availableSlots.length > 0) {
-                    data.availableSlots.forEach(slot => {
-                        const option = document.createElement('option');
-                        option.value = slot;
-                        option.textContent = `${slot} - ${addHour(slot)}`;
-                        timeSlotSelect.appendChild(option);
-                    });
-                    document.getElementById('busyDayMessage').classList.add('hidden');
-                } else {
-                    timeSlotSelect.innerHTML = '<option value="">No available time slots</option>';
-                    document.getElementById('busyDayMessage').classList.remove('hidden');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                timeSlotError.textContent = `Error loading time slots: ${error.message}`;
-                timeSlotError.style.display = 'block';
-                timeSlotSelect.innerHTML = '<option value="">Error loading time slots</option>';
-            })
-            .finally(() => {
-                timeSlotLoading.style.display = 'none';
-                timeSlotSelect.disabled = false;
-            });
+        fetch(`/api/available-time-slots?date=${date}&consultant_id=${consultantId}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
+            if (data.availableSlots && data.availableSlots.length > 0) {
+                data.availableSlots.forEach(slot => {
+                    const option = document.createElement('option');
+                    option.value = slot;
+                    option.textContent = `${slot} - ${addHour(slot)}`;
+                    timeSlotSelect.appendChild(option);
+                });
+                document.getElementById('busyDayMessage').classList.add('hidden');
+            } else {
+                timeSlotSelect.innerHTML = '<option value="">No available time slots</option>';
+                document.getElementById('busyDayMessage').classList.remove('hidden');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            timeSlotError.textContent = `Error loading time slots: ${error.message}`;
+            timeSlotError.style.display = 'block';
+            timeSlotSelect.innerHTML = '<option value="">Error loading time slots</option>';
+        })
+        .finally(() => {
+            timeSlotLoading.style.display = 'none';
+            timeSlotSelect.disabled = false;
+        });
     }
-
 
     function addHour(time) {
         const [hours, minutes] = time.split(':');
@@ -264,14 +282,6 @@ document.addEventListener('DOMContentLoaded', function() {
         date.setHours(date.getHours() + 1);
         return date.toTimeString().slice(0, 5);
     }
-
-    consultantRoleSelect.addEventListener('change', function() {
-        timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
-        timeSlotSelect.disabled = true;
-        if (dateInput.value) {
-            fetchAvailableTimeSlots(dateInput.value);
-        }
-    });
 });
     </script>
 
