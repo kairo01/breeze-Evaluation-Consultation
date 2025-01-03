@@ -11,6 +11,7 @@
                 <h1 class="text-2xl font-bold" style="font-family: 'Bunny', sans-serif;">Welcome !!</h1>
                 <p class="text-gray-600" style="font-family: 'Bunny', sans-serif;">{{ Auth::user()->name }}</p>
                 <p class="text-gray-600" style="font-family: 'Bunny', sans-serif;">{{ Auth::user()->student_id }}</p>
+                <p class="text-gray-600" style="font-family: 'Bunny', sans-serif;"> Section: {{ Auth::user()->section }}</p>
             </div>
             <div>
                 <img src="{{ asset('css/GeneralResources/icon.jpg') }}" alt="Student Image" class="rounded-full w-20 h-20">

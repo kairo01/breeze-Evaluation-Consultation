@@ -5,6 +5,8 @@
         </h2>
     </x-slot>
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
     <div class="max-w-7xl mx-auto py-10">
         <!-- Form Section -->
         <form id="evaluationForm" action="{{ route('evaluation.store') }}" method="POST" 
@@ -27,8 +29,14 @@
 
             <!-- Rating Scale -->
             <div class="p-4 rounded-lg mb-6 bg-gray-100">
-                <p class="font-semibold text-center mb-2">Rating Scale</p>
-                <p class="text-sm text-gray-500 text-center">1 - Poor | 2 - Fair | 3 - Good | 4 - Very Good | 5 - Excellent</p>
+             <p class="font-semibold text-center mb-2">Rating Scale</p>
+      
+                <i class="fas fa-sad-cry" style="color: #ff4c4c;"></i> 1 - Poor | 
+                  <i class="fas fa-frown" style="color: #ff914d;"></i> 2 - Fair | 
+                  <i class="fas fa-meh" style="color: #f0e500;"></i> 3 - Good | 
+                  <i class="fas fa-smile" style="color: #66bb6a;"></i> 4 - Very Good | 
+                  <i class="fas fa-laugh-beam" style="color: #2b9f3e;"></i> 5 - Excellent
+        </p>
             </div>
 
             <!-- Teaching Skills -->
