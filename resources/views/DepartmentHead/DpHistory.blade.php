@@ -75,9 +75,5 @@
             </div>
         </div>
     </div>
-    @section('title')
-      Department Head History
-   @endsection
 </x-app-layout>
 
-    

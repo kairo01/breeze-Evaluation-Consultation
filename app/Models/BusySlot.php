@@ -22,6 +22,8 @@ class BusySlot extends Model
 
     protected $casts = [
         'date' => 'date',
+        'from' => 'datetime',
+        'to' => 'datetime',
         'busy_all_day' => 'boolean',
     ];
 

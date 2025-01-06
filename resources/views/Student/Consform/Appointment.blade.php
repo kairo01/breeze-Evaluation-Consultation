@@ -173,120 +173,120 @@
     </div>
 
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const consultantRoleSelect = document.getElementById('consultant_role');
-    const purposeSelect = document.getElementById('purpose');
-    const meetingModeSelect = document.getElementById('meeting_mode');
-    const meetingPreferenceContainer = document.getElementById('meeting_preference_container');
-    const dateInput = document.getElementById('date');
-    const timeSlotSelect = document.getElementById('time_slot');
-    const timeSlotLoading = document.getElementById('time_slot_loading');
-    const timeSlotError = document.getElementById('time_slot_error');
+    document.addEventListener('DOMContentLoaded', function() {
+        const consultantRoleSelect = document.getElementById('consultant_role');
+        const purposeSelect = document.getElementById('purpose');
+        const meetingModeSelect = document.getElementById('meeting_mode');
+        const meetingPreferenceContainer = document.getElementById('meeting_preference_container');
+        const dateInput = document.getElementById('date');
+        const timeSlotSelect = document.getElementById('time_slot');
+        const timeSlotLoading = document.getElementById('time_slot_loading');
+        const timeSlotError = document.getElementById('time_slot_error');
 
-    consultantRoleSelect.addEventListener('change', function() {
-        const selectedConsultant = this.selectedOptions[0].dataset.role;
+        consultantRoleSelect.addEventListener('change', function() {
+            const selectedConsultant = this.selectedOptions[0].dataset.role;
 
-        if (['HmDepartment', 'HighSchoolDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'ComputerDepartment'].includes(selectedConsultant)) {
-            Array.from(purposeSelect.options).forEach(function(option) {
-                if (option.value !== 'Counseling') {
-                    option.disabled = true;
-                } else {
+            if (['HmDepartment', 'HighSchoolDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'ComputerDepartment'].includes(selectedConsultant)) {
+                Array.from(purposeSelect.options).forEach(function(option) {
+                    if (option.value !== 'Counseling') {
+                        option.disabled = true;
+                    } else {
+                        option.disabled = false;
+                    }
+                });
+                purposeSelect.value = 'Counseling';
+            } else {
+                Array.from(purposeSelect.options).forEach(function(option) {
                     option.disabled = false;
+                });
+            }
+
+            updateMeetingPreferenceVisibility();
+            if (dateInput.value) {
+                fetchAvailableTimeSlots();
+            }
+        });
+
+        meetingModeSelect.addEventListener('change', updateMeetingPreferenceVisibility);
+
+        function updateMeetingPreferenceVisibility() {
+            if (consultantRoleSelect.value && meetingModeSelect.value === 'Online') {
+                meetingPreferenceContainer.style.display = 'block';
+            } else {
+                meetingPreferenceContainer.style.display = 'none';
+            }
+        }
+
+        dateInput.addEventListener('change', fetchAvailableTimeSlots);
+
+        function fetchAvailableTimeSlots() {
+            const date = dateInput.value;
+            const consultantId = consultantRoleSelect.value;
+
+            if (!date || !consultantId) {
+                return;
+            }
+
+            timeSlotLoading.style.display = 'block';
+            timeSlotError.style.display = 'none';
+            timeSlotSelect.disabled = true;
+            timeSlotSelect.innerHTML = '<option value="">Loading time slots...</option>';
+
+            fetch(`/api/available-time-slots?date=${date}&consultant_id=${consultantId}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
                 }
-            });
-            purposeSelect.value = 'Counseling';
-        } else {
-            Array.from(purposeSelect.options).forEach(function(option) {
-                option.disabled = false;
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
+                if (data.availableSlots && data.availableSlots.length > 0) {
+                    data.availableSlots.forEach(slot => {
+                        const option = document.createElement('option');
+                        option.value = slot;
+                        option.textContent = `${slot} - ${addHour(slot)}`;
+                        timeSlotSelect.appendChild(option);
+                    });
+                    document.getElementById('busyDayMessage').classList.add('hidden');
+                } else {
+                    timeSlotSelect.innerHTML = '<option value="">No available time slots</option>';
+                    document.getElementById('busyDayMessage').classList.remove('hidden');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                timeSlotError.textContent = `Error loading time slots: ${error.message}`;
+                timeSlotError.style.display = 'block';
+                timeSlotSelect.innerHTML = '<option value="">Error loading time slots</option>';
+            })
+            .finally(() => {
+                timeSlotLoading.style.display = 'none';
+                timeSlotSelect.disabled = false;
             });
         }
 
-        updateMeetingPreferenceVisibility();
-        if (dateInput.value) {
-            fetchAvailableTimeSlots();
+        function addHour(time) {
+            const [hours, minutes] = time.split(':');
+            const date = new Date(2000, 0, 1, hours, minutes);
+            date.setHours(date.getHours() + 1);
+            return date.toTimeString().slice(0, 5);
         }
     });
-
-    meetingModeSelect.addEventListener('change', updateMeetingPreferenceVisibility);
-
-    function updateMeetingPreferenceVisibility() {
-        if (consultantRoleSelect.value && meetingModeSelect.value === 'Online') {
-            meetingPreferenceContainer.style.display = 'block';
-        } else {
-            meetingPreferenceContainer.style.display = 'none';
-        }
-    }
-
-    dateInput.addEventListener('change', fetchAvailableTimeSlots);
-
-    function fetchAvailableTimeSlots() {
-        const date = dateInput.value;
-        const consultantId = consultantRoleSelect.value;
-
-        if (!date || !consultantId) {
-            return;
-        }
-
-        timeSlotLoading.style.display = 'block';
-        timeSlotError.style.display = 'none';
-        timeSlotSelect.disabled = true;
-        timeSlotSelect.innerHTML = '<option value="">Loading time slots...</option>';
-
-        fetch(`/api/available-time-slots?date=${date}&consultant_id=${consultantId}`, {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json',
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.error) {
-                throw new Error(data.error);
-            }
-            timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
-            if (data.availableSlots && data.availableSlots.length > 0) {
-                data.availableSlots.forEach(slot => {
-                    const option = document.createElement('option');
-                    option.value = slot;
-                    option.textContent = `${slot} - ${addHour(slot)}`;
-                    timeSlotSelect.appendChild(option);
-                });
-                document.getElementById('busyDayMessage').classList.add('hidden');
-            } else {
-                timeSlotSelect.innerHTML = '<option value="">No available time slots</option>';
-                document.getElementById('busyDayMessage').classList.remove('hidden');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            timeSlotError.textContent = `Error loading time slots: ${error.message}`;
-            timeSlotError.style.display = 'block';
-            timeSlotSelect.innerHTML = '<option value="">Error loading time slots</option>';
-        })
-        .finally(() => {
-            timeSlotLoading.style.display = 'none';
-            timeSlotSelect.disabled = false;
-        });
-    }
-
-    function addHour(time) {
-        const [hours, minutes] = time.split(':');
-        const date = new Date(2000, 0, 1, hours, minutes);
-        date.setHours(date.getHours() + 1);
-        return date.toTimeString().slice(0, 5);
-    }
-});
     </script>
 
 @section('title')
-   Student Appointment Form
+  Student Appointment Form
 @endsection
 
 </x-app-layout>
