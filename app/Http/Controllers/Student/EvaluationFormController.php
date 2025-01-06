@@ -91,6 +91,7 @@ class EvaluationFormController extends Controller
             'facilities' => 'required|array',
             'facilities.*.rating' => 'required|integer|min:1|max:5',
             'facilities.*.comment' => 'nullable|string|max:255',
+            // Ensure the teacher comment is concise but informative, with a max of 500 characters.
             'teacher_comment' => 'required|string|max:500',
         ]);
     
@@ -103,18 +104,20 @@ class EvaluationFormController extends Controller
             ];
         }
     
-        // Save data into the database
+        // Save evaluation data, including teacher's comments, to the database
         Evaluation::create([
             'student_id' => $request->student_id,
             'teacher_name' => $request->teacher_name,
             'subject' => $request->subject,
             'teaching_skills' => $request->teaching_skills,
             'facilities' => $facilitiesData,
+            // Store the teacher's comment provided by the user
             'teacher_comment' => $request->teacher_comment,
         ]);
-
+    
         return redirect()->route('evaluation.create')->with('success', 'Evaluation submitted successfully.');
     }
+    
     
     public function show($id)
     {
