@@ -124,6 +124,13 @@ class EvaluationFormController extends Controller
         $evaluation = Evaluation::findOrFail($id);
         return view('Student.evaluation.evaluation.show', compact('evaluation'));
     }
-
+    
+    public function showEvaluationHistory()
+    {
+        $evaluations = Evaluation::with(['facilities', 'teacher'])->get();  // Assuming relationships are set up
+        
+        return view('evaluation.history', compact('evaluations'));
+    }
+    
     
 }

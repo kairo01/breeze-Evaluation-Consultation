@@ -235,4 +235,11 @@ class EvaluationHistoryController extends Controller
         return view('Evaluation.HrHistory' ,compact('evaluations'));
     }
     
+    public function showEvaluationHistory()
+{
+    $evaluations = Evaluation::with(['facilities', 'teacher'])->get();  // Assuming relationships are set up
+    
+    return view('evaluation.history', compact('evaluations'));
+}
+
 }
