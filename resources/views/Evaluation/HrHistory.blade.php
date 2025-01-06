@@ -7,6 +7,7 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/Evaluation/HrViewHistory.css') }}">
+
     <!-- Rating Scale Container -->
     <div class="rating-scale-container">
         <p><strong>Rating Scale: </strong> 
@@ -34,6 +35,8 @@
                             <th>Total Skills</th>
                             <th>Total Facilities</th>
                             <th>Percentage Breakdown</th>
+                            <th>Facility Comments</th>
+                            <th>Overall Skills</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -44,12 +47,20 @@
                             $totalFacilities = 0;
                             $maxSkillsScore = 20;
                             $maxFacilitiesScore = 25;
+                            $overallSkillsTotal = [];
                         @endphp
 
                         @foreach ($evaluations as $evaluation)
                             @php
                                 $skillsTotal = array_sum($evaluation->teaching_skills);
                                 $facilitiesTotal = collect($evaluation->facilities)->pluck('rating')->sum();
+
+                                foreach ($evaluation->teaching_skills as $skill => $rating) {
+                                    if (!isset($overallSkillsTotal[$skill])) {
+                                        $overallSkillsTotal[$skill] = 0;
+                                    }
+                                    $overallSkillsTotal[$skill] += $rating;
+                                }
 
                                 $totalSkills += $skillsTotal;
                                 $totalFacilities += $facilitiesTotal;
@@ -65,6 +76,16 @@
                                     Facilities: <strong>{{ round(($facilitiesTotal / $maxFacilitiesScore) * 100, 2) }}%</strong>
                                 </td>
                                 <td>
+                                    @foreach ($evaluation->facilities as $facility => $details)
+                                        <p><strong>{{ $facility }}:</strong> {{ $details['comment'] }}</p>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach ($overallSkillsTotal as $skill => $total)
+                                        <p><strong>{{ $skill }}:</strong> {{ $total }}</p>
+                                    @endforeach
+                                </td>
+                                <td>
                                     <button class="modal-button" onclick="openModal('skills-modal-{{ $loop->index }}')">  
                                         <i class="fas fa-eye"></i> View Skills
                                     </button>
@@ -78,14 +99,45 @@
                 </table>
             </div>
 
-            <!-- Total Percentage Breakdown -->
+            <!-- Total Percentage Breakdown and Skills -->
             <div class="breakdown-section" id="print-section">
-                <h3>Total Percentage Breakdown</h3>
-                <p>Skills: <strong>{{ round(($totalSkills / ($maxSkillsScore * count($evaluations))) * 100, 2) }}%</strong></p>
-                <p>Facilities: <strong>{{ round(($totalFacilities / ($maxFacilitiesScore * count($evaluations))) * 100, 2) }}%</strong></p>
+                <h3 class="breakdown-title">Total Percentage Breakdown</h3>
+                @php
+                    $totalSkillsPercentage = ($totalSkills / ($maxSkillsScore * count($evaluations))) * 100;
+                    $totalFacilitiesPercentage = ($totalFacilities / ($maxFacilitiesScore * count($evaluations))) * 100;
+
+                    // Calculate the overall percentage by averaging skills and facilities percentages
+                    $overallPercentage = ($totalSkillsPercentage + $totalFacilitiesPercentage) / 2;
+
+                    // Determine the overall rating based on the overall percentage
+                    $rating = '';
+                    if ($overallPercentage >= 90) {
+                        $rating = 'Excellent (5)';
+                    } elseif ($overallPercentage >= 75) {
+                        $rating = 'Very Good (4)';
+                    } elseif ($overallPercentage >= 50) {
+                        $rating = 'Good (3)';
+                    } elseif ($overallPercentage >= 25) {
+                        $rating = 'Fair (2)';
+                    } else {
+                        $rating = 'Poor (1)';
+                    }
+                @endphp
+                <div class="percentage-breakdown">
+                    <p>Skills: <strong>{{ round($totalSkillsPercentage, 2) }}%</strong></p>
+                    <p>Facilities: <strong>{{ round($totalFacilitiesPercentage, 2) }}%</strong></p>
+                    <h4 class="overall-rating">Overall Rating: <strong>{{ $rating }}</strong></h4>
+                </div>
+
+                <h4 class="skills-breakdown-title">Overall Skills Breakdown</h4>
+                <ul class="skills-list">
+                    @foreach ($overallSkillsTotal as $skill => $total)
+                        <li><strong>{{ $skill }}:</strong> {{ $total }}</li>
+                    @endforeach
+                </ul>
             </div>
 
-            <!-- Modals -->
+            <!-- Modals for Skills and Facilities -->
             @foreach ($evaluations as $evaluation)
                 <!-- Skills Modal -->
                 <div class="modal" id="skills-modal-{{ $loop->index }}">
@@ -138,7 +190,6 @@
                 </div>
             @endforeach
         @else
-            <!-- Display No History Message -->
             <div class="no-history-message">
                 <h3>No History Available</h3>
             </div>
