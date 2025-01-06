@@ -17,7 +17,7 @@
 
             <!-- HM Department -->
             <a href="{{ route('evaluation.history', ['department' => 'hm']) }}" class="department-card">
-                <img src="{{ asset('css/GeneralResources/HM.jfif') }}" alt="HM Department Logo" class="department-logo">
+                <img src="{{ asset('css/GeneralResources/Hm.jfif') }}" alt="HM Department Logo" class="department-logo">
                 <h3>HM Department</h3>
             </a>
 
@@ -34,7 +34,7 @@
             </a>
 
             <a href="{{ route('evaluation.history', ['department' => 'highschool']) }}" class="department-card">
-                <img src="{{ asset('css/GeneralResources/CS.jfif') }}" alt="Computer Department Logo" class="department-logo">
+                <img src="{{ asset('css/GeneralResources/hslogo.jpg') }}" alt="Computer Department Logo" class="department-logo">
                 <h3>HighSchool Department</h3>
             </a>
 
