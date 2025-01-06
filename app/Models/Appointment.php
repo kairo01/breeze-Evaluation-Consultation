@@ -40,16 +40,20 @@ class Appointment extends Model
 
     public function getFormattedDateTimeAttribute()
     {
-        return Carbon::parse($this->date->format('Y-m-d') . ' ' . $this->time->format('H:i:s'))->format('M d, Y h:i A');
+        $start = $this->date->format('Y-m-d') . ' ' . $this->time->format('H:i:s');
+        $end = $this->date->format('Y-m-d') . ' ' . $this->time->addHour()->format('H:i:s');
+        return Carbon::parse($start)->format('M d, Y h:i A') . ' - ' . Carbon::parse($end)->format('h:i A');
     }
 
     public function getEventData()
     {
+        $start = $this->date->format('Y-m-d') . 'T' . $this->time->format('H:i');
+        $end = $this->date->format('Y-m-d') . 'T' . $this->time->addHour()->format('H:i');
         return [
             'id' => $this->id,
             'title' => $this->student->name . ' - ' . $this->purpose,
-            'start' => $this->date->format('Y-m-d') . 'T' . $this->time->format('H:i'),
-            'end' => $this->date->format('Y-m-d') . 'T' . $this->time->addHour()->format('H:i'),
+            'start' => $start,
+            'end' => $end,
             'description' => 'Consultant: ' . $this->consultant->name . ' - ' . $this->course,
             'color' => '#1E90FF',
         ];

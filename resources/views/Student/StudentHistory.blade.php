@@ -63,7 +63,7 @@
                                         {{ $appointment->meeting_preference ?? 'N/A' }}
                                     </td>
                                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                        {{ $appointment->date->format('M d, Y') }} {{ $appointment->time->format('h:i A') }}
+                                        {{ $appointment->formatted_date_time }}
                                     </td>
                                     <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                         @if($appointment->status === 'Pending')

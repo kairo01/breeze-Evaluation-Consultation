@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\BusySlot;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ConsultationCalendarController extends Controller
 {
@@ -21,13 +22,17 @@ class ConsultationCalendarController extends Controller
         $busySlots = BusySlot::where('consultant_id', auth()->id())
             ->get()
             ->map(function ($slot) {
+                $start = $slot->busy_all_day ? $slot->date->format('Y-m-d') : $slot->date->format('Y-m-d') . 'T' . $slot->from->format('H:i:s');
+                $end = $slot->busy_all_day ? $slot->date->format('Y-m-d') : $slot->date->format('Y-m-d') . 'T' . $slot->to->format('H:i:s');
                 return [
+                    'id' => $slot->id,
                     'title' => $slot->title,
-                    'start' => $slot->busy_all_day ? $slot->date : $slot->date . 'T' . $slot->from,
-                    'end' => $slot->busy_all_day ? $slot->date : $slot->date . 'T' . $slot->to,
+                    'start' => $start,
+                    'end' => $end,
                     'description' => $slot->description,
                     'color' => '#FF5733',
-                    'type' => 'busy_slot',
+                    'type' => 'busy_slot',  
+                    'allDay' => $slot->busy_all_day,
                 ];
             });
 
@@ -41,21 +46,26 @@ class ConsultationCalendarController extends Controller
             'description' => 'required|string',
             'date' => 'required|date',
             'from' => 'nullable|required_if:busyAllDay,false|date_format:H:i',
-            'to' => 'nullable|required_if:busyAllDay,false|date_format:H:i',
+            'to' => 'nullable|required_if:busyAllDay,false|date_format:H:i|after:from',
         ]);
 
-        $busyAllDay = $request->has('busyAllDay') && $request->busyAllDay == 'on';
+        $busyAllDay = $request->has('busyAllDay');
 
-        BusySlot::create([
+        $busySlot = new BusySlot([
             'title' => $validated['title'],
             'description' => $validated['description'],
             'date' => $validated['date'],
-            'from' => $busyAllDay ? null : $validated['from'],
-            'to' => $busyAllDay ? null : $validated['to'],
             'busy_all_day' => $busyAllDay,
             'consultant_role' => auth()->user()->role,
             'consultant_id' => auth()->id(),
         ]);
+
+        if (!$busyAllDay) {
+            $busySlot->from = Carbon::createFromFormat('Y-m-d H:i', $validated['date'] . ' ' . $validated['from']);
+            $busySlot->to = Carbon::createFromFormat('Y-m-d H:i', $validated['date'] . ' ' . $validated['to']);
+        }
+
+        $busySlot->save();
 
         return redirect()->back()->with('success', 'Busy slot added successfully.');
     }
