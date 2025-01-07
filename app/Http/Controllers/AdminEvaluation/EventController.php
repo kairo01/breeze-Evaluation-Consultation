@@ -20,6 +20,12 @@ class EvaluationController extends Controller
             'student_type' => 'required|in:highschool,college',
         ]);
 
+        $year = Carbon::parse($request->input('start_date'))->year;
+
+        if (Event::whereYear('start_date', $year)->exists()) {
+            return back()->with('error', 'The Evaluation for this year already exists.');
+        }
+
         // Save evaluation to the database
         $evaluation = Evaluation::create([
             'title' => $request->title,
