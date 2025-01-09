@@ -115,7 +115,7 @@ class EvaluationFormController extends Controller
             'teacher_comment' => $request->teacher_comment,
         ]);
     
-        return redirect()->route('evaluation.create')->with('success', 'Evaluation submitted successfully.');
+        return redirect()->route('Student.evaluation.StudentPicker')->with('success', 'Evaluation submitted successfully.');
     }
     
     
