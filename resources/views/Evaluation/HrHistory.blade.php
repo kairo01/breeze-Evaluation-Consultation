@@ -26,17 +26,13 @@
     <div class="container">
         @if(count($evaluations) > 0)
             <!-- Main Evaluation Table -->
-            <div class="table-container">
+            <div class="table-container" id="evaluation-table-container">
                 <table class="evaluation-table">
                     <thead>
                         <tr>
                             <th>Teacher</th>
                             <th>Subject</th>
-                            <th>Total Skills</th>
-                            <th>Total Facilities</th>
                             <th>Percentage Breakdown</th>
-                            <th>Facility Comments</th>
-                            <th>Overall Skills</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -69,21 +65,9 @@
                             <tr>
                                 <td>{{ $evaluation->teacher_name }}</td>
                                 <td>{{ $evaluation->subject }}</td>
-                                <td>{{ $skillsTotal }}</td>
-                                <td>{{ $facilitiesTotal }}</td>
                                 <td>
                                     Skills: <strong>{{ round(($skillsTotal / $maxSkillsScore) * 100, 2) }}%</strong>, 
                                     Facilities: <strong>{{ round(($facilitiesTotal / $maxFacilitiesScore) * 100, 2) }}%</strong>
-                                </td>
-                                <td>
-                                    @foreach ($evaluation->facilities as $facility => $details)
-                                        <p><strong>{{ $facility }}:</strong> {{ $details['comment'] }}</p>
-                                    @endforeach
-                                </td>
-                                <td>
-                                    @foreach ($overallSkillsTotal as $skill => $total)
-                                        <p><strong>{{ $skill }}:</strong> {{ $total }}</p>
-                                    @endforeach
                                 </td>
                                 <td>
                                     <button class="modal-button" onclick="openModal('skills-modal-{{ $loop->index }}')">  
@@ -99,7 +83,7 @@
                 </table>
             </div>
 
-            <!-- Total Percentage Breakdown and Skills -->
+            <!-- Total Percentage Breakdown -->
             <div class="breakdown-section" id="print-section">
                 <h3 class="breakdown-title">Total Percentage Breakdown</h3>
                 @php
@@ -128,67 +112,63 @@
                     <p>Facilities: <strong>{{ round($totalFacilitiesPercentage, 2) }}%</strong></p>
                     <h4 class="overall-rating">Overall Rating: <strong>{{ $rating }}</strong></h4>
                 </div>
-
-                <h4 class="skills-breakdown-title">Overall Skills Breakdown</h4>
-                <ul class="skills-list">
-                    @foreach ($overallSkillsTotal as $skill => $total)
-                        <li><strong>{{ $skill }}:</strong> {{ $total }}</li>
-                    @endforeach
-                </ul>
             </div>
 
-            <!-- Modals for Skills and Facilities -->
-            @foreach ($evaluations as $evaluation)
-                <!-- Skills Modal -->
-                <div class="modal" id="skills-modal-{{ $loop->index }}">
-                    <div class="modal-content">
-                        <span class="close-button" onclick="closeModal('skills-modal-{{ $loop->index }}')">&times;</span>
-                        <h4>Skills for {{ $evaluation->teacher_name }} ({{ $evaluation->subject }})</h4>
-                        <table class="modal-table">
-                            <thead>
-                                <tr>
-                                    <th>Skill</th>
-                                    <th>Rating</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($evaluation->teaching_skills as $skill => $rating)
+            <!-- Modals for Skills and Facilities (Visible for Interaction and Printing) -->
+            <div id="modals-container">
+                @foreach ($evaluations as $evaluation)
+                    <!-- Skills Modal -->
+                    <div class="modal" id="skills-modal-{{ $loop->index }}">
+                        <div class="modal-content">
+                            <h4>Skills for {{ $evaluation->teacher_name }} ({{ $evaluation->subject }})</h4>
+                            <table class="modal-table">
+                                <thead>
                                     <tr>
-                                        <td>{{ $skill }}</td>
-                                        <td>{{ $rating }}</td>
+                                        <th>Skill</th>
+                                        <th>Rating</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($evaluation->teaching_skills as $skill => $rating)
+                                        <tr>
+                                            <td>{{ $skill }}</td>
+                                            <td>{{ $rating }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            <h4>Total Skills: <strong>{{ $skillsTotal }}</strong></h4> <!-- Total Skills for this evaluation -->
+                        </div>
                     </div>
-                </div>
 
-                <!-- Facilities Modal -->
-                <div class="modal" id="facilities-modal-{{ $loop->index }}">
-                    <div class="modal-content">
-                        <span class="close-button" onclick="closeModal('facilities-modal-{{ $loop->index }}')">&times;</span>
-                        <h4>Facilities for {{ $evaluation->teacher_name }} ({{ $evaluation->subject }})</h4>
-                        <table class="modal-table">
-                            <thead>
-                                <tr>
-                                    <th>Facility</th>
-                                    <th>Rating</th>
-                                    <th>Comment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($evaluation->facilities as $facility => $details)
+                    <!-- Facilities Modal -->
+                    <div class="modal" id="facilities-modal-{{ $loop->index }}">
+                        <div class="modal-content">
+                            <h4>Facilities for {{ $evaluation->teacher_name }} ({{ $evaluation->subject }})</h4>
+                            <table class="modal-table">
+                                <thead>
                                     <tr>
-                                        <td>{{ $facility }}</td>
-                                        <td>{{ $details['rating'] }}</td>
-                                        <td>{{ $details['comment'] }}</td>
+                                        <th>Facility</th>
+                                        <th>Rating</th>
+                                        <th>Comment</th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach ($evaluation->facilities as $facility => $details)
+                                        <tr>
+                                            <td>{{ $facility }}</td>
+                                            <td>{{ $details['rating'] }}</td>
+                                            <td>{{ $details['comment'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            <h4>Total Facilities: <strong>{{ $facilitiesTotal }}</strong></h4> <!-- Total Facilities for this evaluation -->
+                        </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
+
         @else
             <div class="no-history-message">
                 <h3>No History Available</h3>
@@ -206,20 +186,56 @@
         }
 
         function printBreakdown() {
-            // Hide the buttons and modals before printing
-            document.querySelectorAll('button').forEach(button => button.style.display = 'none');
-            document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
-            
-            const printContent = document.getElementById('print-section').innerHTML;
-            const originalContent = document.body.innerHTML;
-            document.body.innerHTML = printContent;
-            
-            window.print();
-            
-            // After printing, reset the page content and display the buttons/modals again
-            document.body.innerHTML = originalContent;
-            window.location.reload();
+            // Temporarily hide buttons for printing, but keep modals visible
+            document.querySelectorAll('.modal-button').forEach(button => button.style.display = 'none');
+
+            // Get the evaluation table and modals content for printing
+            const evaluationTable = document.getElementById('evaluation-table-container').outerHTML;
+            const modalsContent = document.getElementById('modals-container').outerHTML;
+            const breakdownSection = document.getElementById('print-section').outerHTML;
+
+            // Create the content for the print preview
+            const printContent = `
+                <div class="print-header">
+                    <h2>Evaluation History</h2>
+                    <p>Rating Scale: 1 - Poor, 2 - Fair, 3 - Good, 4 - Very Good, 5 - Excellent</p>
+                </div>
+                ${evaluationTable}
+                ${breakdownSection}
+                ${modalsContent}
+            `;
+
+            // Set up print styles
+            const printStyles = `
+                <style>
+                    table, th, td {
+                        border: 1px solid black;
+                        border-collapse: collapse;
+                        padding: 5px;
+                    }
+                    th, td {
+                        text-align: left;
+                    }
+                    .modal {
+                        display: block;
+                    }
+                </style>
+            `;
+
+            // Open a new window for printing
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printStyles);
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+
+            // Trigger the print action
+            printWindow.print();
+
+            // Close the print window after printing
+            printWindow.close();
+
+            // Restore visibility of buttons and modals after printing
+            document.querySelectorAll('.modal-button').forEach(button => button.style.display = 'inline-block');
         }
     </script>
-
 </x-app-layout>
