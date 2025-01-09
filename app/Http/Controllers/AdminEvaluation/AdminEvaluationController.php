@@ -44,7 +44,102 @@ class AdminEvaluationController extends Controller
                     'Jan Antonnete Canindo', 'Christine Leron', 'Sean Reclosado', 'Saira Mangayao'
                 ],
             ],
-        ];
+        
+            'gened' => [
+                'name' => 'Gen Ed Department',
+                    'faculty' => [
+                [
+                    'name' => 'Cabillan, Arlene',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'De Guzman, Doreliza Pearl',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Dizon, Eljer',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Jenolan, Juniel',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Ramos, Danilo',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Ravago, Baby-lyn',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Seno, Charmie Lynn',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Simbul, Ronald Jr.',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Razon, King Jovan',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Bautista, Marie-nel',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Enriquez, Maria Deth',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Layug, Romeo',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Zabala, Sheila',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Gomez, Rochelle',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Isuan, Shiena Marie',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Delos Reyes, Alexander John',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Clacio, Corazon',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Castillo, Jett Noelson',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Roman, Marijuane',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Maranan, Alexia',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Acosta, Allan',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+                [
+                    'name' => 'Gomez, Mariz',
+                    'image' => 'css/GeneralResources/icon.jpg',
+                ],
+            ],
+        ],     
+    ];
+
 
         // Count all teachers across all departments
         $totalTeachers = 0;

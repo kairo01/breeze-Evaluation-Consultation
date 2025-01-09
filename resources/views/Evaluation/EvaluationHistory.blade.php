@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-       <h2 class="header-title">
+        <h2 class="header-title">
             {{ $department['name'] }}
         </h2>
     </x-slot>
@@ -9,14 +9,16 @@
 
     <div class="content">
         <!-- Department Head Section -->
-        <div class="department-head">
-            <img src="{{ asset($department['head']['image']) }}" alt="Department Head" class="head-img">
-            <h3>Department Head: {{ $department['head']['name'] }}</h3>
-            
-            <a href="{{ route('Evaluation.History', ['teacher_name' => $department['head']['name']]) }}" class="evaluate-btn">View Evaluation History</a>
-        </div>
+        @if(array_key_exists('head', $department)) 
+            <div class="department-head">
+                <img src="{{ asset($department['head']['image']) }}" alt="Department Head" class="head-img">
+                <h3>Department Head: {{ $department['head']['name'] }}</h3>
 
-        <!-- Faculty Members Section -->
+                <a href="{{ route('Evaluation.History', ['teacher_name' => $department['head']['name']]) }}" class="evaluate-btn">View Evaluation History</a>
+            </div>
+        @endif
+
+       
         <div class="faculty-members">
             @foreach($department['faculty'] as $faculty)
                 <div class="faculty-card">
@@ -24,11 +26,11 @@
                     <h4>{{ $faculty['name'] }}</h4>
                     <a href="{{ route('Evaluation.History', ['teacher_name' => $faculty['name']]) }}" class="evaluate-btn">View Evaluation History</a>
                 </div>
-              
             @endforeach
         </div>
     </div>
- @section('title')
-   View Evaluation History
-@endsection
+
+    @section('title')
+        View Evaluation History
+    @endsection
 </x-app-layout>

@@ -38,6 +38,11 @@
                 <h3>HighSchool Department</h3>
             </a>
 
+            <a href="{{ route('evaluation.history', ['department' => 'gened']) }}" class="department-card">
+                            <img src="{{ asset('css/GeneralResources/hslogo.jpg') }}" alt="Gen Ed Faculty Logo" class="department-logo">
+                            <h3>Gen Ed Faculty</h3>
+            </a>
+
         </div>
     </div>
 

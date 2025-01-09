@@ -1,5 +1,4 @@
 <x-app-layout>
-    
     @if(session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}
@@ -7,7 +6,7 @@
     @endif
 
     <x-slot name="header">
-       <h2 class="header-title">
+        <h2 class="header-title">
             {{ $department['name'] }}
         </h2>
     </x-slot>
@@ -15,36 +14,32 @@
     <link rel="stylesheet" href="{{ asset('css/Evaluation/EvaluationHistory.css') }}">
 
     <div class="content">
-        <!-- Department Head Section -->
-        <div class="department-head">
-            <img src="{{ asset($department['head']['image']) }}" alt="Department Head" class="head-img">
-            <h3>Department Head: {{ $department['head']['name'] }}</h3>
+       
+        @if(array_key_exists('head', $department))
+            <div class="department-head">
+                <img src="{{ asset($department['head']['image']) }}" alt="Department Head" class="head-img">
+                <h3>Department Head: {{ $department['head']['name'] }}</h3>
 
-            <x-nav-link :href="route('Student.evaluation.evaluationform', ['teacher_name' => $department['head']['name']])" :active="request()->routeIs('Student.evaluation.evaluationform')">
-                         <button class="evaluate-btn">Evaluate</button>
-                                </x-nav-link>
+                <a href="{{ route('Student.evaluation.evaluationform', ['teacher_name' => $department['head']['name']]) }}">
+                    <button class="evaluate-btn">Evaluate</button>
+                </a>
+            </div>
+        @endif
 
-        </div>
-
-        <!-- Faculty Members Section -->
         <div class="faculty-members">
             @foreach($department['faculty'] as $faculty)
                 <div class="faculty-card">
                     <img src="{{ asset($faculty['image']) }}" alt="Faculty Member" class="faculty-img">
                     <h4>{{ $faculty['name'] }}</h4>
-                    <button>
-                    <x-nav-link :href="route('Student.evaluation.evaluationform', ['teacher_name' => $faculty['name']])" >
-                            <button class="evaluate-btn">Evaluate</button>
-                                </x-nav-link>
-                    </button>
+                    <a href="{{ route('Student.evaluation.evaluationform', ['teacher_name' => $faculty['name']]) }}">
+                        <button class="evaluate-btn">Evaluate</button>
+                    </a>
                 </div>
-        
             @endforeach
         </div>
     </div>
 
- @section('title')
-   Student Faculty Evaluate
-@endsection
-
+    @section('title')
+        Student Faculty Evaluate
+    @endsection
 </x-app-layout>
