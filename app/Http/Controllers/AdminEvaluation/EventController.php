@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\EvaluationNotification;
 use Carbon\Carbon;
+use App\Models\Event;
 
 class EvaluationController extends Controller
 {
