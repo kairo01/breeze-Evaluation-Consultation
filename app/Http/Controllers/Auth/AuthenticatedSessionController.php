@@ -48,7 +48,10 @@ class AuthenticatedSessionController extends Controller
         } else if ($student_type === 'HighSchool') {
             return redirect()->route('Student.HighSchoolDashboard');
         }
-    } else {
+    } else if ($role === 'SuperAdmin') {
+        return redirect()->route('Superadmin.SuperAdminDashboard');
+    }
+     else {
         return redirect()->route('dashboard'); 
     }
 

@@ -40,6 +40,8 @@ use App\Http\Controllers\Student\HighSchoolController;
 use App\Http\Controllers\Student\HighSchoolPickerController;
 use App\Http\Controllers\Student\StudentPickerController;
 use App\Http\Controllers\Student\NotificationController;
+use App\Http\Controllers\Superadmin\SuperAdminController;
+
 
 
 // Other Routes
@@ -206,3 +208,5 @@ Route::get('/api/available-time-slots', [StudentAppointmentController::class, 'g
 // Notification routes
 Route::get('/notifications', [NotifyController::class, 'index'])->name('notifications.index');
 Route::post('/notifications/{notify}/mark-as-read', [NotifyController::class, 'markAsRead'])->name('notifications.mark-as-read');
+
+Route::get('/superadmindashboard', [SuperAdminController::class, 'index'])->name('Superadmin.SuperAdminDashboard');

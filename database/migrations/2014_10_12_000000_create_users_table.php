@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['HumanResources', 'Guidance', 'ComputerDepartment', 'EngineeringDeparment', 'HighSchoolDepartment', 'TesdaDepartment', 'HmDepartment', 'Student']); // Added roles
+            $table->enum('role', ['HumanResources','SuperAdmin' ,'Guidance', 'ComputerDepartment', 'EngineeringDeparment', 'HighSchoolDepartment', 'TesdaDepartment', 'HmDepartment', 'Student']); // Added roles
             $table->enum('student_type', ['College', 'HighSchool'])->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->string('section')->nullable(); // Add section column here
