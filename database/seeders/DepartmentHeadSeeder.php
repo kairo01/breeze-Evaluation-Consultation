@@ -14,7 +14,7 @@ class DepartmentHeadSeeder extends Seeder
     {
         // Create the department head for Computer Department
         User::create([
-            'name' => 'ComputerDepartment',
+            'name' => 'Jairryl Anne De Guzman',
             'student_id' => null,
             'email' => 'ComputerDepartment@example.com',
             'password' => Hash::make('password123'),
@@ -28,7 +28,7 @@ class DepartmentHeadSeeder extends Seeder
 
         // Create the department head for Science Department
         User::create([
-            'name' => 'EngineeringDeparment',
+            'name' => 'Engr. Adelino Cordova Jr.',
             'student_id' => null,
             'email' => 'EngineeringDeparment@example.com',
             'password' => Hash::make('password123'),
@@ -42,7 +42,7 @@ class DepartmentHeadSeeder extends Seeder
 
         // Create the department head for Math Department
         User::create([
-            'name' => 'HighSchoolDepartment',
+            'name' => 'Arlene Cabillan',
             'student_id' => null,
             'email' => 'HighSchoolDepartment@example.com',
             'password' => Hash::make('password123'),
@@ -56,7 +56,7 @@ class DepartmentHeadSeeder extends Seeder
 
         // Create the department head for English Department
         User::create([
-            'name' => 'TesdaDepartment',
+            'name' => 'Niño Corpuz',
             'student_id' => null,
             'email' => 'TesdaDepartment@example.com',
             'password' => Hash::make('password123'),
@@ -69,7 +69,7 @@ class DepartmentHeadSeeder extends Seeder
         ]);
         // Create the department head for English Department
         User::create([
-            'name' => 'HmDepartment',
+            'name' => 'Jessalyn Sarmiento Tancio',
             'student_id' => null,
             'email' => 'HmDepartment@example.com',
             'password' => Hash::make('password123'),

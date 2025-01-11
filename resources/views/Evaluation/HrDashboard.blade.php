@@ -17,6 +17,7 @@
             <div>
                 <h1 class="text-2xl font-bold" style="font-family: 'Bunny', sans-serif;">Welcome !!</h1>
                 <p class="text-gray-600" style="font-family: 'Bunny', sans-serif;">{{ Auth::user()->name }}</p>
+                <p class="text-gray-600" style="font-family: 'Bunny', sans-serif;">{{ Auth::user()->role }}</p>
             </div>
             <div>
                 <img src="{{ asset('css/GeneralResources/admin2.png') }}" alt="Admin Image" class="rounded-full w-20 h-20">
