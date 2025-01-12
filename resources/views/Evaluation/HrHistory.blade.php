@@ -33,7 +33,8 @@
                             <th>Teacher</th>
                             <th>Subject</th>
                             <th>Percentage Breakdown</th>
-                            <th>Actions</th>
+                            <th>Teacher Comment</th> <!-- New Column for Teacher Comment -->
+                            <th>View Details</th>
                         </tr>
                     </thead>
 
@@ -69,12 +70,13 @@
                                     Skills: <strong>{{ round(($skillsTotal / $maxSkillsScore) * 100, 2) }}%</strong>, 
                                     Facilities: <strong>{{ round(($facilitiesTotal / $maxFacilitiesScore) * 100, 2) }}%</strong>
                                 </td>
+                                <td>{{ $evaluation->teacher_comment }}</td> <!-- Display Teacher Comment -->
                                 <td>
                                     <button class="modal-button" onclick="openModal('skills-modal-{{ $loop->index }}')">  
-                                        <i class="fas fa-eye"></i> View Skills
+                                          <i class="fas fa-chalkboard-teacher"></i> View Skills
                                     </button>
                                     <button class="modal-button" onclick="openModal('facilities-modal-{{ $loop->index }}')">
-                                        <i class="fas fa-eye"></i> View Facilities
+                                        <i class="fas fa-building"></i> View Facilities
                                     </button>
                                 </td>
                             </tr>
@@ -120,6 +122,7 @@
                     <!-- Skills Modal -->
                     <div class="modal" id="skills-modal-{{ $loop->index }}">
                         <div class="modal-content">
+                              <button class="close-button" onclick="closeModal('skills-modal-{{ $loop->index }}')">&times;</button>
                             <h4>Skills for {{ $evaluation->teacher_name }} ({{ $evaluation->subject }})</h4>
                             <table class="modal-table">
                                 <thead>
@@ -144,6 +147,7 @@
                     <!-- Facilities Modal -->
                     <div class="modal" id="facilities-modal-{{ $loop->index }}">
                         <div class="modal-content">
+                                <button class="close-button" onclick="closeModal('facilities-modal-{{ $loop->index }}')">&times;</button>
                             <h4>Facilities for {{ $evaluation->teacher_name }} ({{ $evaluation->subject }})</h4>
                             <table class="modal-table">
                                 <thead>
