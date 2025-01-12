@@ -40,6 +40,12 @@ use App\Http\Controllers\Student\HighSchoolController;
 use App\Http\Controllers\Student\HighSchoolPickerController;
 use App\Http\Controllers\Student\StudentPickerController;
 use App\Http\Controllers\Student\NotificationController;
+use App\Http\Controllers\Student\StudentCtNotificationController;
+use App\Http\Controllers\ConsultationController\ConsultationNotificationController;
+use App\Http\Controllers\DepartmentHeadController\DpNotificationController;
+use App\Http\Controllers\AdminEvaluation\FacultyListController;
+use App\Http\Controllers\ConsultationController\ConsultationOverallHistoryController;
+use App\Http\Controllers\DepartmentHeadController\DpOverallHistoryController;
 
 
 // Other Routes
@@ -219,6 +225,3 @@ Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->g
 Route::get('/api/available-time-slots', [StudentAppointmentController::class, 'getAvailableTimeSlots'])->name('api.available-time-slots');
 
 
-// Notification routes
-Route::get('/notifications', [NotifyController::class, 'index'])->name('notifications.index');
-Route::post('/notifications/{notify}/mark-as-read', [NotifyController::class, 'markAsRead'])->name('notifications.mark-as-read');
