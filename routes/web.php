@@ -40,12 +40,8 @@ use App\Http\Controllers\Student\HighSchoolController;
 use App\Http\Controllers\Student\HighSchoolPickerController;
 use App\Http\Controllers\Student\StudentPickerController;
 use App\Http\Controllers\Student\NotificationController;
-use App\Http\Controllers\Student\StudentCtNotificationController;
-use App\Http\Controllers\ConsultationController\ConsultationNotificationController;
-use App\Http\Controllers\DepartmentHeadController\DpNotificationController;
-use App\Http\Controllers\AdminEvaluation\FacultyListController;
-use App\Http\Controllers\ConsultationController\ConsultationOverallHistoryController;
-use App\Http\Controllers\DepartmentHeadController\DpOverallHistoryController;
+use App\Http\Controllers\Superadmin\SuperAdminController;
+
 
 
 // Other Routes
@@ -120,10 +116,6 @@ Route::middleware(['auth', 'role:Guidance'])->group(function () {
 
     Route::get('/Consultation/CtMessages', [ConsultationMessagesController::class, 'index'])
         ->name('Consultation.CtMessages');
-
-    Route::get('/overall-history', [ConsultationOverallHistoryController::class, 'index'])->name('Consultation.CtOverallHistory');
-    Route::get('/program-history/{program}', [ConsultationOverallHistoryController::class, 'showProgramHistory'])->name('Consultation.CtProgramHistory');
-    Route::get('/course-history/{program}/{course}', [ConsultationOverallHistoryController::class, 'showCourseHistory'])->name('Consultation.CtCourseHistory');
 });
 
 // Route::get('/highschool', function () {
@@ -188,7 +180,6 @@ Route::prefix('student')->name('Student.')->group(function () {
     Route::get('/appointment', [StudentAppointmentController::class, 'index'])->name('Consform.Appointment');
     Route::post('/appointment', [StudentAppointmentController::class, 'store'])->name('Consform.Appointment.store');
     Route::get('/history', [StudentHistoryController::class, 'index'])->name('StudentHistory');
-    Route::get('/consultation-notifications', [StudentCtNotificationController::class, 'index'])->name('consultation-notifications');
     // Add other student routes here
 });
 
@@ -200,11 +191,6 @@ Route::prefix('consultation')->name('Consultation.')->middleware('role:Guidance'
     Route::post('/approval/decline', [ConsultationApprovalController::class, 'decline'])->name('CtApproval.decline');
     Route::get('/history', [ConsultationHistoryController::class, 'index'])->name('CtHistory');
     Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('store.busy.slot');
-    Route::get('/CtNotification', [ConsultationNotificationController::class, 'index'])->name('CtNotification');
-    Route::get('/overall-history', [ConsultationOverallHistoryController::class, 'index'])->name('Consultation.CtOverallHistory');
-    Route::get('/program-history/{program}', [ConsultationOverallHistoryController::class, 'showProgramHistory'])->name('Consultation.CtProgramHistory');
-    Route::get('/course-history/{program}/{course}', [ConsultationOverallHistoryController::class, 'showCourseHistory'])->name('Consultation.CtCourseHistory');
-    Route::delete('/busy-slot/{id}', [ConsultationCalendarController::class, 'deleteBusySlot'])->name('consultation.delete.busy.slot');
 });
 
 Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->group(function () {
@@ -214,13 +200,13 @@ Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->g
     Route::post('/approval/approve', [DpApprovalController::class, 'approve'])->name('DepartmentHead.DpApproval.approve');
     Route::post('/approval/decline', [DpApprovalController::class, 'decline'])->name('DepartmentHead.DpApproval.decline');
     Route::get('/history', [DpHistoryController::class, 'index'])->name('DepartmentHead.DpHistory');
-    Route::post('/busy-slot', [DpCalendarController::class, 'storeBusySlot'])->name('DepartmentHead.store.busy.slot');
-    Route::delete('/busy-slot/{id}', [DpCalendarController::class, 'deleteBusySlot'])->name('DepartmentHead.delete.busy.slot');
-    Route::get('/DpNotification', [DpNotificationController::class, 'index'])->name('DepartmentHead.DpNotification');
-    Route::get('/overall-history', [DpOverallHistoryController::class, 'index'])->name('DepartmentHead.DpOverallHistory');
-    Route::get('/program-history/{program}', [DpOverallHistoryController::class, 'showProgramHistory'])->name('DepartmentHead.DpProgramHistory');
-    Route::get('/course-history/{program}/{course}', [DpOverallHistoryController::class, 'showCourseHistory'])->name('DepartmentHead.DpCourseHistory');
+    Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('DepartmentHead.store.busy.slot');
 });
 
 Route::get('/api/available-time-slots', [StudentAppointmentController::class, 'getAvailableTimeSlots'])->name('api.available-time-slots');
 
+// Notification routes
+Route::get('/notifications', [NotifyController::class, 'index'])->name('notifications.index');
+Route::post('/notifications/{notify}/mark-as-read', [NotifyController::class, 'markAsRead'])->name('notifications.mark-as-read');
+
+Route::get('/superadmindashboard', [SuperAdminController::class, 'index'])->name('Superadmin.SuperAdminDashboard');

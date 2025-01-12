@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers\Auth;
 
@@ -32,14 +32,24 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'string'], // Validate role
+            'student_id' => ['nullable', 'string', 'max:50', 'unique:users,student_id'], // Validate student_id
         ]);
 
+        // If role is student, ensure student_id is provided
+        if ($request->role === 'student' && !$request->student_id) {
+            return back()->withErrors(['student_id' => 'Student ID is required for the student role.']);
+        }
+
+        // Create the user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role, // Save role
+            'student_id' => $request->role === 'student' ? $request->student_id : null, // Save student_id if role is student
         ]);
 
         event(new Registered($user));

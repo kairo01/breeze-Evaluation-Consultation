@@ -37,6 +37,12 @@
                                   class="block h-10 w-10 border border-gray-500 rounded-full" 
                                  alt="College Logo" />
                             </a>
+                            @elseif(Auth::user()->role == 'SuperAdmin')
+                            <a href="{{ route('Superadmin.SuperAdminDashboard') }}">
+                                 <img src="{{ asset('css/GeneralResources/collegelogo.jpg') }}" 
+                                  class="block h-10 w-10 border border-gray-500 rounded-full" 
+                                 alt="College Logo" />
+                            </a>
                         @endif
                     @else
                         <a href="{{ route('welcome') }}">
@@ -70,6 +76,8 @@
                                     {{ __('Dashboard') }}
                                 </x-nav-link>
                             @endif
+
+
                                @if(Auth::user()->student_type == 'College' || Auth::user()->student_type == 'HighSchool')
                                <x-nav-link :href="route('Student.evaluation.StudentPicker')" :active="request()->routeIs('Student.evaluation.StudentPicker')">
                                     {{ __('Evaluation') }}
@@ -89,6 +97,17 @@
                         
                                 @endif
                           
+        
+                                @elseif(Auth::user()->role == 'SuperAdmin')
+                            <x-nav-link :href="route('Superadmin.SuperAdminDashboard')" :active="request()->routeIs('Superadmin.SuperAdminDashboard')">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('register')" :active="request()->routeIs('register')">
+                                {{ __('Registration') }}
+                            </x-nav-link>
+                            @endif
+                    
                         @elseif(Auth::user()->role == 'Guidance')
                             <x-nav-link :href="route('Consultation.CtDashboard')" :active="request()->routeIs('Consultation.CtDashboard')">
                                 {{ __('Dashboard') }}
@@ -105,6 +124,7 @@
                             <x-nav-link :href="route('Consultation.CtNotification')" :active="request()->routeIs('Consultation.CtNotification')">
                                 {{ __('Notification') }}
                             </x-nav-link>
+
                             @elseif(in_array(Auth::user()->role, ['ComputerDepartment', 'EngineeringDeparment', 'HighSchoolDepartment', 'TesdaDepartment', 'HmDepartment' ]))
         <x-nav-link :href="route('DepartmentHead.DpDashboard')" :active="request()->routeIs('DepartmentHead.DpDashboard')">
             {{ __('Dashboard') }}
@@ -122,7 +142,8 @@
             {{ __('Notification') }}
         </x-nav-link>
                         @endif
-                    @endif
+
+ 
                 </div>
             </div>
 
