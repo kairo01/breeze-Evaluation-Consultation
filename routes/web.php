@@ -224,4 +224,3 @@ Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->g
 
 Route::get('/api/available-time-slots', [StudentAppointmentController::class, 'getAvailableTimeSlots'])->name('api.available-time-slots');
 
-
