@@ -100,6 +100,9 @@
                     <p class="font-semibold text-sm">Time:</p>
                     <p id="modalTimeLabel" class="text-sm mb-2"></p>
                 </div>
+                <button id="deleteBusySlotBtn" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded hidden">
+                    Delete Busy Slot
+                </button>
             </div>
         </div>
     </div>
@@ -132,9 +135,38 @@
                 if (event.extendedProps.type === 'appointment') {
                     document.getElementById('modalTitleLabel').innerText = `Appointment: ${event.title}`;
                     document.getElementById('modalDescriptionLabel').innerText = event.extendedProps.description;
+                    document.getElementById('deleteBusySlotBtn').classList.add('hidden');
                 } else if (event.extendedProps.type === 'busy_slot') {
                     document.getElementById('modalTitleLabel').innerText = `Busy Slot: ${event.title}`;
                     document.getElementById('modalDescriptionLabel').innerText = event.extendedProps.description;
+                    document.getElementById('deleteBusySlotBtn').classList.remove('hidden');
+                    document.getElementById('deleteBusySlotBtn').onclick = function() {
+                        if (confirm('Are you sure you want to delete this busy slot?')) {
+                            fetch(`/department-head/busy-slot/${event.id}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                }
+                            }).then(response => {
+                                if (response.ok) {
+                                    return response.json();
+                                }
+                                throw new Error('Network response was not ok.');
+                            }).then(data => {
+                                if (data.success) {
+                                    calendar.getEventById(event.id).remove();
+                                    closeEventModal();
+                                } else {
+                                    alert('Failed to delete busy slot: ' + data.error);
+                                }
+                            }).catch(error => {
+                                console.error('Error:', error);
+                                alert('Failed to delete busy slot: ' + error.message);
+                            });
+                        }
+                    };
                 }
 
                 document.getElementById('modalDateLabel').innerText = event.start.toLocaleDateString();
@@ -189,7 +221,8 @@
         };
     });
     </script>
-    @section('title')
+
+ @section('title')
       Department Head Calendar
    @endsection
 </x-app-layout>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Student;
+
 
 namespace App\Http\Controllers\Student;
 
@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use App\Notifications\NewAppointmentNotification;
 
 class StudentAppointmentController extends Controller
 {
@@ -89,12 +90,8 @@ class StudentAppointmentController extends Controller
             ]);
 
             // Create notification for the consultant
-            Notify::create([
-                'user_id' => $consultantId,
-                'message' => 'New appointment request from ' . auth()->user()->name,
-                'type' => 'new_appointment',
-                'read' => false,
-            ]);
+            $consultant = User::find($consultantId);
+            $consultant->notify(new NewAppointmentNotification($appointment));
 
             return redirect()->route('Student.Consform.Appointment')->with('success', 'Appointment successfully created.');
         } catch (\Exception $e) {

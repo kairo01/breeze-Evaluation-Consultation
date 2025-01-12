@@ -63,15 +63,23 @@
                                             {{ $appointment->meeting_preference ?? 'N/A' }}
                                         </td>
                                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                            {{ \Carbon\Carbon::parse($appointment->date_time)->format('Y-m-d H:i') }}
+                                            {{ $appointment->date->format('Y-m-d') }}<br>
+                                            {{ $appointment->time->format('H:i') }} - {{ $appointment->time->addHour()->format('H:i') }}
                                         </td>
                                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
-                                            <!-- Accept Form -->
-                                            <form action="{{ route('DepartmentHead.DpApproval.approve') }}" method="POST" class="inline-block">
+                                            <button onclick="showApprovalForm({{ $appointment->id }})" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded">
+                                                Accept
+                                            </button>
+
+                                            <form id="approvalForm{{ $appointment->id }}" action="{{ route('DepartmentHead.DpApproval.approve') }}" method="POST" class="hidden mt-2">
                                                 @csrf
                                                 <input type="hidden" name="appointment_id" value="{{ $appointment->id }}">
-                                                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded">
-                                                    Accept
+                                                <div class="mb-2">
+                                                    <label for="approval_reason" class="block text-sm font-medium text-gray-700">Approval Reason / Meeting Details:</label>
+                                                    <textarea name="approval_reason" id="approval_reason" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
+                                                </div>
+                                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">
+                                                    Confirm Approval
                                                 </button>
                                             </form>
 
@@ -125,9 +133,13 @@
         function closeDeclineModal(id) {
             document.getElementById('declineModal' + id).style.display = 'none';
         }
+        function showApprovalForm(id) {
+            document.getElementById('approvalForm' + id).classList.remove('hidden');
+        }
     </script>
 
    @section('title')
       Department Head Approval
    @endsection
 </x-app-layout>
+

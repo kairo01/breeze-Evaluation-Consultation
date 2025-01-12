@@ -16,7 +16,7 @@ class ConsultationDbController extends Controller
         $pendingAppointments = Appointment::where('consultant_role', $user->id)->where('status', 'Pending')->count();
         $declinedAppointments = Appointment::where('consultant_role', $user->id)->where('status', 'Declined')->count();
 
-        return view('Consultation.Ctdashboard', compact('totalAppointments', 'approvedAppointments', 'pendingAppointments', 'declinedAppointments'));
+        return view('Consultation.CtDashboard', compact('totalAppointments', 'approvedAppointments', 'pendingAppointments', 'declinedAppointments'));
     }
     
 }

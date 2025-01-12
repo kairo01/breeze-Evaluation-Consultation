@@ -9,12 +9,28 @@ use Illuminate\Support\Facades\Auth;
 
 class ConsultationHistoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $appointments = Appointment::where('consultant_role', Auth::id())
-            ->orderBy('date', 'desc')
-            ->orderBy('time', 'desc')
-            ->get();
+        $query = Appointment::where('consultant_role', Auth::id());
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->whereHas('student', function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%");
+            })->orWhere('course', 'like', "%$search%")
+          ->orWhere('purpose', 'like', "%$search%")
+          ->orWhere('meeting_mode', 'like', "%$search%")
+          ->orWhere('status', 'like', "%$search%");
+        }
+
+        if ($request->has('sort')) {
+            $sort = $request->input('sort');
+            $query->orderBy('course', $sort);
+        } else {
+            $query->orderBy('date', 'desc')->orderBy('time', 'desc');
+        }
+
+        $appointments = $query->get();
 
         return view('Consultation.CtHistory', compact('appointments'));
     }

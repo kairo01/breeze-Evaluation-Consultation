@@ -31,7 +31,7 @@ class ConsultationCalendarController extends Controller
                     'end' => $end,
                     'description' => $slot->description,
                     'color' => '#FF5733',
-                    'type' => 'busy_slot',  
+                    'type' => 'busy_slot',
                     'allDay' => $slot->busy_all_day,
                 ];
             });
@@ -68,6 +68,23 @@ class ConsultationCalendarController extends Controller
         $busySlot->save();
 
         return redirect()->back()->with('success', 'Busy slot added successfully.');
+    }
+
+    public function deleteBusySlot($id)
+    {
+        try {
+            $busySlot = BusySlot::findOrFail($id);
+    
+            if ($busySlot->consultant_id !== auth()->id()) {
+                return response()->json(['success' => false, 'error' => 'Unauthorized'], 403);
+            }
+
+            $busySlot->delete();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
     }
 
     public function dashboard()

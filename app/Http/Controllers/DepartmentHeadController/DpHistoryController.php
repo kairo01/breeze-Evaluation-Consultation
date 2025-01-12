@@ -9,16 +9,30 @@ use Illuminate\Support\Facades\Auth;
 
 class DpHistoryController extends Controller
 {
-    public function index()
-    {
-        // Get the logged-in user’s role or ID
-        $userId = Auth::id(); // Assuming the department head is logged in
+    public function index(Request $request)
+{
+    $query = Appointment::where('consultant_role', Auth::id());
 
-        // Fetch appointments where the status is not 'Pending' and belong to the logged-in department head
-        $appointments = Appointment::where('status', '!=', 'Pending')
-            ->where('consultant_role', $userId) // Filter by department head’s ID
-            ->get();
-
-        return view('DepartmentHead.DpHistory', compact('appointments'));
+    if ($request->has('search')) {
+        $search = $request->input('search');
+        $query->whereHas('student', function ($q) use ($search) {
+            $q->where('name', 'like', "%$search%");
+        })->orWhere('course', 'like', "%$search%")
+          ->orWhere('purpose', 'like', "%$search%")
+          ->orWhere('meeting_mode', 'like', "%$search%")
+          ->orWhere('status', 'like', "%$search%");
     }
+
+    if ($request->has('sort')) {
+        $sort = $request->input('sort');
+        $query->orderBy('course', $sort);
+    } else {
+        $query->orderBy('date', 'desc')->orderBy('time', 'desc');
+    }
+
+    $appointments = $query->get();
+
+    return view('DepartmentHead.DpHistory', compact('appointments'));
 }
+}
+

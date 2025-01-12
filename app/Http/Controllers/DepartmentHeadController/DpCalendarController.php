@@ -70,6 +70,23 @@ class DpCalendarController extends Controller
         return redirect()->back()->with('success', 'Busy slot added successfully.');
     }
 
+    public function deleteBusySlot($id)
+    {
+        try {
+            $busySlot = BusySlot::findOrFail($id);
+    
+            if ($busySlot->consultant_id !== auth()->id()) {
+                return response()->json(['success' => false, 'error' => 'Unauthorized'], 403);
+            }
+
+            $busySlot->delete();
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+        }
+    }
+
     public function dashboard()
     {
         $user = auth()->user();
