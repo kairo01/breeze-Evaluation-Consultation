@@ -98,7 +98,7 @@
                                 @endif
                           
         
-                                @elseif(Auth::user()->role == 'SuperAdmin')
+                        @elseif(Auth::user()->role == 'SuperAdmin')
                             <x-nav-link :href="route('Superadmin.SuperAdminDashboard')" :active="request()->routeIs('Superadmin.SuperAdminDashboard')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
@@ -106,8 +106,6 @@
                             <x-nav-link :href="route('register')" :active="request()->routeIs('register')">
                                 {{ __('Registration') }}
                             </x-nav-link>
-                            @endif
-                    
                         @elseif(Auth::user()->role == 'Guidance')
                             <x-nav-link :href="route('Consultation.CtDashboard')" :active="request()->routeIs('Consultation.CtDashboard')">
                                 {{ __('Dashboard') }}
@@ -125,25 +123,24 @@
                                 {{ __('Notification') }}
                             </x-nav-link>
 
-                            @elseif(in_array(Auth::user()->role, ['ComputerDepartment', 'EngineeringDeparment', 'HighSchoolDepartment', 'TesdaDepartment', 'HmDepartment' ]))
-        <x-nav-link :href="route('DepartmentHead.DpDashboard')" :active="request()->routeIs('DepartmentHead.DpDashboard')">
-            {{ __('Dashboard') }}
-        </x-nav-link>
-        <x-nav-link :href="route('DepartmentHead.DpApproval')" :active="request()->routeIs('DepartmentHead.DpApproval')">
-            {{ __('Approval') }}
-        </x-nav-link>
-        <x-nav-link :href="route('DepartmentHead.DpHistory')" :active="request()->routeIs('DepartmentHead.DpHistory')">
-            {{ __('History') }}
-        </x-nav-link>
-        <x-nav-link :href="route('DepartmentHead.DpCalendar')" :active="request()->routeIs('DepartmentHead.DpCalendar')">
-            {{ __('Calendar') }}
-        </x-nav-link>
-        <x-nav-link :href="route('DepartmentHead.DpNotification')" :active="request()->routeIs('DepartmentHead.DpNotification')">
-            {{ __('Notification') }}
-        </x-nav-link>
+                        @elseif(in_array(Auth::user()->role, ['ComputerDepartment', 'EngineeringDeparment', 'HighSchoolDepartment', 'TesdaDepartment', 'HmDepartment' ]))
+                            <x-nav-link :href="route('DepartmentHead.DpDashboard')" :active="request()->routeIs('DepartmentHead.DpDashboard')">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('DepartmentHead.DpApproval')" :active="request()->routeIs('DepartmentHead.DpApproval')">
+                                {{ __('Approval') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('DepartmentHead.DpHistory')" :active="request()->routeIs('DepartmentHead.DpHistory')">
+                                {{ __('History') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('DepartmentHead.DpCalendar')" :active="request()->routeIs('DepartmentHead.DpCalendar')">
+                                {{ __('Calendar') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('DepartmentHead.DpNotification')" :active="request()->routeIs('DepartmentHead.DpNotification')">
+                                {{ __('Notification') }}
+                            </x-nav-link>
                         @endif
-
- 
+                    @endif
                 </div>
             </div>
 
