@@ -14,5 +14,17 @@ class DpNotificationController extends Controller
         return view('DepartmentHead.DpNotification', compact('notifications'));
     }
 
+    public function markAsRead($id)
+    {
+        $notification = auth()->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+        return back()->with('success', 'Notification marked as read.');
+    }
+
+    public function markAllAsRead()
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        return back()->with('success', 'All notifications marked as read.');
+    }
 }
 

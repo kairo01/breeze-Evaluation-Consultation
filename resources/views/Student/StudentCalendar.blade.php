@@ -30,6 +30,8 @@
                 <p id="modalDescription" class="text-sm mb-4"></p>
                 <p class="font-semibold text-sm">Date and Time:</p>
                 <p id="modalDateTime" class="text-sm mb-2"></p>
+                <p class="font-semibold text-sm">Status:</p>
+                <p id="modalStatus" class="text-sm mb-2"></p>
             </div>
         </div>
     </div>
@@ -61,8 +63,10 @@
 
                     if (event.extendedProps.type === 'appointment') {
                         document.getElementById('modalTitle').innerText = `Appointment: ${event.title}`;
+                        document.getElementById('modalStatus').innerText = event.extendedProps.status;
                     } else if (event.extendedProps.type === 'busy_slot') {
                         document.getElementById('modalTitle').innerText = `Busy Slot: ${event.title}`;
+                        document.getElementById('modalStatus').innerText = 'N/A';
                     }
 
                     let description = event.extendedProps.description || 'No description available';
@@ -87,6 +91,18 @@
                     document.getElementById('modalDateTime').innerText = dateTimeText;
 
                     document.getElementById('eventModal').classList.remove('hidden');
+                },
+                eventDidMount: function(info) {
+                    if (info.event.extendedProps.type === 'appointment') {
+                        setInterval(function() {
+                            var now = new Date();
+                            var end = info.event.end;
+                            if (now > end && info.event.backgroundColor !== '#4CAF50') {
+                                info.event.setProp('backgroundColor', '#4CAF50');
+                                info.event.setExtendedProp('status', 'Done');
+                            }
+                        }, 60000); // Check every minute
+                    }
                 }
             });
 
@@ -120,9 +136,8 @@
     </script>
 
 @section('title')
-   Student Calendar
+  Student Calendar
 @endsection
-
 
 </x-app-layout>
 

@@ -44,6 +44,9 @@
                                     <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         Approval Reason / Meeting Details
                                     </th>
+                                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        Completed
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,6 +78,12 @@
                                         <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                             {{ $appointment->approval_reason ?? 'N/A' }}
                                         </td>
+                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
+                                            <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" 
+                                                   {{ $appointment->is_completed ? 'checked' : '' }} 
+                                                   {{ $appointment->status !== 'Approved' || !$appointment->is_past_due ? 'disabled' : '' }}
+                                                   onchange="updateCompletionStatus({{ $appointment->id }}, this.checked)">
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -88,4 +97,25 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+function updateCompletionStatus(appointmentId, isCompleted) {
+    fetch(`/department-head/update-completion/${appointmentId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ is_completed: isCompleted })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Appointment completion status updated');
+        } else {
+            console.error('Failed to update appointment completion status');
+        }
+    });
+}
+</script>
 

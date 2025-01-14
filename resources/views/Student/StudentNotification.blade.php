@@ -86,8 +86,23 @@
                     <h3 class="text-lg font-semibold mb-4">Your Notifications</h3>
                     @forelse(auth()->user()->notifications as $notification)
                         <div class="mb-4 p-4 bg-gray-100 rounded">
-                            <p class="font-semibold">{{ $notification->data['message'] ?? 'No message available' }}</p>
-                            <p class="text-sm text-gray-600">{{ $notification->created_at ? $notification->created_at->diffForHumans() : 'Time not available' }}</p>
+                            <p class="font-semibold">{{ $notification->data['message'] }}</p>
+                            @if(isset($notification->data['start_time']))
+                                <p class="text-sm text-gray-600">Appointment Time: {{ \Carbon\Carbon::parse($notification->data['start_time'])->format('F j, Y, g:i A') }}</p>
+                            @endif
+                            @if(isset($notification->data['with']))
+                                <p class="text-sm text-gray-600">With: {{ $notification->data['with'] }}</p>
+                            @endif
+                            @if(isset($notification->data['purpose']))
+                                <p class="text-sm text-gray-600">Purpose: {{ $notification->data['purpose'] }}</p>
+                            @endif
+                            @if(isset($notification->data['meeting_mode']))
+                                <p class="text-sm text-gray-600">Meeting Mode: {{ $notification->data['meeting_mode'] }}</p>
+                            @endif
+                            @if(isset($notification->data['meeting_preference']))
+                                <p class="text-sm text-gray-600">Meeting Preference: {{ $notification->data['meeting_preference'] }}</p>
+                            @endif
+                            <p class="text-sm text-gray-600 mt-2">{{ $notification->created_at->diffForHumans() }}</p>
                         </div>
                     @empty
                         <p>No notifications found.</p>

@@ -80,7 +80,7 @@
     <div id="eventModal" class="fixed inset-0 z-50 hidden flex justify-center items-center bg-black bg-opacity-50">
         <div class="bg-white p-6 rounded-md shadow-lg w-96">
             <div class="flex justify-between items-center mb-4">
-                <h5 class="text-lg font-semibold text-gray-800">Event Details</h5>
+                <h5 id="modalTitle" class="text-lg font-semibold text-gray-800"></h5>
                 <button onclick="closeEventModal()" class="text-gray-500 hover:text-gray-700 text-lg font-bold">&times;</button>
             </div>
             <div class="text-gray-700">
@@ -99,6 +99,10 @@
                 <div class="mb-4">
                     <p class="font-semibold text-sm">Time:</p>
                     <p id="modalTimeLabel" class="text-sm mb-2"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="font-semibold text-sm">Status:</p>
+                    <p id="modalStatusLabel" class="text-sm mb-2"></p>
                 </div>
                 <button id="deleteBusySlotBtn" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded hidden">
                     Delete Busy Slot
@@ -133,12 +137,16 @@
                 const event = info.event;
 
                 if (event.extendedProps.type === 'appointment') {
-                    document.getElementById('modalTitleLabel').innerText = `Appointment: ${event.title}`;
+                    document.getElementById('modalTitle').innerText = 'Approved Appointment';
+                    document.getElementById('modalTitleLabel').innerText = `Appointment with: ${event.title}`;
                     document.getElementById('modalDescriptionLabel').innerText = event.extendedProps.description;
+                    document.getElementById('modalStatusLabel').innerText = event.extendedProps.status;
                     document.getElementById('deleteBusySlotBtn').classList.add('hidden');
                 } else if (event.extendedProps.type === 'busy_slot') {
-                    document.getElementById('modalTitleLabel').innerText = `Busy Slot: ${event.title}`;
+                    document.getElementById('modalTitle').innerText = 'Busy Slot';
+                    document.getElementById('modalTitleLabel').innerText = event.title;
                     document.getElementById('modalDescriptionLabel').innerText = event.extendedProps.description;
+                    document.getElementById('modalStatusLabel').innerText = 'N/A';
                     document.getElementById('deleteBusySlotBtn').classList.remove('hidden');
                     document.getElementById('deleteBusySlotBtn').onclick = function() {
                         if (confirm('Are you sure you want to delete this busy slot?')) {
@@ -150,16 +158,16 @@
                                     'Content-Type': 'application/json'
                                 }
                             }).then(response => {
-                                if (response.ok) {
-                                    return response.json();
+                                if (!response.ok) {
+                                    throw new Error('Server responded with status ' + response.status);
                                 }
-                                throw new Error('Network response was not ok.');
+                                return response.json();
                             }).then(data => {
                                 if (data.success) {
                                     calendar.getEventById(event.id).remove();
                                     closeEventModal();
                                 } else {
-                                    alert('Failed to delete busy slot: ' + data.error);
+                                    throw new Error(data.error || 'Unknown error occurred');
                                 }
                             }).catch(error => {
                                 console.error('Error:', error);
@@ -172,9 +180,14 @@
                 document.getElementById('modalDateLabel').innerText = event.start.toLocaleDateString();
                 document.getElementById('modalTimeLabel').innerText = event.allDay
                     ? 'All Day'
-                    : `${event.start.toLocaleTimeString()} - ${event.end ? event.end.toLocaleTimeString() : 'N/A'}`;
+                    : `${event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 
                 document.getElementById('eventModal').classList.remove('hidden');
+            },
+            eventDidMount: function(info) {
+                if (info.event.extendedProps.type === 'appointment') {
+                    updateAppointmentStatus(info.event);
+                }
             }
         });
 
@@ -219,11 +232,33 @@
         window.goBack = function () {
             window.history.back();
         };
+
+        function updateAppointmentStatus(event) {
+            const now = new Date();
+            const end = event.end;
+
+            if (now > end && event.backgroundColor !== '#4CAF50') {
+                event.setProp('backgroundColor', '#4CAF50');
+                event.setExtendedProp('status', 'Done');
+            } else if (now <= end && event.backgroundColor !== '#1E90FF') {
+                event.setProp('backgroundColor', '#1E90FF');
+                event.setExtendedProp('status', 'Ongoing');
+            }
+        }
+
+        // Update appointment statuses every minute
+        setInterval(function() {
+            calendar.getEvents().forEach(function(event) {
+                if (event.extendedProps.type === 'appointment') {
+                    updateAppointmentStatus(event);
+                }
+            });
+        }, 60000);
     });
     </script>
 
-  @section('title')
-      Guidance Counselor Calendar
-   @endsection
+@section('title')
+     Guidance Counselor Calendar
+  @endsection
 </x-app-layout>
 

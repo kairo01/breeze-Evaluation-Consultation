@@ -19,11 +19,19 @@ class StudentAppointmentController extends Controller
 {
     public function index()
     {
-        $users = User::whereIn('role', ['Guidance', 'ComputerDepartment', 'EngineeringDeparment', 'HighSchoolDepartment', 'TesdaDepartment', 'HmDepartment'])->get();
+        $user = Auth::user();
+        $consultants = User::where(function ($query) use ($user) {
+            if ($user->student_type === 'HighSchool') {
+                $query->where('role', 'HighSchoolDepartment');
+            } else {
+                $query->whereIn('role', ['Guidance', 'ComputerDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'HmDepartment']);
+            }
+        })->get();
+    
         $pendingAppointment = Appointment::where('student_id', auth()->id())
-                                     ->where('status', 'Pending')
-                                     ->exists();
-        return view('Student.Consform.Appointment', compact('users', 'pendingAppointment'));
+                                         ->where('status', 'Pending')
+                                         ->exists();
+        return view('Student.Consform.Appointment', compact('consultants', 'pendingAppointment'));
     }
 
     public function store(Request $request)

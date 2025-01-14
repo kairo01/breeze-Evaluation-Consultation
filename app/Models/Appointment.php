@@ -59,5 +59,15 @@ class Appointment extends Model
             'color' => '#1E90FF',
         ];
     }
+
+    public function getIsCompletedAttribute()
+    {
+        return $this->status === 'Approved' && $this->date->addHour()->isPast();
+    }
+
+    public function getIsPastDueAttribute()
+    {
+        return $this->date->addHour()->isPast();
+    }
 }
 

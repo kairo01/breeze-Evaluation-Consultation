@@ -11,8 +11,20 @@ class StudentCtNotificationController extends Controller
     public function index()
     {
         $notifications = auth()->user()->notifications()->paginate(10);
-        return view('Student.StudentCtNotification', compact('notifications'));
+        return view('Student.StudentNotification', compact('notifications'));
     }
 
+    public function markAsRead($id)
+    {
+        $notification = auth()->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+        return back()->with('success', 'Notification marked as read.');
+    }
+
+    public function markAllAsRead()
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        return back()->with('success', 'All notifications marked as read.');
+    }
 }
 

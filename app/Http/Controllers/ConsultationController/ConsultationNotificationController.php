@@ -13,5 +13,18 @@ class ConsultationNotificationController extends Controller
         $notifications = auth()->user()->notifications()->paginate(10);
         return view('Consultation.CtNotification', compact('notifications'));
     }
+
+    public function markAsRead($id)
+    {
+        $notification = auth()->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+        return back()->with('success', 'Notification marked as read.');
+    }
+
+    public function markAllAsRead()
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        return back()->with('success', 'All notifications marked as read.');
+    }
 }
 

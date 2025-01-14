@@ -99,18 +99,14 @@
                     @enderror
                 </div>
 
-                <!-- Select Consultant (excluding "HumanResources") -->
                 <div class="mb-4">
                     <label class="block text-gray-700 text-sm font-bold mb-2" for="consultant_role">
                         Select Consultant:
                     </label>
                     <select name="consultant_role" id="consultant_role" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <option value="">Select Consultant</option>
-                        @foreach($users as $user)
-                            @if((auth()->user()->student_type === 'HighSchool' && $user->role === 'HighSchoolDepartment') || 
-                                (auth()->user()->student_type === 'College' && in_array($user->role, ['HmDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'ComputerDepartment', 'Guidance'])))
-                                <option value="{{ $user->id }}" data-role="{{ $user->role }}">{{ $user->role }}</option>
-                            @endif
+                        @foreach($consultants as $consultant)
+                            <option value="{{ $consultant->id }}" data-role="{{ $consultant->role }}">{{ $consultant->role }}</option>
                         @endforeach
                     </select>
                 </div>

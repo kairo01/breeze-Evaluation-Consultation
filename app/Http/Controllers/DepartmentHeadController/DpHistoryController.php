@@ -34,5 +34,13 @@ class DpHistoryController extends Controller
 
     return view('DepartmentHead.DpHistory', compact('appointments'));
 }
+
+public function updateCompletion(Request $request, Appointment $appointment)
+{
+    $appointment->is_completed = $request->is_completed;
+    $appointment->save();
+
+    return response()->json(['success' => true]);
+}
 }
 

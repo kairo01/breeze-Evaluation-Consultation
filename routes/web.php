@@ -124,6 +124,10 @@ Route::middleware(['auth', 'role:Guidance'])->group(function () {
     Route::get('/overall-history', [ConsultationOverallHistoryController::class, 'index'])->name('Consultation.CtOverallHistory');
     Route::get('/program-history/{program}', [ConsultationOverallHistoryController::class, 'showProgramHistory'])->name('Consultation.CtProgramHistory');
     Route::get('/course-history/{program}/{course}', [ConsultationOverallHistoryController::class, 'showCourseHistory'])->name('Consultation.CtCourseHistory');
+    Route::post('/consultation/update-completion/{appointment}', [ConsultationHistoryController::class, 'updateCompletion'])->name('consultation.update-completion');
+    Route::get('/consultation/notifications', [ConsultationNotificationController::class, 'index'])->name('Consultation.CtNotification');
+    Route::post('/consultation/notifications/{id}/mark-as-read', [ConsultationNotificationController::class, 'markAsRead'])->name('Consultation.markNotificationAsRead');
+    Route::post('/consultation/notifications/mark-all-as-read', [ConsultationNotificationController::class, 'markAllAsRead'])->name('Consultation.markAllNotificationsAsRead');
 });
 
 // Route::get('/highschool', function () {
@@ -189,6 +193,9 @@ Route::prefix('student')->name('Student.')->group(function () {
     Route::post('/appointment', [StudentAppointmentController::class, 'store'])->name('Consform.Appointment.store');
     Route::get('/history', [StudentHistoryController::class, 'index'])->name('StudentHistory');
     Route::get('/consultation-notifications', [StudentCtNotificationController::class, 'index'])->name('consultation-notifications');
+    Route::get('/notifications', [StudentCtNotificationController::class, 'index'])->name('StudentNotification');
+    Route::post('/notifications/{id}/mark-as-read', [StudentCtNotificationController::class, 'markAsRead'])->name('markNotificationAsRead');
+    Route::post('/notifications/mark-all-as-read', [StudentCtNotificationController::class, 'markAllAsRead'])->name('markAllNotificationsAsRead');
     // Add other student routes here
 });
 
@@ -205,6 +212,7 @@ Route::prefix('consultation')->name('Consultation.')->middleware('role:Guidance'
     Route::get('/program-history/{program}', [ConsultationOverallHistoryController::class, 'showProgramHistory'])->name('Consultation.CtProgramHistory');
     Route::get('/course-history/{program}/{course}', [ConsultationOverallHistoryController::class, 'showCourseHistory'])->name('Consultation.CtCourseHistory');
     Route::delete('/busy-slot/{id}', [ConsultationCalendarController::class, 'deleteBusySlot'])->name('consultation.delete.busy.slot');
+    Route::post('/update-completion/{appointment}', [ConsultationHistoryController::class, 'updateCompletion'])->name('consultation.update-completion');
 });
 
 Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->group(function () {
@@ -220,6 +228,10 @@ Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->g
     Route::get('/overall-history', [DpOverallHistoryController::class, 'index'])->name('DepartmentHead.DpOverallHistory');
     Route::get('/program-history/{program}', [DpOverallHistoryController::class, 'showProgramHistory'])->name('DepartmentHead.DpProgramHistory');
     Route::get('/course-history/{program}/{course}', [DpOverallHistoryController::class, 'showCourseHistory'])->name('DepartmentHead.DpCourseHistory');
+    Route::post('/update-completion/{appointment}', [DpHistoryController::class, 'updateCompletion'])->name('department-head.update-completion');
+    Route::get('/notifications', [DpNotificationController::class, 'index'])->name('DepartmentHead.DpNotification');
+    Route::post('/notifications/{id}/mark-as-read', [DpNotificationController::class, 'markAsRead'])->name('DepartmentHead.markNotificationAsRead');
+    Route::post('/notifications/mark-all-as-read', [DpNotificationController::class, 'markAllAsRead'])->name('DepartmentHead.markAllNotificationsAsRead');
 });
 
 Route::get('/api/available-time-slots', [StudentAppointmentController::class, 'getAvailableTimeSlots'])->name('api.available-time-slots');

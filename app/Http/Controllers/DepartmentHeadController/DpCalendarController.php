@@ -16,7 +16,22 @@ class DpCalendarController extends Controller
             ->where('status', 'Approved')
             ->get()
             ->map(function ($appointment) {
-                return array_merge($appointment->getEventData(), ['type' => 'appointment']);
+                $start = Carbon::parse($appointment->date->format('Y-m-d') . ' ' . $appointment->time->format('H:i:s'));
+                $end = $start->copy()->addHour();
+                $now = Carbon::now();
+                $isDone = $now->isAfter($end);
+                $status = $isDone ? 'Done' : 'Ongoing';
+
+                return [
+                    'id' => $appointment->id,
+                    'title' => $appointment->student->name,
+                    'start' => $start->format('Y-m-d\TH:i:s'),
+                    'end' => $end->format('Y-m-d\TH:i:s'),
+                    'description' => $appointment->purpose,
+                    'color' => $isDone ? '#4CAF50' : '#1E90FF', // Green if done, Blue if ongoing
+                    'type' => 'appointment',
+                    'status' => $status,
+                ];
             });
 
         $busySlots = BusySlot::where('consultant_id', auth()->id())
@@ -26,7 +41,7 @@ class DpCalendarController extends Controller
                 $end = $slot->busy_all_day ? $slot->date->format('Y-m-d') : $slot->date->format('Y-m-d') . 'T' . $slot->to->format('H:i:s');
                 return [
                     'id' => $slot->id,
-                    'title' => $slot->title,
+                    'title' => 'Busy: ' . $slot->title,
                     'start' => $start,
                     'end' => $end,
                     'description' => $slot->description,
