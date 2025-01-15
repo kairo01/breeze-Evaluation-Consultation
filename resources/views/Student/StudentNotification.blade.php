@@ -83,14 +83,11 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <h3 class="text-lg font-semibold mb-4">Your Notifications</h3>
-                    @forelse(auth()->user()->notifications as $notification)
+                    <h3 class="text-lg font-semibold mb-4">Your Consultation Notifications</h3>
+                    @forelse(auth()->user()->notifications->whereIn('type', ['App\Notifications\AppointmentStatusNotification', 'App\Notifications\AppointmentReminder']) as $notification)
                         <div class="mb-4 p-4 bg-gray-100 rounded">
                             @if(isset($notification->data['message']))
                                 <p class="font-semibold">{{ $notification->data['message'] }}</p>
-                            @elseif(isset($notification->data['title']))
-                                <p class="font-semibold">{{ $notification->data['title'] }}</p>
-                                <p class="text-sm text-gray-600">{{ $notification->data['description'] ?? 'No description' }}</p>
                             @endif
                             @if(isset($notification->data['start_time']))
                                 <p class="text-sm text-gray-600">Appointment Time: {{ \Carbon\Carbon::parse($notification->data['start_time'])->format('F j, Y, g:i A') }}</p>
@@ -110,7 +107,7 @@
                             <p class="text-sm text-gray-600 mt-2">{{ $notification->created_at->diffForHumans() }}</p>
                         </div>
                     @empty
-                        <p>No notifications found.</p>
+                        <p>No consultation notifications found.</p>
                     @endforelse
                 </div>
             </div>
