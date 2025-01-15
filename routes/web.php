@@ -4,12 +4,15 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminEvaluation\HrCalendarController;
+
 use App\Http\Controllers\ConsultationController\ConsultationDbController;
-use App\Http\Controllers\AdminEvaluation\AdminEvaluationController;
 use App\Http\Controllers\ConsultationController\ConsultationApprovalController;
 use App\Http\Controllers\ConsultationController\ConsultationHistoryController;
 use App\Http\Controllers\ConsultationController\ConsultationCalendarController;
 use App\Http\Controllers\ConsultationController\ConsultationMessagesController;
+use App\Http\Controllers\ConsultationController\ConsultationNotificationController;
+use App\Http\Controllers\ConsultationController\ConsultationOverallHistoryController;
+
 
 use App\Http\Controllers\Student\StudentHistoryController;
 use App\Http\Controllers\Student\StudentCalendarController;
@@ -20,7 +23,7 @@ use App\Http\Controllers\AdminEvaluation\HrCollege;
 use App\Http\Controllers\NotifyController;
 
 use App\Http\Controllers\AdminEvaluation\HrCollegeController;
-
+use App\Http\Controllers\AdminEvaluation\AdminEvaluationController;
 use App\Http\Controllers\AdminEvaluation\HrFacultylistController;
 use App\Http\Controllers\AdminEvaluation\HrHighschoolController;
 use App\Http\Controllers\AdminEvaluation\HrPickerController;
@@ -30,6 +33,9 @@ use App\Http\Controllers\DepartmentHeadController\DpController;
 use App\Http\Controllers\DepartmentHeadController\DpApprovalController;
 use App\Http\Controllers\DepartmentHeadController\DpHistoryController;
 use App\Http\Controllers\DepartmentHeadController\DpCalendarController;
+use App\Http\Controllers\DepartmentHeadController\DpNotificationController;
+use App\Http\Controllers\DepartmentHeadController\DpOverallHistoryController;
+
 
 
 use App\Http\Controllers\AdminEvaluation\EvaluationController;
@@ -40,6 +46,7 @@ use App\Http\Controllers\Student\HighSchoolController;
 use App\Http\Controllers\Student\HighSchoolPickerController;
 use App\Http\Controllers\Student\StudentPickerController;
 use App\Http\Controllers\Student\NotificationController;
+use App\Http\Controllers\Student\StudentCtNotificationController;
 use App\Http\Controllers\Superadmin\SuperAdminController;
 
 
