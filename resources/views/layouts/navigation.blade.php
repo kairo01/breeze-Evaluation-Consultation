@@ -102,10 +102,10 @@
                             <x-nav-link :href="route('Superadmin.SuperAdminDashboard')" :active="request()->routeIs('Superadmin.SuperAdminDashboard')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
-
-                            <x-nav-link :href="route('register')" :active="request()->routeIs('register')">
-                                {{ __('Registration') }}
-                            </x-nav-link>
+                            
+                            <x-nav-link :href="route('Superadmin.manage')" :active="request()->routeIs('Superadmin.manage')">
+                                   {{ __('Manage Users') }}
+                         </x-nav-link>
                         @elseif(Auth::user()->role == 'Guidance')
                             <x-nav-link :href="route('Consultation.CtDashboard')" :active="request()->routeIs('Consultation.CtDashboard')">
                                 {{ __('Dashboard') }}

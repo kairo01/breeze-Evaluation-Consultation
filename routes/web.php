@@ -246,3 +246,16 @@ Route::get('/notifications', [NotifyController::class, 'index'])->name('notifica
 Route::post('/notifications/{notify}/mark-as-read', [NotifyController::class, 'markAsRead'])->name('notifications.mark-as-read');
 
 Route::get('/superadmindashboard', [SuperAdminController::class, 'index'])->name('Superadmin.SuperAdminDashboard');
+
+
+Route::middleware(['auth', 'role:SuperAdmin'])->group(function () {
+    Route::get('/superadmin/manage', [SuperAdminController::class, 'manageAccounts'])->name('Superadmin.manage');
+    Route::get('edit/{role}', [SuperAdminController::class, 'editAccount'])->name('Superadmin.edit');
+    Route::put('update/{role}', [SuperAdminController::class, 'updateAccount'])->name('update');
+   Route::delete('/superadmin/delete/{role}', [SuperAdminController::class, 'deleteAccount'])->name('Superadmin.delete-account');
+});
+
+Route::put('/edit/{role}', [SuperadminController::class, 'update'])->name('Superadmin.edit');
+
+Route::get('/create', [SuperAdminController::class, 'createAccount'])->name('create'); // Route for showing the create form
+Route::post('/create', [SuperAdminController::class, 'storeAccount'])->name('store'); // Route for storing the account
