@@ -14,6 +14,13 @@ class SendAppointmentReminders extends Command
 
     public function handle()
     {
+        // Simulate time 59 minutes before the first appointment
+        $firstAppointment = Appointment::where('status', 'Approved')->orderBy('date')->first();
+        if ($firstAppointment) {
+            $simulatedNow = Carbon::parse($firstAppointment->date)->subMinutes(59);
+            Carbon::setTestNow($simulatedNow);
+        }
+
         $oneHourFromNow = Carbon::now()->addHour();
         $twoHoursFromNow = Carbon::now()->addHours(2);
 

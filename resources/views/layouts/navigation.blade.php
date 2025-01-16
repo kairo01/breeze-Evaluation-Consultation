@@ -86,7 +86,7 @@
                                 {{ __('Appointment') }}
                             </x-nav-link>
                             <x-nav-link :href="route('Student.StudentHistory')" :active="request()->routeIs('Student.StudentHistory')">
-                                {{ __('History') }}
+                                {{ __('Appointment History') }}
                             </x-nav-link>
                             <x-nav-link :href="route('Student.StudentCalendar')" :active="request()->routeIs('Student.StudentCalendar')">
                                 {{ __('Calendar') }}
