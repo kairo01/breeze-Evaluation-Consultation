@@ -83,17 +83,17 @@
                                     {{ __('Evaluation') }}
                                 </x-nav-link>
                                 <x-nav-link :href="route('Student.Consform.Appointment')" :active="request()->routeIs('Student.Consform.Appointment')">
-                                {{ __('Appointment') }}
-                            </x-nav-link>
-                            <x-nav-link :href="route('Student.StudentHistory')" :active="request()->routeIs('Student.StudentHistory')">
-                                {{ __('Appointment History') }}
-                            </x-nav-link>
-                            <x-nav-link :href="route('Student.StudentCalendar')" :active="request()->routeIs('Student.StudentCalendar')">
-                                {{ __('Calendar') }}
-                            </x-nav-link> 
-                            <x-nav-link :href="route('Student.StudentNotification')" :active="request()->routeIs('Student.StudentNotification')">
-                                {{ __('Notification') }}
-                            </x-nav-link> 
+                                    {{ __('Appointment') }}
+                                </x-nav-link>
+                                <x-nav-link :href="route('Student.StudentHistory')" :active="request()->routeIs('Student.StudentHistory')">
+                                    {{ __('History') }}
+                                </x-nav-link>
+                                <x-nav-link :href="route('Student.StudentCalendar')" :active="request()->routeIs('Student.StudentCalendar')">
+                                    {{ __('Calendar') }}
+                                </x-nav-link> 
+                                <x-nav-link :href="route('Student.StudentNotification')" :active="request()->routeIs('Student.StudentNotification')">
+                                    {{ __('Notification') }}
+                                </x-nav-link> 
                         
                                 @endif
                           
@@ -102,10 +102,10 @@
                             <x-nav-link :href="route('Superadmin.SuperAdminDashboard')" :active="request()->routeIs('Superadmin.SuperAdminDashboard')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
-                            
-                            <x-nav-link :href="route('Superadmin.manage')" :active="request()->routeIs('Superadmin.manage')">
-                                   {{ __('Manage Users') }}
-                         </x-nav-link>
+
+                            <x-nav-link :href="route('superadmin.department-head.manage')" :active="request()->routeIs('superadmin.department-head.manage')">
+                                {{ __('Manage Department Heads') }}
+                            </x-nav-link>
                         @elseif(Auth::user()->role == 'Guidance')
                             <x-nav-link :href="route('Consultation.CtDashboard')" :active="request()->routeIs('Consultation.CtDashboard')">
                                 {{ __('Dashboard') }}
@@ -123,7 +123,7 @@
                                 {{ __('Notification') }}
                             </x-nav-link>
 
-                        @elseif(in_array(Auth::user()->role, ['ComputerDepartment', 'EngineeringDeparment', 'HighSchoolDepartment', 'TesdaDepartment', 'HmDepartment' ]))
+                        @elseif(in_array(Auth::user()->role, ['ComputerDepartment', 'EngineeringDeparment', 'HighSchoolDepartment', 'TesdaDepartment', 'HmDepartment']) || strpos(Auth::user()->role, 'CustomDepartment:') === 0)
                             <x-nav-link :href="route('DepartmentHead.DpDashboard')" :active="request()->routeIs('DepartmentHead.DpDashboard')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
@@ -218,7 +218,7 @@
                     <x-responsive-nav-link :href="route('Consultation.CtNotification')" :active="request()->routeIs('Consultation.CtNotification')">
                         {{ __('Notification') }}
                     </x-responsive-nav-link>
-                @elseif(Auth::user()->role == 'ComputerDepartment')
+                @elseif(in_array(Auth::user()->role, ['ComputerDepartment', 'EngineeringDeparment', 'HighSchoolDepartment', 'TesdaDepartment', 'HmDepartment']) || strpos(Auth::user()->role, 'CustomDepartment:') === 0)
                     <x-responsive-nav-link :href="route('DepartmentHead.DpDashboard')" :active="request()->routeIs('DepartmentHead.DpDashboard')">
                         {{ __('Dashboard') }}
                     </x-responsive-nav-link>

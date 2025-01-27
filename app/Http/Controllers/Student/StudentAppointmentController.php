@@ -17,23 +17,26 @@ use App\Notifications\NewAppointmentNotification;
 
 class StudentAppointmentController extends Controller
 {
-    public function index()
+
+        public function index()
     {
         $user = Auth::user();
         $consultants = User::where(function ($query) use ($user) {
             if ($user->student_type === 'HighSchool') {
                 $query->where('role', 'HighSchoolDepartment');
             } else {
-                $query->whereIn('role', ['Guidance', 'ComputerDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'HmDepartment']);
+                $query->where(function ($q) {
+                    $q->whereIn('role', ['Guidance', 'ComputerDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'HmDepartment'])
+                      ->orWhere('role', 'like', 'CustomDepartment:%');
+                });
             }
         })->get();
-    
+
         $pendingAppointment = Appointment::where('student_id', auth()->id())
-                                         ->where('status', 'Pending')
-                                         ->exists();
+                                     ->where('status', 'Pending')
+                                     ->exists();
         return view('Student.Consform.Appointment', compact('consultants', 'pendingAppointment'));
     }
-
     public function store(Request $request)
     {
         $pendingOrApprovedAppointment = Appointment::where('student_id', auth()->id())

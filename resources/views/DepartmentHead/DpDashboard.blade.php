@@ -11,7 +11,15 @@
             <div>
                 <h1 class="text-2xl font-bold" style="font-family: 'Bunny', sans-serif;">Welcome !!</h1>
                 <p class="text-gray-600" style="font-family: 'Bunny', sans-serif;">{{ Auth::user()->name }}</p>
-                <p class="text-gray-600" style="font-family: 'Bunny', sans-serif;">{{ Auth::user()->role }}</p>
+                <p class="text-gray-600" style="font-family: 'Bunny', sans-serif;">
+                    @php
+                        $role = Auth::user()->role;
+                        if (strpos($role, 'CustomDepartment:') === 0) {
+                            $role = substr($role, 17); // Remove the "CustomDepartment:" prefix
+                        }
+                    @endphp
+                    {{ $role }}
+                </p>
             </div>
         </div>
 

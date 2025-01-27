@@ -106,7 +106,10 @@
                     <select name="consultant_role" id="consultant_role" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         <option value="">Select Consultant</option>
                         @foreach($consultants as $consultant)
-                            <option value="{{ $consultant->id }}" data-role="{{ $consultant->role }}">{{ $consultant->role }}</option>
+                            <option value="{{ $consultant->id }}">
+                                {{ $consultant->name }} 
+                                ({{ strpos($consultant->role, 'CustomDepartment:') === 0 ? substr($consultant->role, 17) : $consultant->role }})
+                            </option>
                         @endforeach
                     </select>
                 </div>
