@@ -50,6 +50,7 @@ use App\Http\Controllers\Student\StudentCtNotificationController;
 use App\Http\Controllers\Superadmin\SuperAdminController;
 use App\Http\Controllers\Superadmin\ConsultationManageController;
 use App\Http\Controllers\Superadmin\DepartmentHeadManageController;
+use App\Http\Controllers\Student\FacultyListController;
 
 
 
@@ -192,6 +193,8 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
 Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
 
 Route::get('Evaluation.HrHistory', [EvaluationFormController::class, 'index'])->name('Evaluation.HrHistory');
+
+    Route::post('/update-completion/{appointment}', [StudentHistoryController::class, 'updateCompletion'])->name('student.update-completion');
 
 });
 

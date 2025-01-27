@@ -22,6 +22,7 @@ class Appointment extends Model
         'status',
         'decline_reason',
         'approval_reason',
+        'is_completed',
     ];
 
     protected $casts = [

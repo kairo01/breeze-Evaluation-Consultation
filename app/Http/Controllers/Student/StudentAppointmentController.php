@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
@@ -17,33 +15,31 @@ use App\Notifications\NewAppointmentNotification;
 
 class StudentAppointmentController extends Controller
 {
-
-        public function index()
+    public function index()
     {
         $user = Auth::user();
         $consultants = User::where(function ($query) use ($user) {
             if ($user->student_type === 'HighSchool') {
                 $query->where('role', 'HighSchoolDepartment');
             } else {
-                $query->where(function ($q) {
-                    $q->whereIn('role', ['Guidance', 'ComputerDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'HmDepartment'])
-                      ->orWhere('role', 'like', 'CustomDepartment:%');
-                });
+                $query->whereIn('role', ['Guidance', 'ComputerDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'HmDepartment']);
             }
         })->get();
-
+    
         $pendingAppointment = Appointment::where('student_id', auth()->id())
-                                     ->where('status', 'Pending')
-                                     ->exists();
+                                         ->where('status', 'Pending')
+                                         ->exists();
         return view('Student.Consform.Appointment', compact('consultants', 'pendingAppointment'));
     }
+
     public function store(Request $request)
     {
         $pendingOrApprovedAppointment = Appointment::where('student_id', auth()->id())
                          ->whereIn('status', ['Pending', 'Approved'])
+                         ->where('date', '>=', Carbon::now()->startOfWeek())
                          ->exists();
         if ($pendingOrApprovedAppointment) {
-            return redirect()->back()->with('error', 'You already have a pending or approved appointment. Please wait for it to be completed before making a new one.');
+            return redirect()->back()->with('error', 'You already have a pending or approved appointment for this week. Please wait for it to be completed before making a new one.');
         }
 
         $request->validate([
