@@ -30,7 +30,7 @@ class DepartmentHeadSeeder extends Seeder
         User::create([
             'name' => 'Engr. Adelino Cordova Jr.',
             'student_id' => null,
-            'email' => 'EngineeringDeparment@example.com',
+            'email' => 'EngineeringDepartment@example.com',
             'password' => Hash::make('password123'),
             'role' => 'EngineeringDeparment',
             'student_type' => null,

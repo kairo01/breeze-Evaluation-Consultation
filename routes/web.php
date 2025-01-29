@@ -48,6 +48,9 @@ use App\Http\Controllers\Student\StudentPickerController;
 use App\Http\Controllers\Student\NotificationController;
 use App\Http\Controllers\Student\StudentCtNotificationController;
 use App\Http\Controllers\Superadmin\SuperAdminController;
+use App\Http\Controllers\Superadmin\ConsultationManageController;
+use App\Http\Controllers\Superadmin\DepartmentHeadManageController;
+use App\Http\Controllers\Student\FacultyListController;
 
 
 
@@ -191,6 +194,8 @@ Route::get('/evaluation/history/{department}', [EvaluationHistoryController::cla
 
 Route::get('Evaluation.HrHistory', [EvaluationFormController::class, 'index'])->name('Evaluation.HrHistory');
 
+    Route::post('/update-completion/{appointment}', [StudentHistoryController::class, 'updateCompletion'])->name('student.update-completion');
+
 });
 
 Route::prefix('student')->name('Student.')->group(function () {
@@ -260,11 +265,15 @@ Route::middleware(['auth', 'role:SuperAdmin'])->group(function () {
     Route::get('edit/{role}', [SuperAdminController::class, 'editAccount'])->name('Superadmin.edit');
     Route::put('update/{role}', [SuperAdminController::class, 'updateAccount'])->name('update');
    Route::delete('/superadmin/delete/{role}', [SuperAdminController::class, 'deleteAccount'])->name('Superadmin.delete-account');
+    Route::get('/superadmin/department-head/manage', [DepartmentHeadManageController::class, 'index'])->name('superadmin.department-head.manage');
+    Route::get('/superadmin/department-head/create', [DepartmentHeadManageController::class, 'create'])->name('superadmin.department-head.create');
+    Route::post('/superadmin/department-head/store', [DepartmentHeadManageController::class, 'store'])->name('superadmin.department-head.store');
+    Route::get('/superadmin/department-head/edit/{id}', [DepartmentHeadManageController::class, 'edit'])->name('superadmin.department-head.edit');
+    Route::put('/superadmin/department-head/update/{id}', [DepartmentHeadManageController::class, 'update'])->name('superadmin.department-head.update');
+    Route::delete('/superadmin/department-head/delete/{id}', [DepartmentHeadManageController::class, 'destroy'])->name('superadmin.department-head.delete');
 });
 
 Route::put('/edit/{role}', [SuperadminController::class, 'update'])->name('Superadmin.edit');
 
 Route::get('/create', [SuperAdminController::class, 'createAccount'])->name('create'); // Route for showing the create form
 Route::post('/create', [SuperAdminController::class, 'storeAccount'])->name('store'); // Route for storing the account
-
-Route::get('/skills-count', [EvaluationHistoryController::class, 'showSkillsCount'])->name('Evaluation.Skillscount');

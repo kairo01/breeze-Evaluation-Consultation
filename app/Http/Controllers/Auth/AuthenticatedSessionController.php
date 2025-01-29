@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
 
     if ($role === 'Guidance') {
         return redirect()->route('Consultation.CtDashboard');
-    } elseif (in_array($role, ['ComputerDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'HighSchoolDepartment', 'HmDepartment'])) {
+    } elseif (in_array($role, ['ComputerDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'HighSchoolDepartment', 'HmDepartment']) || strpos($role, 'CustomDepartment:') === 0) {
         // If the user is a department head, redirect to the department head dashboard
         return redirect()->route('DepartmentHead.DpDashboard');
     } elseif ($role === 'HumanResources') {

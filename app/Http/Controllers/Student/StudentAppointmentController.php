@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
@@ -38,9 +36,10 @@ class StudentAppointmentController extends Controller
     {
         $pendingOrApprovedAppointment = Appointment::where('student_id', auth()->id())
                          ->whereIn('status', ['Pending', 'Approved'])
+                         ->where('date', '>=', Carbon::now()->startOfWeek())
                          ->exists();
         if ($pendingOrApprovedAppointment) {
-            return redirect()->back()->with('error', 'You already have a pending or approved appointment. Please wait for it to be completed before making a new one.');
+            return redirect()->back()->with('error', 'You already have a pending or approved appointment for this week. Please wait for it to be completed before making a new one.');
         }
 
         $request->validate([

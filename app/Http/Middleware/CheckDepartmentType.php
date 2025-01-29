@@ -1,7 +1,5 @@
 <?php
 
-// app/Http/Middleware/CheckDepartmentType.php
-
 namespace App\Http\Middleware;
 
 use Closure;
@@ -12,10 +10,14 @@ class CheckDepartmentType
 {
     public function handle(Request $request, Closure $next)
     {
-        // Check if the user is a department head
+        if (!Auth::check()) {
+            return redirect('/'); // Redirect if not logged in
+        }
+
+        $role = Auth::user()->role; // Get the role here
         $allowedRoles = ['ComputerDepartment', 'EngineeringDeparment', 'HighSchoolDepartment', 'TesdaDepartment', 'HmDepartment'];
 
-        if (in_array(Auth::user()->role, $allowedRoles)) {
+        if (in_array($role, $allowedRoles) || strpos($role, 'CustomDepartment:') === 0) {
             return $next($request);
         }
 
@@ -23,3 +25,4 @@ class CheckDepartmentType
         return redirect('/');
     }
 }
+
