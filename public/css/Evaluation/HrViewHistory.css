@@ -1,7 +1,13 @@
+
+
 .container {
     max-width: 1200px;
     margin: auto;
     padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 .table-container {
     background: #ffffff;
@@ -46,6 +52,8 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative;
 }
+
+
 .close-button {
     position: absolute;
     top: 10px;
@@ -58,17 +66,6 @@
 .close-button:hover {
     color: #ff0000;
 }
-.modal-button {
-    background: rgb(0, 103, 247);
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-.modal-button:hover {
-    background: rgb(15, 3, 189);
-}
 
 .rating-scale-container {
     position: relative;
@@ -78,20 +75,51 @@
     margin-right: 90px;
 }
 
+.modal-button.skills-button {
+    border: 1px solid #4CAF50; /* Green border for Skills */
+    color: black; /* Green text for Skills */
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 20px; /* Add spacing between buttons */
+}
+
+.modal-button.skills-button:hover {
+    background-color: #4CAF50; /* Green background on hover */
+    color: white; /* White text on hover */
+}
+
+.modal-button.facilities-button {
+    border: 1px solid brown; /* Orange border for Facilities */
+    color: black; /* Orange text for Facilities */
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-button.facilities-button:hover {
+    background-color: brown; /* Orange background on hover */
+    color: white; /* White text on hover */
+}
+
+
 .rating-scale-container .print-button {
     position: absolute;
     top: 20px;
     right: 80px;
-    background: rgb(0, 103, 247);
-    color: white;
-    border: none;
+    border: 1px solid #3b82f6;
+    color: #000000;  
     padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
+    transition: all 0.3s ease; 
 }
 
 .rating-scale-container .print-button:hover {
-    background: rgb(15, 3, 189);
+    background-color: #3b82f6;
+    color: white;
 }
 
 .no-history-message {
@@ -105,18 +133,3 @@
     font-size: 24px;
     font-weight: bold;
 }
-
-@media print {
-    button {
-        display: none;
-    }
-    .modal {
-        display: none;
-    }
-    .container {
-        max-width: 100%;
-        margin: 0;
-        padding: 10px;
-    }
-}
-

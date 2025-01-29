@@ -266,3 +266,5 @@ Route::put('/edit/{role}', [SuperadminController::class, 'update'])->name('Super
 
 Route::get('/create', [SuperAdminController::class, 'createAccount'])->name('create'); // Route for showing the create form
 Route::post('/create', [SuperAdminController::class, 'storeAccount'])->name('store'); // Route for storing the account
+
+Route::get('/skills-count', [EvaluationHistoryController::class, 'showSkillsCount'])->name('Evaluation.Skillscount');

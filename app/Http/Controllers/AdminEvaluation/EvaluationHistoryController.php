@@ -10,6 +10,26 @@ use Illuminate\Support\Facades\Auth;
 
 class EvaluationHistoryController extends Controller
 {
+    public function showSkillsCount()
+    {
+        $evaluations = Evaluation::all(); // Fetch evaluations
+        $ratingCounts = [];
+    
+        foreach ($evaluations as $evaluation) {
+            foreach ($evaluation->teaching_skills as $skill => $rating) {
+                if (!isset($ratingCounts[$skill])) {
+                    $ratingCounts[$skill] = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
+                }
+                if (isset($ratingCounts[$skill][$rating])) {
+                    $ratingCounts[$skill][$rating] += 1;
+                }
+            }
+        }
+    
+        return view('Evaluation.Skillscount', compact('ratingCounts', 'evaluations'));
+    }
+    
+
     public function show($department)
     {
         // List of departments
@@ -334,6 +354,8 @@ class EvaluationHistoryController extends Controller
     $evaluations = Evaluation::with(['facilities', 'teacher'])->get();  // Assuming relationships are set up
     
     return view('evaluation.history', compact('evaluations'));
+
+    
 }
 
 }

@@ -7,6 +7,7 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/Evaluation/HrViewHistory.css') }}">
+    <a href="{{ route('Evaluation.Skillscount') }}" class="btn btn-primary">View Skills Count</a>
 
     <!-- Rating Scale Container -->
     <div class="rating-scale-container">
@@ -25,26 +26,27 @@
 
     <div class="container">
         @if(count($evaluations) > 0)
-            <!-- Main Evaluation Table -->
             <div class="table-container" id="evaluation-table-container">
+                <!-- Main Evaluation Table -->
                 <table class="evaluation-table">
                     <thead>
                         <tr>
                             <th>Teacher</th>
                             <th>Subject</th>
                             <th>Percentage Breakdown</th>
-                            <th>Teacher Comment</th> <!-- New Column for Teacher Comment -->
+                            <th>Teacher Comment</th>
                             <th>View Details</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         @php
                             $totalSkills = 0;
                             $totalFacilities = 0;
                             $maxSkillsScore = 20;
                             $maxFacilitiesScore = 25;
-                            $overallSkillsTotal = [];
+
+                            // Initialize aggregated counts for skills ratings (per skill)
+                            $skillsRatingAggregates = [];
                         @endphp
 
                         @foreach ($evaluations as $evaluation)
@@ -52,11 +54,12 @@
                                 $skillsTotal = array_sum($evaluation->teaching_skills);
                                 $facilitiesTotal = collect($evaluation->facilities)->pluck('rating')->sum();
 
+                                // Count ratings for each skill
                                 foreach ($evaluation->teaching_skills as $skill => $rating) {
-                                    if (!isset($overallSkillsTotal[$skill])) {
-                                        $overallSkillsTotal[$skill] = 0;
+                                    if (!isset($skillsRatingAggregates[$skill])) {
+                                        $skillsRatingAggregates[$skill] = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
                                     }
-                                    $overallSkillsTotal[$skill] += $rating;
+                                    $skillsRatingAggregates[$skill][$rating]++;
                                 }
 
                                 $totalSkills += $skillsTotal;
@@ -70,7 +73,7 @@
                                     Skills: <strong>{{ round(($skillsTotal / $maxSkillsScore) * 100, 2) }}%</strong>, 
                                     Facilities: <strong>{{ round(($facilitiesTotal / $maxFacilitiesScore) * 100, 2) }}%</strong>
                                 </td>
-                                <td>{{ $evaluation->teacher_comment }}</td> <!-- Display Teacher Comment -->
+                                <td>{{ $evaluation->teacher_comment }}</td>
                                 <td>
                                     <button class="modal-button" onclick="openModal('skills-modal-{{ $loop->index }}')">  
                                           <i class="fas fa-chalkboard-teacher"></i> View Skills
@@ -84,6 +87,9 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Aggregated Skills Rating Counts (Across all subjects) -->
+            
 
             <!-- Total Percentage Breakdown -->
             <div class="breakdown-section" id="print-section">
@@ -116,13 +122,13 @@
                 </div>
             </div>
 
-            <!-- Modals for Skills and Facilities (Visible for Interaction and Printing) -->
+            <!-- Modals for Skills and Facilities -->
             <div id="modals-container">
                 @foreach ($evaluations as $evaluation)
                     <!-- Skills Modal -->
                     <div class="modal" id="skills-modal-{{ $loop->index }}">
                         <div class="modal-content">
-                              <button class="close-button" onclick="closeModal('skills-modal-{{ $loop->index }}')">&times;</button>
+                            <button class="close-button" onclick="closeModal('skills-modal-{{ $loop->index }}')">&times;</button>
                             <h4>Skills for {{ $evaluation->teacher_name }} ({{ $evaluation->subject }})</h4>
                             <table class="modal-table">
                                 <thead>
@@ -140,14 +146,14 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <h4>Total Skills: <strong>{{ $skillsTotal }}</strong></h4> <!-- Total Skills for this evaluation -->
+                            <h4>Total Skills: <strong>{{ $skillsTotal }}</strong></h4>
                         </div>
                     </div>
 
                     <!-- Facilities Modal -->
                     <div class="modal" id="facilities-modal-{{ $loop->index }}">
                         <div class="modal-content">
-                                <button class="close-button" onclick="closeModal('facilities-modal-{{ $loop->index }}')">&times;</button>
+                            <button class="close-button" onclick="closeModal('facilities-modal-{{ $loop->index }}')">&times;</button>
                             <h4>Facilities for {{ $evaluation->teacher_name }} ({{ $evaluation->subject }})</h4>
                             <table class="modal-table">
                                 <thead>
@@ -167,7 +173,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <h4>Total Facilities: <strong>{{ $facilitiesTotal }}</strong></h4> <!-- Total Facilities for this evaluation -->
+                            <h4>Total Facilities: <strong>{{ $facilitiesTotal }}</strong></h4>
                         </div>
                     </div>
                 @endforeach
@@ -190,15 +196,12 @@
         }
 
         function printBreakdown() {
-            // Temporarily hide buttons for printing, but keep modals visible
             document.querySelectorAll('.modal-button').forEach(button => button.style.display = 'none');
 
-            // Get the evaluation table and modals content for printing
             const evaluationTable = document.getElementById('evaluation-table-container').outerHTML;
             const modalsContent = document.getElementById('modals-container').outerHTML;
             const breakdownSection = document.getElementById('print-section').outerHTML;
 
-            // Create the content for the print preview
             const printContent = `
                 <div class="print-header">
                     <h2>Evaluation History</h2>
@@ -209,7 +212,6 @@
                 ${modalsContent}
             `;
 
-            // Set up print styles
             const printStyles = `
                 <style>
                     table, th, td {
@@ -226,20 +228,43 @@
                 </style>
             `;
 
-            // Open a new window for printing
             const printWindow = window.open('', '_blank');
             printWindow.document.write(printStyles);
             printWindow.document.write(printContent);
             printWindow.document.close();
 
-            // Trigger the print action
             printWindow.print();
-
-            // Close the print window after printing
             printWindow.close();
 
-            // Restore visibility of buttons and modals after printing
             document.querySelectorAll('.modal-button').forEach(button => button.style.display = 'inline-block');
         }
     </script>
+
+    <style>
+        .skills-rating-aggregates {
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            margin-top: 20px;
+        }
+
+        .skills-rating-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .skills-rating-table th, .skills-rating-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .skills-rating-table th {
+            background-color: #f0f0f0;
+        }
+
+        .percentage-breakdown {
+            margin-top: 20px;
+        }
+    </style>
 </x-app-layout>
