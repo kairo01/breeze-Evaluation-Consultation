@@ -18,6 +18,8 @@
 <!-- FullCalendar CSS -->
      <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
 
+        <link rel="stylesheet" href="{{ asset('css/print.css') }}">
+
         <!-- Tailwind CSS via Vite -->
         @vite('resources/css/app.css')
 
@@ -49,3 +51,4 @@
         </div>
     </body>
 </html>
+

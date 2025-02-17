@@ -30,7 +30,7 @@ class ConsultationHistoryController extends Controller
             $query->orderBy('date', 'desc')->orderBy('time', 'desc');
         }
 
-        $appointments = $query->get();
+        $appointments = $query->paginate(10)->appends($request->query());
 
         return view('Consultation.CtHistory', compact('appointments'));
     }

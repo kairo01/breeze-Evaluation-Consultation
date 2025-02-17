@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Guidance Approval
+            {{ __('Guidance Approval') }}
         </h2>
     </x-slot>
 
@@ -16,7 +16,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     @if($appointments->isEmpty())
-                        <p>No pending appointments.</p>
+                        <p class="text-gray-500 text-center py-4">No pending appointments.</p>
                     @else
                         <table class="min-w-full leading-normal">
                             <thead>
@@ -83,12 +83,10 @@
                                                 </button>
                                             </form>
 
-                                            <!-- Decline Form -->
-                                            <button onclick="openDeclineModal({{ $appointment->id }})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">
+                                            <button onclick="openDeclineModal({{ $appointment->id }})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded mt-2">
                                                 Decline
                                             </button>
 
-                                            <!-- Decline Modal -->
                                             <div id="declineModal{{ $appointment->id }}" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
                                                 <div class="bg-white rounded-lg shadow-lg p-6 w-1/3">
                                                     <h2 class="text-xl font-bold mb-4">Decline Appointment</h2>
@@ -98,9 +96,6 @@
                                                         <div class="mb-4">
                                                             <label for="decline_reason" class="block text-gray-700 text-sm font-bold mb-2">Reason for Decline:</label>
                                                             <textarea name="decline_reason" id="decline_reason" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
-                                                            @error('decline_reason')
-                                                                <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
-                                                            @enderror
                                                         </div>
                                                         <div class="flex justify-end">
                                                             <button type="button" onclick="closeDeclineModal({{ $appointment->id }})" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2">
@@ -118,14 +113,41 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        
+                        <!-- Pagination -->
+                        <div class="mt-4 flex justify-between items-center">
+                            <div>
+                                {{ $appointments->firstItem() }} - {{ $appointments->lastItem() }} of {{ $appointments->total() }}
+                            </div>
+                            <div class="flex">
+                                @if ($appointments->onFirstPage())
+                                    <span class="px-2 py-1 bg-gray-200 text-gray-600 rounded-l">Previous</span>
+                                @else
+                                    <a href="{{ $appointments->previousPageUrl() }}" class="px-2 py-1 bg-blue-500 text-white rounded-l hover:bg-blue-600">Previous</a>
+                                @endif
+
+                                <span class="px-2 py-1 bg-gray-100">
+                                    Page {{ $appointments->currentPage() }} of {{ $appointments->lastPage() }}
+                                </span>
+
+                                @if ($appointments->hasMorePages())
+                                    <a href="{{ $appointments->nextPageUrl() }}" class="px-2 py-1 bg-blue-500 text-white rounded-r hover:bg-blue-600">Next</a>
+                                @else
+                                    <span class="px-2 py-1 bg-gray-200 text-gray-600 rounded-r">Next</span>
+                                @endif
+                            </div>
+                        </div>
                     @endif
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript for Decline Modal -->
     <script>
+        function showApprovalForm(id) {
+            document.getElementById('approvalForm' + id).classList.remove('hidden');
+        }
+
         function openDeclineModal(id) {
             document.getElementById('declineModal' + id).style.display = 'flex';
         }
@@ -133,13 +155,10 @@
         function closeDeclineModal(id) {
             document.getElementById('declineModal' + id).style.display = 'none';
         }
-        function showApprovalForm(id) {
-            document.getElementById('approvalForm' + id).classList.remove('hidden');
-        }
     </script>
 
     @section('title')
-      Guidance Counselor Approval
-   @endsection
+        Guidance Counselor Approval
+    @endsection
 </x-app-layout>
 

@@ -34,7 +34,7 @@ class StudentHistoryController extends Controller
            $query->orderBy('date', 'desc')->orderBy('time', 'desc');
        }
 
-       $appointments = $query->get();
+       $appointments = $query->paginate(10)->appends($request->query());
 
        // Update the is_completed status for each appointment
        $appointments->each(function ($appointment) {

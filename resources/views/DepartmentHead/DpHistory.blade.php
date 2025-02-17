@@ -14,7 +14,7 @@
             @endif
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
+                <div class="p-6 bg-white border-b border-gray-200 print-content">
                     <x-history-controls :route="route('DepartmentHead.DpHistory')" />
                     <div id="appointment-table">
                         <table class="min-w-full leading-normal">
@@ -88,12 +88,36 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        
+                        <!-- Pagination -->
+                        <div class="mt-4 flex justify-between items-center">
+                            <div>
+                                {{ $appointments->firstItem() }} - {{ $appointments->lastItem() }} of {{ $appointments->total() }}
+                            </div>
+                            <div class="flex">
+                                @if ($appointments->onFirstPage())
+                                    <span class="px-2 py-1 bg-gray-200 text-gray-600 rounded-l">Previous</span>
+                                @else
+                                    <a href="{{ $appointments->previousPageUrl() }}" class="px-2 py-1 bg-blue-500 text-white rounded-l hover:bg-blue-600">Previous</a>
+                                @endif
+
+                                <span class="px-2 py-1 bg-gray-100">
+                                    Page {{ $appointments->currentPage() }} of {{ $appointments->lastPage() }}
+                                </span>
+
+                                @if ($appointments->hasMorePages())
+                                    <a href="{{ $appointments->nextPageUrl() }}" class="px-2 py-1 bg-blue-500 text-white rounded-r hover:bg-blue-600">Next</a>
+                                @else
+                                    <span class="px-2 py-1 bg-gray-200 text-gray-600 rounded-r">Next</span>
+                                @endif
+                            </div>
+                        </div>
                     </div>
-                    <a href="{{ route('DepartmentHead.DpOverallHistory') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        View Overall History
-                    </a>
                 </div>
             </div>
+            <a href="{{ route('DepartmentHead.DpOverallHistory') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                View Overall History
+            </a>
         </div>
     </div>
 </x-app-layout>
@@ -119,3 +143,4 @@ function updateCompletionStatus(appointmentId, isCompleted) {
 }
 </script>
 
+    

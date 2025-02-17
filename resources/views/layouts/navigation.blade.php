@@ -103,6 +103,10 @@
                                 {{ __('Dashboard') }}
                             </x-nav-link>
 
+                            <x-nav-link :href="route('Superadmin.manage')" :active="request()->routeIs('Superadmin.manage')">
+                                   {{ __('Manage Users') }}
+                         </x-nav-link>
+                         
                             <x-nav-link :href="route('superadmin.department-head.manage')" :active="request()->routeIs('superadmin.department-head.manage')">
                                 {{ __('Manage Department Heads') }}
                             </x-nav-link>

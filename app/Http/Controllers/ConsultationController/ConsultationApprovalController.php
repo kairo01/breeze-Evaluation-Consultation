@@ -13,7 +13,7 @@ class ConsultationApprovalController extends Controller
     {
         $appointments = Appointment::where('consultant_role', auth()->id())
             ->where('status', 'Pending')
-            ->get();
+            ->paginate(10);
         return view('Consultation.CtApproval', compact('appointments'));
     }
 
