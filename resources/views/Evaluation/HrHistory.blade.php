@@ -8,8 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/Evaluation/HrViewHistory.css') }}">
     <div class="text-right mb-4">
-    
-</div>
+    </div>
 
     <!-- Rating Scale Container -->
     <div class="rating-scale-container">
@@ -21,10 +20,10 @@
             <i class="fas fa-laugh-beam" style="color: #2b9f3e;"></i> 5 - Excellent
         </p>
         <div class="flex justify-end mb-4">
-    <a href="{{ route('Evaluation.Skillscount') }}" class="px-4 py-2 border-2 border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-600 hover:text-white transition duration-300 ease-in-out">
-        <i class="fas fa-chart-bar"></i> View Skills Count
-    </a>
-</div>
+            <a href="{{ route('Evaluation.Skillscount') }}" class="px-4 py-2 border-2 border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-600 hover:text-white transition duration-300 ease-in-out">
+                <i class="fas fa-chart-bar"></i> View Skills Count
+            </a>
+        </div>
 
     <div class="container">
         @if(count($evaluations) > 0)
@@ -61,7 +60,7 @@
                                     if (!isset($skillsRatingAggregates[$skill])) {
                                         $skillsRatingAggregates[$skill] = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
                                     }
-                                    $skillsRatingAggregates[$skill][$rating]++;
+                                    $skillsRatingAggregates[$skill][$rating]++; 
                                 }
 
                                 $totalSkills += $skillsTotal;
@@ -69,7 +68,6 @@
                             @endphp
 
                             <tr class="text-center">
-                              <div class="flex justify-center space-x-2">
                                 <td>{{ $evaluation->teacher_name }}</td>
                                 <td>{{ $evaluation->subject }}</td>
                                 <td>
@@ -78,25 +76,53 @@
                                 </td>
                                 <td>{{ $evaluation->teacher_comment }}</td>
                                 <td class="space-x-5">
-                                      <button class="px-4 py-2 border-2 border-green-400 text-green-600 font-semibold rounded-lg hover:bg-green-600 hover:text-white transition duration-300 ease-in-out" onclick="openModal('skills-modal-{{ $loop->index }}')">  
-                                           <i class="fas fa-chalkboard-teacher"></i> View Skills
-                                     </button>
-                                        <button class="px-4 py-2 border-2 border-red-600 text-red-600 font-semibold rounded-lg hover:bg-red-600 hover:text-white transition duration-300 ease-in-out" onclick="openModal('facilities-modal-{{ $loop->index }}')">
-                                              <i class="fas fa-building"></i> View Facilities
-                                        </button>
+                                    <button class="px-4 py-2 border-2 border-green-400 text-green-600 font-semibold rounded-lg hover:bg-green-600 hover:text-white transition duration-300 ease-in-out" onclick="openModal('skills-modal-{{ $loop->index }}')">  
+                                        <i class="fas fa-chalkboard-teacher"></i> View Skills
+                                    </button>
+                                    <button class="px-4 py-2 border-2 border-red-600 text-red-600 font-semibold rounded-lg hover:bg-red-600 hover:text-white transition duration-300 ease-in-out" onclick="openModal('facilities-modal-{{ $loop->index }}')">
+                                        <i class="fas fa-building"></i> View Facilities
+                                    </button>
                                 </td>
-                            </div>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
 
-            <!-- Aggregated Skills Rating Counts (Across all subjects) -->
-            
+            <!-- Pagination Controls -->
+            <div class="pagination-controls flex justify-between mt-4">
+                <div>
+                    {{-- Previous Button --}}
+                    @if ($evaluations->onFirstPage())
+                        <button class="px-4 py-2 border-2 border-gray-400 text-gray-400 font-semibold rounded-lg" disabled>
+                            Previous
+                        </button>
+                    @else
+                        <a href="{{ $evaluations->previousPageUrl() }}" class="px-4 py-2 border-2 border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-600 hover:text-white transition duration-300 ease-in-out">
+                            Previous
+                        </a>
+                    @endif
+                </div>
 
-            <!-- Total Percentage Breakdown -->
-    
+                <div>
+                    {{-- Next Button --}}
+                    @if ($evaluations->hasMorePages())
+                        <a href="{{ $evaluations->nextPageUrl() }}" class="px-4 py-2 border-2 border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-600 hover:text-white transition duration-300 ease-in-out">
+                            Next
+                        </a>
+                    @else
+                        <button class="px-4 py-2 border-2 border-gray-400 text-gray-400 font-semibold rounded-lg" disabled>
+                            Next
+                        </button>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Page Number Display -->
+            <div class="text-center mt-4">
+                <p>Page {{ $evaluations->currentPage() }} of {{ $evaluations->lastPage() }}</p>
+            </div>
+
             <!-- Modals for Skills and Facilities -->
             <div id="modals-container">
                 @foreach ($evaluations as $evaluation)
@@ -240,6 +266,10 @@
 
         .percentage-breakdown {
             margin-top: 20px;
+        }
+
+        .pagination-controls a, .pagination-controls button {
+            margin: 0 5px;
         }
     </style>
 </x-app-layout>

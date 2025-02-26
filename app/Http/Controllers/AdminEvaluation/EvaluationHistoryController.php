@@ -335,14 +335,19 @@ class EvaluationHistoryController extends Controller
     }
 
     public function index(Request $request) {
-
         $teacher_name = $request->query('teacher_name');
-
-        $evaluations = Evaluation::where('teacher_name', $teacher_name)->get();
-
-        return view('Evaluation.HrHistory',compact('evaluations', 'teacher_name'));
+    
+        $query = Evaluation::query();
+    
+        if ($teacher_name) {
+            $query->where('teacher_name', $teacher_name);
+        }
+    
+        $evaluations = $query->paginate(10); // Gumamit ng paginate() para gumana ang pagination
+    
+        return view('Evaluation.HrHistory', compact('evaluations', 'teacher_name'));
     }
-
+    
     public function History() {
         
 
