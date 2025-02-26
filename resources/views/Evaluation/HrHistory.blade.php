@@ -7,22 +7,24 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/Evaluation/HrViewHistory.css') }}">
-    <a href="{{ route('Evaluation.Skillscount') }}" class="btn btn-primary">View Skills Count</a>
+    <div class="text-right mb-4">
+    
+</div>
 
     <!-- Rating Scale Container -->
     <div class="rating-scale-container">
         <p><strong>Rating Scale: </strong> 
             <i class="fas fa-sad-cry" style="color: #ff4c4c;"></i> 1 - Poor | 
-            <i class="fas fa-frown" style="color: #ff914d;"></i> 2 - Fair | 
-            <i class="fas fa-meh" style="color: #f0e500;"></i> 3 - Good | 
+            <i class="fas fa-frown" style="color: #ff914d;"></i> 2 - Very Poor | 
+            <i class="fas fa-meh" style="color: #f0e500;"></i> 3 - Fair | 
             <i class="fas fa-smile" style="color: #66bb6a;"></i> 4 - Very Good | 
             <i class="fas fa-laugh-beam" style="color: #2b9f3e;"></i> 5 - Excellent
         </p>
-
-        <button onclick="printBreakdown()" class="print-button">
-            <i class="fas fa-print"></i> Print
-        </button>
-    </div>
+        <div class="flex justify-end mb-4">
+    <a href="{{ route('Evaluation.Skillscount') }}" class="px-4 py-2 border-2 border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-600 hover:text-white transition duration-300 ease-in-out">
+        <i class="fas fa-chart-bar"></i> View Skills Count
+    </a>
+</div>
 
     <div class="container">
         @if(count($evaluations) > 0)
@@ -66,7 +68,8 @@
                                 $totalFacilities += $facilitiesTotal;
                             @endphp
 
-                            <tr>
+                            <tr class="text-center">
+                              <div class="flex justify-center space-x-2">
                                 <td>{{ $evaluation->teacher_name }}</td>
                                 <td>{{ $evaluation->subject }}</td>
                                 <td>
@@ -74,14 +77,15 @@
                                     Facilities: <strong>{{ round(($facilitiesTotal / $maxFacilitiesScore) * 100, 2) }}%</strong>
                                 </td>
                                 <td>{{ $evaluation->teacher_comment }}</td>
-                                <td>
-                                    <button class="modal-button" onclick="openModal('skills-modal-{{ $loop->index }}')">  
-                                          <i class="fas fa-chalkboard-teacher"></i> View Skills
-                                    </button>
-                                    <button class="modal-button" onclick="openModal('facilities-modal-{{ $loop->index }}')">
-                                        <i class="fas fa-building"></i> View Facilities
-                                    </button>
+                                <td class="space-x-5">
+                                      <button class="px-4 py-2 border-2 border-green-400 text-green-600 font-semibold rounded-lg hover:bg-green-600 hover:text-white transition duration-300 ease-in-out" onclick="openModal('skills-modal-{{ $loop->index }}')">  
+                                           <i class="fas fa-chalkboard-teacher"></i> View Skills
+                                     </button>
+                                        <button class="px-4 py-2 border-2 border-red-600 text-red-600 font-semibold rounded-lg hover:bg-red-600 hover:text-white transition duration-300 ease-in-out" onclick="openModal('facilities-modal-{{ $loop->index }}')">
+                                              <i class="fas fa-building"></i> View Facilities
+                                        </button>
                                 </td>
+                            </div>
                             </tr>
                         @endforeach
                     </tbody>
@@ -92,36 +96,7 @@
             
 
             <!-- Total Percentage Breakdown -->
-            <div class="breakdown-section" id="print-section">
-                <h3 class="breakdown-title">Total Percentage Breakdown</h3>
-                @php
-                    $totalSkillsPercentage = ($totalSkills / ($maxSkillsScore * count($evaluations))) * 100;
-                    $totalFacilitiesPercentage = ($totalFacilities / ($maxFacilitiesScore * count($evaluations))) * 100;
-
-                    // Calculate the overall percentage by averaging skills and facilities percentages
-                    $overallPercentage = ($totalSkillsPercentage + $totalFacilitiesPercentage) / 2;
-
-                    // Determine the overall rating based on the overall percentage
-                    $rating = '';
-                    if ($overallPercentage >= 90) {
-                        $rating = 'Excellent (5)';
-                    } elseif ($overallPercentage >= 75) {
-                        $rating = 'Very Good (4)';
-                    } elseif ($overallPercentage >= 50) {
-                        $rating = 'Good (3)';
-                    } elseif ($overallPercentage >= 25) {
-                        $rating = 'Fair (2)';
-                    } else {
-                        $rating = 'Poor (1)';
-                    }
-                @endphp
-                <div class="percentage-breakdown">
-                    <p>Skills: <strong>{{ round($totalSkillsPercentage, 2) }}%</strong></p>
-                    <p>Facilities: <strong>{{ round($totalFacilitiesPercentage, 2) }}%</strong></p>
-                    <h4 class="overall-rating">Overall Rating: <strong>{{ $rating }}</strong></h4>
-                </div>
-            </div>
-
+    
             <!-- Modals for Skills and Facilities -->
             <div id="modals-container">
                 @foreach ($evaluations as $evaluation)
