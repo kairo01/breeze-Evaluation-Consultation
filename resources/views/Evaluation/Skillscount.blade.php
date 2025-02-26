@@ -5,94 +5,64 @@
         </h2>
     </x-slot>
 
-    <!-- Centered Container -->
-    <div class="container mx-auto max-w-5xl"> <!-- Tailwind: Centers & Limits Width -->
-    <!-- <div class="container" style="margin: 0 auto; max-width: 900px;"> --> <!-- Alternative: Inline CSS -->
-    
-        <!-- Print Button -->
-        <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
-            <button onclick="printTable()" style="background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">
+    <div class="container mx-auto max-w-5xl">
+        <div class="flex justify-end mt-5">
+            <button onclick="printTable()" class="bg-green-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-600">
                 Print
             </button>
         </div>
 
-        <!-- Print Section -->
-        <div id="print-section" style="background-color: #ffffff; padding: 1.5rem; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-top: 20px;">
-            <h2 style="font-size: 1.5rem; font-weight: bold; text-align: center;">Evaluation Summary</h2>
-
-            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
-                <thead>
-                    <tr style="background-color: #f3f4f6;">
-                        <th style="border: 1px solid #e5e7eb; padding: 12px 15px; text-align: left;">Teacher</th>
-                        <th style="border: 1px solid #e5e7eb; padding: 12px 15px; text-align: left;">Skill</th>
-                        <th style="border: 1px solid #e5e7eb; padding: 12px 15px; text-align: left;">5</th>
-                        <th style="border: 1px solid #e5e7eb; padding: 12px 15px; text-align: left;">4</th>
-                        <th style="border: 1px solid #e5e7eb; padding: 12px 15px; text-align: left;">3</th>
-                        <th style="border: 1px solid #e5e7eb; padding: 12px 15px; text-align: left;">2</th>
-                        <th style="border: 1px solid #e5e7eb; padding: 12px 15px; text-align: left;">1</th>
-                        <th style="border: 1px solid #e5e7eb; padding: 12px 15px; text-align: left;">Subject</th>
-                        <th style="border: 1px solid #e5e7eb; padding: 12px 15px; text-align: left;">Comment</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php
-                        $totals = [5 => 0, 4 => 0, 3 => 0, 2 => 0, 1 => 0];
-                        $totalRatings = 0;
-                    @endphp
-
-                    @foreach ($ratingCounts as $skill => $ratings)
-                        @php
-                            $evaluation = $evaluations->shift();
-                        @endphp
-                        <tr style="{{ $loop->even ? 'background-color: #f9fafb;' : '' }}">
-                            <td style="border: 1px solid #e5e7eb; padding: 12px 15px;">{{ $evaluation->teacher_name ?? '' }}</td>
-                            <td style="border: 1px solid #e5e7eb; padding: 12px 15px;">{{ ucfirst($skill) }}</td>
-                            @foreach ([5, 4, 3, 2, 1] as $rating)
-                                <td style="border: 1px solid #e5e7eb; padding: 12px 15px; text-align: left;">
-                                    {{ $ratings[$rating] }}
-                                </td>
-                                @php
-                                    $totals[$rating] += $ratings[$rating];
-                                    $totalRatings += $ratings[$rating] * $rating;
-                                @endphp
-                            @endforeach
-                            <td style="border: 1px solid #e5e7eb; padding: 12px 15px;">{{ $evaluation->subject ?? '' }}</td>
-                            <td style="border: 1px solid #e5e7eb; padding: 12px 15px;">{{ $evaluation->teacher_comment ?? '' }}</td>
+        <div id="print-section" class="bg-white p-6 rounded-lg shadow-lg mt-5 flex gap-6">
+            
+            <!-- Skills Evaluation Table -->
+            <div class="w-1/2">
+                <h2 class="text-xl font-bold text-center">Skills Evaluation</h2>
+                <table class="w-full border-collapse border border-gray-300 mt-4">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2">Skill</th>
+                            <th class="border border-gray-300 px-4 py-2">5</th>
+                            <th class="border border-gray-300 px-4 py-2">4</th>
+                            <th class="border border-gray-300 px-4 py-2">3</th>
+                            <th class="border border-gray-300 px-4 py-2">2</th>
+                            <th class="border border-gray-300 px-4 py-2">1</th>
                         </tr>
-                    @endforeach
-
-                    <!-- Total Row -->
-                    <tr style="background-color: #f3f4f6; font-weight: bold;">
-                        <td colspan="2" style="border: 1px solid #e5e7eb; padding: 12px 15px;">Total Skills</td>
-                        @foreach ([5, 4, 3, 2, 1] as $rating)
-                            <td style="border: 1px solid #e5e7eb; padding: 12px 15px; text-align: left;">
-                                {{ $totals[$rating] }}
-                            </td>
+                    </thead>
+                    <tbody>
+                        @foreach ($ratingCounts as $skill => $ratings)
+                            <tr class="{{ $loop->even ? 'bg-gray-50' : '' }}">
+                                <td class="border border-gray-300 px-4 py-2">{{ ucfirst($skill) }}</td>
+                                @foreach ([5, 4, 3, 2, 1] as $rating)
+                                    <td class="border border-gray-300 px-4 py-2">{{ $ratings[$rating] }}</td>
+                                @endforeach
+                            </tr>
                         @endforeach
-                        <td colspan="2"></td>
-                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                    <!-- Total Percentage Breakdown -->
-                    @php
-                        $totalPossibleScore = 5 * array_sum($totals);
-                        $totalPercentage = $totalPossibleScore > 0 ? ($totalRatings / $totalPossibleScore) * 100 : 0;
-
-                        $ratingLabel = $totalPercentage >= 90 ? 'Excellent (5)' :
-                                       ($totalPercentage >= 75 ? 'Very Good (4)' :
-                                       ($totalPercentage >= 50 ? 'Good (3)' :
-                                       ($totalPercentage >= 25 ? 'Fair (2)' : 'Poor (1)')));
-                    @endphp
-                    <tr style="background-color: #e0f2fe; font-weight: bold;">
-                        <td colspan="2" style="border: 1px solid #e5e7eb; padding: 12px 15px;">Total Percentage</td>
-                        <td colspan="5" style="border: 1px solid #e5e7eb; padding: 12px 15px; text-align: center;">
-                            {{ round($totalPercentage, 2) }}%
-                        </td>
-                        <td colspan="2" style="border: 1px solid #e5e7eb; padding: 12px 15px; text-align: center;">
-                            Overall Rating: <strong>{{ $ratingLabel }}</strong>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <!-- Teacher Details Table -->
+            <div class="w-1/2">
+                <h2 class="text-xl font-bold text-center">Teacher Details</h2>
+                <table class="w-full border-collapse border border-gray-300 mt-4">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2">Teacher</th>
+                            <th class="border border-gray-300 px-4 py-2">Subject</th>
+                            <th class="border border-gray-300 px-4 py-2">Comment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($evaluations as $evaluation)
+                            <tr class="{{ $loop->even ? 'bg-gray-50' : '' }}">
+                                <td class="border border-gray-300 px-4 py-2">{{ $evaluation->teacher_name }}</td>
+                                <td class="border border-gray-300 px-4 py-2">{{ $evaluation->subject }}</td>
+                                <td class="border border-gray-300 px-4 py-2">{{ $evaluation->teacher_comment }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -110,7 +80,6 @@
                         th, td { border: 1px solid #e5e7eb; padding: 12px 15px; text-align: left; }
                         th { background-color: #f3f4f6; }
                         tr:nth-child(even) { background-color: #f9fafb; }
-                        .highlight { background-color: #e0f2fe; font-weight: bold; }
                     </style>
                 </head>
                 <body>
