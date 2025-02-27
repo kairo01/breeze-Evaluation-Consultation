@@ -5,12 +5,13 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UserSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('users')->insert([
+        $users = [
             [
                 'name' => 'Charmie Lynn Seno',
                 'student_id' => null,
@@ -20,9 +21,6 @@ class UserSeeder extends Seeder
                 'student_type' => null,
                 'section' => null,
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Doreliza Pearl De Guzman',
@@ -33,9 +31,6 @@ class UserSeeder extends Seeder
                 'student_type' => null,
                 'section' => null,
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Jessica Gutierrez',
@@ -46,9 +41,6 @@ class UserSeeder extends Seeder
                 'student_type' => null,
                 'section' => null,
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'HighSchoolStudent',
@@ -59,9 +51,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'highschool',
                 'section' => 'Grade 7',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'CollegeStudent',
@@ -72,9 +61,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 101',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Rostelyn Jane Abundia',
@@ -85,9 +71,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 401',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'David John De Leon',
@@ -98,9 +81,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 401',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'John Aldrin Portugal',
@@ -111,9 +91,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 401',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Carl Angelo Maniangap',
@@ -124,9 +101,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 401',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Daniel Teddy Llanda',
@@ -137,9 +111,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 401',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [  
                 'name' => 'Gwen',
@@ -150,9 +121,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 401',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Juanito Bugay',
@@ -163,9 +131,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 401',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'John Reyel Vargas',
@@ -176,9 +141,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 401',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Chris Pangilinan',
@@ -189,9 +151,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 401',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'John Alfer Mendoza',
@@ -202,9 +161,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 401',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Allysa Denise Opemaria',
@@ -215,9 +171,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 401',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Dhanrey Leal',
@@ -228,9 +181,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 403',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Darrel Jhon Barilla',
@@ -241,9 +191,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 403',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Rose Santillan',
@@ -254,9 +201,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 403',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Nicole Espulgar',
@@ -267,9 +211,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'CS 201',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Raven Margareth Saltorre',
@@ -280,9 +221,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'CS 201',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Aaron Tolentino',
@@ -293,9 +231,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 403',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Jayvanz Singca',
@@ -306,9 +241,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 203',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Denmart Mariano',
@@ -319,9 +251,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 203',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Scean Dulantre',
@@ -332,9 +261,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 203',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'John Neri Magpoc',
@@ -345,9 +271,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 203',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Carl Tormes',
@@ -358,9 +281,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 203',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Khies Zuniga',
@@ -371,9 +291,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 203',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Shekirah Sto.Domingo',
@@ -384,9 +301,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 203',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Charicel Vergara',
@@ -397,9 +311,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 203',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Lawrence Balasabas',
@@ -410,9 +321,6 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSIT 203',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Jonas Aragon',
@@ -423,11 +331,16 @@ class UserSeeder extends Seeder
                 'student_type' => 'college',
                 'section' => 'BSHM 304',
                 'status' => 'active',
-                'remember_token' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
 
-        ]);
+        ];
+
+        foreach ($users as $userData) {
+            User::updateOrCreate(
+                ['email' => $userData['email']],
+                $userData
+            );
+        }
     }
 }
+

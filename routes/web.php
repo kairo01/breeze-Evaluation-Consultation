@@ -226,7 +226,7 @@ Route::prefix('consultation')->name('Consultation.')->middleware('role:Guidance'
     Route::get('/course-history/{program}/{course}', [ConsultationOverallHistoryController::class, 'showCourseHistory'])->name('Consultation.CtCourseHistory');
     Route::delete('/busy-slot/{id}', [ConsultationCalendarController::class, 'deleteBusySlot'])->name('consultation.delete.busy.slot');
     Route::post('/update-completion/{appointment}', [ConsultationHistoryController::class, 'updateCompletion'])->name('consultation.update-completion');
-
+    Route::post('/store-availability', [ConsultationCalendarController::class, 'storeAvailability'])->name('store.availability');
 });
 
 Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->group(function () {
@@ -248,7 +248,8 @@ Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->g
     Route::post('/notifications/mark-all-as-read', [DpNotificationController::class, 'markAllAsRead'])->name('DepartmentHead.markAllNotificationsAsRead');
 
     Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('DepartmentHead.store.busy.slot');
-
+    Route::post('/store-availability', [ConsultationCalendarController::class, 'storeAvailability'])->name('store.availability');
+    Route::post('/store-availability', [DpCalendarController::class, 'storeAvailability'])->name('DepartmentHead.store.availability');
 });
 
 Route::get('/api/available-time-slots', [StudentAppointmentController::class, 'getAvailableTimeSlots'])->name('api.available-time-slots');

@@ -15,6 +15,9 @@
             <button class="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick="showBusySlotModal()">
                 Add Busy Slot
             </button>
+            <button class="mb-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="showAvailabilityModal()">
+                Create Availability
+            </button>
             <button class="back-button mb-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" onclick="goBack()">
                 Back
             </button>
@@ -111,6 +114,73 @@
         </div>
     </div>
 
+    <!-- Modal for Creating Availability -->
+    <div id="availabilityModal" class="fixed inset-0 z-50 hidden flex justify-center items-center bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-md shadow-lg w-96">
+            <div class="flex justify-between items-center mb-4">
+                <h5 class="text-lg font-semibold text-gray-800">Create Availability</h5>
+                <button onclick="closeAvailabilityModal()" class="text-gray-500 hover:text-gray-700 text-lg font-bold">&times;</button>
+            </div>
+            <form action="{{ route('DepartmentHead.store.availability') }}" method="POST">
+                @csrf
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2">Available Days:</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="days[]" value="Monday" class="mr-2">
+                            Monday
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="days[]" value="Tuesday" class="mr-2">
+                            Tuesday
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="days[]" value="Wednesday" class="mr-2">
+                            Wednesday
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="days[]" value="Thursday" class="mr-2">
+                            Thursday
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="days[]" value="Friday" class="mr-2">
+                            Friday
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="days[]" value="Saturday" class="mr-2">
+                            Saturday
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="from_time" class="block text-gray-700 font-medium mb-2">From Time:</label>
+                    <input type="time" id="from_time" name="from_time" class="w-full p-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="to_time" class="block text-gray-700 font-medium mb-2">To Time:</label>
+                    <input type="time" id="to_time" name="to_time" class="w-full p-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="recurrence" class="block text-gray-700 font-medium mb-2">Recurrence:</label>
+                    <select id="recurrence" name="recurrence" class="w-full p-2 border rounded" required>
+                        <option value="week">Week</option>
+                        <option value="month">Month</option>
+                        <option value="year">Year</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="end_date" class="block text-gray-700 font-medium mb-2">End Date:</label>
+                    <input type="date" id="end_date" name="end_date" class="w-full p-2 border rounded" required>
+                </div>
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        Create Availability
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Include FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -132,6 +202,7 @@
             events: [
                 ...@json($appointments),
                 ...@json($busySlots),
+                ...@json($availabilities),
             ],
             eventClick: function (info) {
                 const event = info.event;
@@ -175,6 +246,12 @@
                             });
                         }
                     };
+                } else if (event.extendedProps.type === 'availability') {
+                    document.getElementById('modalTitle').innerText = 'Available Time Slot';
+                    document.getElementById('modalTitleLabel').innerText = event.title;
+                    document.getElementById('modalDescriptionLabel').innerText = 'You are available during this time.';
+                    document.getElementById('modalStatusLabel').innerText = 'Available';
+                    document.getElementById('deleteBusySlotBtn').classList.add('hidden');
                 }
 
                 document.getElementById('modalDateLabel').innerText = event.start.toLocaleDateString();
@@ -255,6 +332,39 @@
         window.goBack = function () {
             window.history.back();
         };
+
+        window.showAvailabilityModal = function () {
+            document.getElementById('availabilityModal').classList.remove('hidden');
+        };
+
+        window.closeAvailabilityModal = function () {
+            document.getElementById('availabilityModal').classList.add('hidden');
+        };
+
+        const recurrenceSelect = document.getElementById('recurrence');
+        const endDateInput = document.getElementById('end_date');
+
+        recurrenceSelect.addEventListener('change', function() {
+            const today = new Date();
+            let endDate = new Date(today);
+
+            switch(this.value) {
+                case 'week':
+                    endDate.setDate(today.getDate() + 7);
+                    break;
+                case 'month':
+                    endDate.setMonth(today.getMonth() + 1);
+                    break;
+                case 'year':
+                    endDate.setFullYear(today.getFullYear() + 1);
+                    break;
+            }
+
+            endDateInput.value = endDate.toISOString().split('T')[0];
+        });
+
+        // Trigger the change event to set the initial end date
+        recurrenceSelect.dispatchEvent(new Event('change'));
     });
     </script>
 

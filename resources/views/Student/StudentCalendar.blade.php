@@ -57,6 +57,7 @@
                 events: [
                     ...@json($appointments),
                     ...@json($busySlots),
+                    ...@json($availabilities),
                 ],
                 eventClick: function (info) {
                     const event = info.event;
@@ -67,6 +68,9 @@
                     } else if (event.extendedProps.type === 'busy_slot') {
                         document.getElementById('modalTitle').innerText = `Busy Slot: ${event.title}`;
                         document.getElementById('modalStatus').innerText = 'N/A';
+                    } else if (event.extendedProps.type === 'availability') {
+                        document.getElementById('modalTitle').innerText = `Consultant Available: ${event.title}`;
+                        document.getElementById('modalStatus').innerText = 'Available';
                     }
 
                     let description = event.extendedProps.description || 'No description available';

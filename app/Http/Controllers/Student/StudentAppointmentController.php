@@ -7,6 +7,7 @@ use App\Models\Appointment;
 use App\Models\User;
 use App\Models\BusySlot;
 use App\Models\Notify;
+use App\Models\Availability; // Added this line for the new model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -155,13 +156,16 @@ class StudentAppointmentController extends Controller
             // Get busy slots for the given date and consultant
             $busySlots = $this->getBusySlots($date, $consultantId);
 
+            // Get available slots from consultant's availability
+            $availableSlots = $this->getAvailableSlots($date, $consultantId);
+
             // Combine booked appointments and busy slots
             $unavailableSlots = array_merge($bookedAppointments, $busySlots);
 
-            // Remove unavailable slots from all slots
-            $availableSlots = array_diff($allSlots, $unavailableSlots);
+            // Remove unavailable slots from available slots
+            $finalAvailableSlots = array_diff($availableSlots, $unavailableSlots);
 
-            return array_values($availableSlots);
+            return array_values($finalAvailableSlots);
         } catch (\Exception $e) {
             Log::error('Error in generateAvailableTimeSlots: ' . $e->getMessage(), [
                 'date' => $date,
@@ -172,6 +176,29 @@ class StudentAppointmentController extends Controller
             ]);
             throw $e;
         }
+    }
+
+    private function getAvailableSlots($date, $consultantId)
+    {
+        $dayOfWeek = Carbon::parse($date)->format('l');
+        $availabilities = Availability::where('consultant_id', $consultantId)
+            ->where('start_date', '<=', $date)
+            ->where('end_date', '>=', $date)
+            ->whereJsonContains('days', $dayOfWeek)
+            ->get();
+
+        $availableSlots = [];
+        foreach ($availabilities as $availability) {
+            $start = Carbon::parse($date . ' ' . $availability->from_time->format('H:i:s'));
+            $end = Carbon::parse($date . ' ' . $availability->to_time->format('H:i:s'));
+
+            while ($start < $end) {
+                $availableSlots[] = $start->format('H:i');
+                $start->addMinutes(30);
+            }
+        }
+
+        return array_unique($availableSlots);
     }
 
     private function getBookedSlots($date, $consultantId)

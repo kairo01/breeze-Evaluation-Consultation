@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAppointmentsTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -20,6 +20,7 @@ class CreateAppointmentsTable extends Migration
             $table->time('time');
             $table->enum('status', ['Pending', 'Approved', 'Declined'])->default('Pending');
             $table->text('decline_reason')->nullable();
+            $table->text('approval_reason')->nullable();
             $table->timestamps();
         });
     }
@@ -28,5 +29,5 @@ class CreateAppointmentsTable extends Migration
     {
         Schema::dropIfExists('appointments');
     }
-}
+};
 

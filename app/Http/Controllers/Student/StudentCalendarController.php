@@ -8,6 +8,7 @@ use App\Models\BusySlot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Availability;
 
 class StudentCalendarController extends Controller
 {
@@ -60,7 +61,38 @@ class StudentCalendarController extends Controller
             ];
         });
 
-        return view('Student.StudentCalendar', compact('appointments', 'busySlots'));
+        $user = Auth::user();
+        $availabilities = Availability::whereHas('consultant', function ($query) use ($user) {
+            if ($user->student_type === 'HighSchool') {
+                $query->where('role', 'HighSchoolDepartment');
+            } else {
+                $query->whereIn('role', ['Guidance', 'ComputerDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'HmDepartment']);
+            }
+        })
+        ->get()
+        ->flatMap(function ($availability) {
+            $events = [];
+            $start = Carbon::parse($availability->start_date);
+            $end = Carbon::parse($availability->end_date);
+
+            while ($start <= $end) {
+                if (in_array($start->format('l'), $availability->days)) {
+                    $events[] = [
+                        'id' => 'availability_' . $availability->id . '_' . $start->format('Y-m-d'),
+                        'title' => 'Consultant Available: ' . $availability->consultant->name,
+                        'start' => $start->format('Y-m-d') . 'T' . $availability->from_time->format('H:i:s'),
+                        'end' => $start->format('Y-m-d') . 'T' . $availability->to_time->format('H:i:s'),
+                        'color' => '#28a745',
+                        'type' => 'availability',
+                    ];
+                }
+                $start->addDay();
+            }
+
+            return $events;
+        });
+
+        return view('Student.StudentCalendar', compact('appointments', 'busySlots', 'availabilities'));
     }
 
     public function highSchoolDashboard()

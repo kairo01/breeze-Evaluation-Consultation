@@ -58,7 +58,7 @@ class DepartmentHeadSeeder extends Seeder
         User::create([
             'name' => 'Niño Corpuz',
             'student_id' => null,
-            'email' => 'TesdaDepartment@example.com',
+            'email' => '    ',
             'password' => Hash::make('password123'),
             'role' => 'TesdaDepartment',
             'student_type' => null,
