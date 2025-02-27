@@ -193,6 +193,7 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
 Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
 
 Route::get('Evaluation.HrHistory', [EvaluationFormController::class, 'index'])->name('Evaluation.HrHistory');
+Route::get('Evaluation.Skillscount', [EvaluationHistoryController::class, 'showSkillsCount'])->name('Evaluation.Skillscount');
 
     Route::post('/update-completion/{appointment}', [StudentHistoryController::class, 'updateCompletion'])->name('student.update-completion');
 
