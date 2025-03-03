@@ -184,17 +184,34 @@ class StudentAppointmentController extends Controller
         $availabilities = Availability::where('consultant_id', $consultantId)
             ->where('start_date', '<=', $date)
             ->where('end_date', '>=', $date)
-            ->whereJsonContains('days', $dayOfWeek)
             ->get();
 
         $availableSlots = [];
-        foreach ($availabilities as $availability) {
-            $start = Carbon::parse($date . ' ' . $availability->from_time->format('H:i:s'));
-            $end = Carbon::parse($date . ' ' . $availability->to_time->format('H:i:s'));
 
-            while ($start < $end) {
-                $availableSlots[] = $start->format('H:i');
-                $start->addMinutes(30);
+        if ($availabilities->isEmpty()) {
+            // If no specific availability is set, consultant is available from 8am to 5pm, Monday to Saturday
+            if ($dayOfWeek !== 'Sunday') {
+                $start = Carbon::parse($date)->setTime(8, 0);
+                $end = Carbon::parse($date)->setTime(17, 0);
+
+                while ($start < $end) {
+                    $availableSlots[] = $start->format('H:i');
+                    $start->addMinutes(30);
+                }
+            }
+        } else {
+            // If specific availability is set, use only those time slots on specified days
+            foreach ($availabilities as $availability) {
+                $availableDays = is_array($availability->days) ? $availability->days : json_decode($availability->days, true);
+                if (in_array($dayOfWeek, $availableDays)) {
+                    $start = Carbon::parse($date . ' ' . $availability->from_time->format('H:i:s'));
+                    $end = Carbon::parse($date . ' ' . $availability->to_time->format('H:i:s'));
+
+                    while ($start < $end) {
+                        $availableSlots[] = $start->format('H:i');
+                        $start->addMinutes(30);
+                    }
+                }
             }
         }
 
