@@ -135,7 +135,10 @@ Route::middleware(['auth', 'role:Guidance'])->group(function () {
     Route::get('/consultation/notifications', [ConsultationNotificationController::class, 'index'])->name('Consultation.CtNotification');
     Route::post('/consultation/notifications/{id}/mark-as-read', [ConsultationNotificationController::class, 'markAsRead'])->name('Consultation.markNotificationAsRead');
     Route::post('/consultation/notifications/mark-all-as-read', [ConsultationNotificationController::class, 'markAllAsRead'])->name('Consultation.markAllNotificationsAsRead');
-
+    
+    Route::post('/update-completion/{appointment}', [ConsultationHistoryController::class, 'updateCompletion'])->name('consultation.update-completion');
+    Route::get('/get-comment/{id}', [ConsultationHistoryController::class, 'getComment'])->name('consultation.get-comment');
+    
 });
 
 // Route::get('/highschool', function () {
@@ -187,28 +190,36 @@ Route::prefix('student')->middleware(['auth'])->group(function () {
             Route::get('/create', [EvaluationFormController::class, 'create'])->name('evaluation.create');
             Route::post('/store', [EvaluationFormController::class, 'store'])->name('evaluation.store');
 
-
-
+            Route::post('/mark-completed/{id}', [StudentHistoryController::class, 'markCompleted'])->name('markCompleted');
+            Route::post('/mark-not-completed/{id}', [StudentHistoryController::class, 'markNotCompleted'])->name('markNotCompleted');
+            Route::get('/reschedule/{id}', [StudentHistoryController::class, 'reschedule'])->name('reschedule');
             
 Route::get('/evaluation/history/{department}', [EvaluationHistoryController::class, 'show'])->name('evaluation.history');
 
 Route::get('Evaluation.HrHistory', [EvaluationFormController::class, 'index'])->name('Evaluation.HrHistory');
 Route::get('Evaluation.Skillscount', [EvaluationHistoryController::class, 'showSkillsCount'])->name('Evaluation.Skillscount');
 
-    Route::post('/update-completion/{appointment}', [StudentHistoryController::class, 'updateCompletion'])->name('student.update-completion');
-
+Route::post('/update-completion/{appointment}', [StudentHistoryController::class, 'updateCompletion'])->name('student.update-completion');
+Route::get('/appointment-details/{id}', [StudentHistoryController::class, 'getAppointmentDetails'])->name('student.appointment-details');
 });
 
 Route::prefix('student')->name('Student.')->group(function () {
     Route::get('/appointment', [StudentAppointmentController::class, 'index'])->name('Consform.Appointment');
     Route::post('/appointment', [StudentAppointmentController::class, 'store'])->name('Consform.Appointment.store');
     Route::get('/history', [StudentHistoryController::class, 'index'])->name('StudentHistory');
+    Route::post('/mark-completed/{id}', [StudentHistoryController::class, 'markCompleted'])->name('markCompleted');
+    Route::post('/mark-not-completed/{id}', [StudentHistoryController::class, 'markNotCompleted'])->name('markNotCompleted');
+    Route::get('/reschedule/{id}', [StudentAppointmentController::class, 'reschedule'])->name('reschedule');
+    Route::get('/appointment-details/{id}', [StudentHistoryController::class, 'getAppointmentDetails'])->name('appointment-details');
 
     Route::get('/consultation-notifications', [StudentCtNotificationController::class, 'index'])->name('consultation-notifications');
     Route::get('/notifications', [StudentCtNotificationController::class, 'index'])->name('StudentNotification');
     Route::post('/notifications/{id}/mark-as-read', [StudentCtNotificationController::class, 'markAsRead'])->name('markNotificationAsRead');
     Route::post('/notifications/mark-all-as-read', [StudentCtNotificationController::class, 'markAllAsRead'])->name('markAllNotificationsAsRead');
+    
 
+    
+    
     // Add other student routes here
 });
 
@@ -220,6 +231,11 @@ Route::prefix('consultation')->name('Consultation.')->middleware('role:Guidance'
     Route::post('/approval/decline', [ConsultationApprovalController::class, 'decline'])->name('CtApproval.decline');
     Route::get('/history', [ConsultationHistoryController::class, 'index'])->name('CtHistory');
     Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('store.busy.slot');
+    
+    Route::post('/update-completion/{appointment}', [ConsultationHistoryController::class, 'updateCompletion'])->name('consultation.update-completion');
+    Route::get('/get-comment/{id}', [ConsultationHistoryController::class, 'getComment'])->name('consultation.get-comment');
+    Route::get('/consultation/appointment-details/{id}', [ConsultationHistoryController::class, 'getAppointmentDetails'])->name('consultation.appointment-details');
+    Route::get('/appointment-details/{id}', [ConsultationHistoryController::class, 'getAppointmentDetails'])->name('appointment-details');
 
     Route::get('/CtNotification', [ConsultationNotificationController::class, 'index'])->name('CtNotification');
     Route::get('/overall-history', [ConsultationOverallHistoryController::class, 'index'])->name('Consultation.CtOverallHistory');
@@ -228,6 +244,7 @@ Route::prefix('consultation')->name('Consultation.')->middleware('role:Guidance'
     Route::delete('/busy-slot/{id}', [ConsultationCalendarController::class, 'deleteBusySlot'])->name('consultation.delete.busy.slot');
     Route::post('/update-completion/{appointment}', [ConsultationHistoryController::class, 'updateCompletion'])->name('consultation.update-completion');
     Route::post('/store-availability', [ConsultationCalendarController::class, 'storeAvailability'])->name('store.availability');
+    
 });
 
 Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->group(function () {
@@ -251,9 +268,16 @@ Route::middleware(['auth', 'checkDepartmentType'])->prefix('department-head')->g
     Route::post('/busy-slot', [ConsultationCalendarController::class, 'storeBusySlot'])->name('DepartmentHead.store.busy.slot');
     Route::post('/store-availability', [ConsultationCalendarController::class, 'storeAvailability'])->name('store.availability');
     Route::post('/store-availability', [DpCalendarController::class, 'storeAvailability'])->name('DepartmentHead.store.availability');
+    
+    Route::get('/get-comment/{id}', [DpHistoryController::class, 'getComment'])->name('department-head.get-comment');
+    Route::post('/update-completion/{appointment}', [DpHistoryController::class, 'updateCompletion'])->name('department-head.update-completion');
+    Route::get('/appointment-details/{id}', [DpHistoryController::class, 'getAppointmentDetails'])->name('department-head.appointment-details');
 });
 
-Route::get('/api/available-time-slots', [StudentAppointmentController::class, 'getAvailableTimeSlots'])->name('api.available-time-slots');
+// Add this route with explicit CSRF protection exemption
+Route::get('/api/available-time-slots', [App\Http\Controllers\Student\StudentAppointmentController::class, 'getAvailableTimeSlots'])
+    ->name('api.available-time-slots')
+    ->middleware('web');
 
 // Notification routes
 Route::get('/notifications', [NotifyController::class, 'index'])->name('notifications.index');
@@ -279,3 +303,4 @@ Route::put('/edit/{role}', [SuperadminController::class, 'update'])->name('Super
 
 Route::get('/create', [SuperAdminController::class, 'createAccount'])->name('create'); // Route for showing the create form
 Route::post('/create', [SuperAdminController::class, 'storeAccount'])->name('store'); // Route for storing the account
+

@@ -15,12 +15,15 @@ class ConsultationHistoryController extends Controller
 
         if ($request->has('search')) {
             $search = $request->input('search');
-            $query->whereHas('student', function ($q) use ($search) {
-                $q->where('name', 'like', "%$search%");
-            })->orWhere('course', 'like', "%$search%")
-          ->orWhere('purpose', 'like', "%$search%")
-          ->orWhere('meeting_mode', 'like', "%$search%")
-          ->orWhere('status', 'like', "%$search%");
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('student', function ($q) use ($search) {
+                    $q->where('name', 'like', "%$search%");
+                })
+                ->orWhere('course', 'like', "%$search%")
+                ->orWhere('purpose', 'like', "%$search%")
+                ->orWhere('meeting_mode', 'like', "%$search%")
+                ->orWhere('status', 'like', "%$search%");
+            });
         }
 
         if ($request->has('sort')) {
@@ -35,12 +38,25 @@ class ConsultationHistoryController extends Controller
         return view('Consultation.CtHistory', compact('appointments'));
     }
 
-    public function updateCompletion(Request $request, Appointment $appointment)
+    public function getAppointmentDetails($id)
     {
-        $appointment->is_completed = $request->is_completed;
-        $appointment->save();
-
-        return response()->json(['success' => true]);
+        try {
+            $appointment = Appointment::findOrFail($id);
+        
+            // Check if the appointment belongs to the current consultant
+            if ($appointment->consultant_role != Auth::id()) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+        
+            return response()->json([
+                'status' => $appointment->is_completed == 1 ? 'Completed' : ($appointment->not_completed == 1 ? 'Not Completed' : $appointment->status),
+                'rating' => $appointment->rating,
+                'comment' => $appointment->comment,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching appointment details: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to fetch appointment details'], 500);
+        }
     }
 }
 

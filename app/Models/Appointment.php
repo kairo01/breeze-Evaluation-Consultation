@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class Appointment extends Model
 {
@@ -23,12 +24,43 @@ class Appointment extends Model
         'decline_reason',
         'approval_reason',
         'is_completed',
+        'not_completed',
+        'rating',
+        'comment',
+        'is_rescheduled',
+        'original_appointment_id',
     ];
 
     protected $casts = [
         'date' => 'date',
         'time' => 'datetime',
+        'is_completed' => 'integer',
+        'not_completed' => 'integer',
+        'is_rescheduled' => 'boolean',
     ];
+
+    // Override the save method to add logging
+    public function save(array $options = [])
+    {
+        // Log before saving
+        Log::info('Saving appointment:', [
+            'id' => $this->id,
+            'is_completed' => $this->is_completed,
+            'not_completed' => $this->not_completed
+        ]);
+        
+        $result = parent::save($options);
+        
+        // Log after saving
+        Log::info('After saving appointment:', [
+            'id' => $this->id,
+            'is_completed' => $this->is_completed,
+            'not_completed' => $this->not_completed,
+            'result' => $result
+        ]);
+        
+        return $result;
+    }
 
     public function student()
     {
@@ -61,14 +93,43 @@ class Appointment extends Model
         ];
     }
 
-    public function getIsCompletedAttribute()
+    public function isPastDue()
     {
-        return $this->status === 'Approved' && $this->date->addHour()->isPast();
+        // If the appointment is already marked as completed or not completed, it's considered past due
+        if ($this->is_completed == 1 || $this->not_completed == 1) {
+            return true;
+        }
+        
+        // Check if the appointment time has passed
+        $appointmentEndTime = Carbon::parse($this->date->format('Y-m-d') . ' ' . $this->time->format('H:i:s'))->addHour();
+        return now()->isAfter($appointmentEndTime);
     }
 
     public function getIsPastDueAttribute()
     {
-        return $this->date->addHour()->isPast();
+        return $this->isPastDue();
+    }
+
+    public function originalAppointment()
+    {
+        return $this->belongsTo(Appointment::class, 'original_appointment_id');
+    }
+
+    public function rescheduledAppointment()
+    {
+        return $this->hasOne(Appointment::class, 'original_appointment_id');
+    }
+
+    public function canReschedule()
+    {
+        $twoWeeksFromNow = Carbon::now()->addWeeks(2)->endOfWeek();
+        return $this->date->lte($twoWeeksFromNow);
+    }
+
+    public function canMakeNewAppointment()
+    {
+        $nextWeekStart = Carbon::now()->addWeek()->startOfWeek();
+        return $this->is_completed == 1 && $this->date->lt($nextWeekStart);
     }
 }
 

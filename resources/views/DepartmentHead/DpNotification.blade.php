@@ -28,6 +28,12 @@
                             @if(isset($notification->data['meeting_preference']))
                                 <p class="text-sm text-gray-600">Meeting Preference: {{ $notification->data['meeting_preference'] }}</p>
                             @endif
+                            @if(isset($notification->data['rating']))
+                                <p class="text-sm text-gray-600">Rating: {{ $notification->data['rating'] }} / 5</p>
+                            @endif
+                            @if(isset($notification->data['comment']))
+                                <p class="text-sm text-gray-600">Comment: {{ $notification->data['comment'] }}</p>
+                            @endif
                             <p class="text-sm text-gray-600 mt-2">{{ $notification->created_at->diffForHumans() }}</p>
                         </div>
                     @empty

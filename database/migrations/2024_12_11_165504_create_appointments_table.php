@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateAppointmentsTable extends Migration
 {
     public function up()
     {
@@ -21,6 +21,12 @@ return new class extends Migration
             $table->enum('status', ['Pending', 'Approved', 'Declined'])->default('Pending');
             $table->text('decline_reason')->nullable();
             $table->text('approval_reason')->nullable();
+            $table->boolean('is_completed')->default(false);
+            $table->boolean('not_completed')->default(false);
+            $table->integer('rating')->nullable();
+            $table->text('comment')->nullable();
+            $table->boolean('is_rescheduled')->default(false);
+            $table->unsignedBigInteger('original_appointment_id')->nullable();
             $table->timestamps();
         });
     }
@@ -29,5 +35,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('appointments');
     }
-};
+}
 

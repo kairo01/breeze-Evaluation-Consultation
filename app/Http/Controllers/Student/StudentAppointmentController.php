@@ -7,7 +7,7 @@ use App\Models\Appointment;
 use App\Models\User;
 use App\Models\BusySlot;
 use App\Models\Notify;
-use App\Models\Availability; // Added this line for the new model
+use App\Models\Availability;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -16,7 +16,7 @@ use App\Notifications\NewAppointmentNotification;
 
 class StudentAppointmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         $consultants = User::where(function ($query) use ($user) {
@@ -30,20 +30,20 @@ class StudentAppointmentController extends Controller
         $pendingAppointment = Appointment::where('student_id', auth()->id())
                                          ->where('status', 'Pending')
                                          ->exists();
-        return view('Student.Consform.Appointment', compact('consultants', 'pendingAppointment'));
-    }
 
-    public function store(Request $request)
-    {
-        $pendingOrApprovedAppointment = Appointment::where('student_id', auth()->id())
-                         ->whereIn('status', ['Pending', 'Approved'])
-                         ->where('date', '>=', Carbon::now()->startOfWeek())
-                         ->exists();
-        if ($pendingOrApprovedAppointment) {
-            return redirect()->back()->with('error', 'You already have a pending or approved appointment for this week. Please wait for it to be completed before making a new one.');
+        $rescheduleData = null;
+        if ($request->has('reschedule') && $request->has('appointment_id')) {
+            $rescheduleData = Appointment::findOrFail($request->appointment_id);
         }
 
-        $request->validate([
+        return view('Student.Consform.Appointment', compact('consultants', 'pendingAppointment', 'rescheduleData'));
+    }
+
+// Update the store method to add better error handling and debugging
+public function store(Request $request)
+{
+    try {
+        $validated = $request->validate([
             'consultant_role' => 'required|exists:users,id',
             'course' => 'required|string',
             'purpose' => 'required|in:Transfer Interview,Return to Class Interview,Academic Problem,Graduating Interview and Exit Interview,Counseling',
@@ -57,16 +57,23 @@ class StudentAppointmentController extends Controller
         $timeSlot = $request->input('time_slot');
         $consultantId = $request->input('consultant_role');
 
-        // Check if the student has already made an appointment this week
-        $startOfWeek = Carbon::parse($date)->startOfWeek();
-        $endOfWeek = Carbon::parse($date)->endOfWeek();
+        // Check if the student is rescheduling
+        $isRescheduling = $request->has('reschedule') && $request->has('original_appointment_id');
 
-        $existingAppointment = Appointment::where('student_id', auth()->id())
-            ->whereBetween('date', [$startOfWeek, $endOfWeek])
-            ->first();
+        if (!$isRescheduling) {
+            // Check if the student has already made an appointment this week or next two weeks
+            $startOfWeek = Carbon::now()->startOfWeek();
+            $twoWeeksFromNow = Carbon::now()->addWeeks(2)->endOfWeek();
 
-        if ($existingAppointment) {
-            return redirect()->back()->with('error', 'You can only make one appointment per week. Your next available appointment date is ' . $endOfWeek->addDay()->format('M d, Y') . '.');
+            $existingAppointment = Appointment::where('student_id', auth()->id())
+                ->whereBetween('date', [$startOfWeek, $twoWeeksFromNow])
+                ->whereNull('original_appointment_id')
+                ->where('status', '!=', 'Declined')
+                ->first();
+
+            if ($existingAppointment) {
+                return redirect()->back()->with('error', 'You can only make one appointment per week. Your next available appointment date is ' . $twoWeeksFromNow->addDay()->format('M d, Y') . '.');
+            }
         }
 
         $availableSlotsResponse = $this->getAvailableTimeSlots(new Request([
@@ -84,29 +91,49 @@ class StudentAppointmentController extends Controller
             return redirect()->back()->with('error', 'The selected time slot is no longer available. Please choose another.');
         }
 
-        try {
-            $appointment = Appointment::create([
-                'student_id' => auth()->id(),
-                'consultant_role' => $consultantId,
-                'course' => $request->input('course'),
-                'purpose' => $request->input('purpose'),
-                'meeting_mode' => $request->input('meeting_mode'),
-                'meeting_preference' => $request->input('meeting_preference'),
-                'date' => $date,
-                'time' => $timeSlot,
-                'status' => 'Pending',
-            ]);
+        $appointmentData = [
+            'student_id' => auth()->id(),
+            'consultant_role' => $consultantId,
+            'course' => $request->input('course'),
+            'purpose' => $request->input('purpose'),
+            'meeting_mode' => $request->input('meeting_mode'),
+            'meeting_preference' => $request->input('meeting_preference'),
+            'date' => $date,
+            'time' => $timeSlot,
+            'status' => 'Pending',
+        ];
 
-            // Create notification for the consultant
-            $consultant = User::find($consultantId);
-            $consultant->notify(new NewAppointmentNotification($appointment));
-
-            return redirect()->route('Student.Consform.Appointment')->with('success', 'Appointment successfully created.');
-        } catch (\Exception $e) {
-            Log::error('Error creating appointment: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'An error occurred while creating the appointment. Please try again.');
+        if ($isRescheduling) {
+            $originalAppointmentId = $request->input('original_appointment_id');
+            $appointmentData['is_rescheduled'] = true;
+            $appointmentData['original_appointment_id'] = $originalAppointmentId;
+            
+            // Update the original appointment to show it's been rescheduled
+            $originalAppointment = Appointment::find($originalAppointmentId);
+            if ($originalAppointment) {
+                $originalAppointment->is_rescheduled = true;
+                $originalAppointment->save();
+            }
         }
+
+        $appointment = Appointment::create($appointmentData);
+
+        // Create notification for the consultant
+        $consultant = User::find($consultantId);
+        $consultant->notify(new NewAppointmentNotification($appointment));
+
+        $message = $isRescheduling ? 'Appointment successfully rescheduled.' : 'Appointment successfully created.';
+        return redirect()->route('Student.Consform.Appointment')->with('success', $message);
+    } catch (\Exception $e) {
+        Log::error('Error creating appointment: ' . $e->getMessage(), [
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'trace' => $e->getTraceAsString(),
+            'request_data' => $request->all()
+        ]);
+        return redirect()->back()->with('error', 'An error occurred while creating the appointment. Please try again. Error: ' . $e->getMessage());
     }
+}
 
     public function getAvailableTimeSlots(Request $request)
     {
@@ -334,6 +361,33 @@ class StudentAppointmentController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Appointment declined successfully.');
+    }
+
+    // Update the reschedule method to include more data for pre-filling the form
+    public function reschedule($id)
+    {
+        $appointment = Appointment::findOrFail($id);
+
+        if ($appointment->student_id !== Auth::id()) {
+            abort(403, 'Unauthorized');
+        }
+
+        // Mark the old appointment as not completed and rescheduled
+        $appointment->not_completed = 1;
+        $appointment->is_completed = 0;
+        $appointment->is_rescheduled = true; // Set the rescheduled flag
+        $appointment->save();
+
+        // Redirect to the appointment form with pre-filled data
+        return redirect()->route('Student.Consform.Appointment', [
+            'reschedule' => true,
+            'appointment_id' => $appointment->id,
+            'consultant_id' => $appointment->consultant_role,
+            'course' => $appointment->course,
+            'purpose' => $appointment->purpose,
+            'meeting_mode' => $appointment->meeting_mode,
+            'meeting_preference' => $appointment->meeting_preference,
+        ]);
     }
 }
 

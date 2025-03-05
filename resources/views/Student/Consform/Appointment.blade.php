@@ -4,6 +4,8 @@
             Appointment Form
         </h2>
     </x-slot>
+    
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @if ($errors->any())
     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -41,6 +43,10 @@
 
             <form action="{{ route('Student.Consform.Appointment.store') }}" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @if($pendingAppointment) onsubmit="return false;" @endif>
                 @csrf
+                @if(isset($rescheduleData))
+                    <input type="hidden" name="reschedule" value="1">
+                    <input type="hidden" name="original_appointment_id" value="{{ $rescheduleData->id }}">
+                @endif
 
                 <!-- Name (Display only) -->
                 <div class="mb-4">
@@ -190,7 +196,7 @@
                 <!-- Submit Button -->
                 <div class="flex items-center justify-between">
                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        Appoint
+                        {{ isset($rescheduleData) ? 'Reschedule Appointment' : 'Appoint' }}
                     </button>
                 </div>
             </form>
@@ -281,21 +287,49 @@
             }
         });
 
-        consultantRoleSelect.addEventListener('change', function() {
-            const selectedConsultant = this.selectedOptions[0].dataset.role;
+        // Find the JavaScript section that handles the consultant selection
+        // Replace the existing consultantRoleSelect event listener with this updated version:
 
-            if (['HmDepartment', 'HighSchoolDepartment', 'EngineeringDeparment', 'TesdaDepartment', 'ComputerDepartment'].includes(selectedConsultant)) {
-                Array.from(purposeSelect.options).forEach(function(option) {
-                    if (option.value !== 'Counseling') {
-                        option.disabled = true;
-                    } else {
-                        option.disabled = false;
-                    }
-                });
+        consultantRoleSelect.addEventListener('change', function() {
+            const selectedConsultantId = this.value;
+            const selectedConsultantText = this.selectedOptions[0].textContent;
+            
+            // Check if the selected consultant is a department head or not Guidance
+            const isDepartmentHead = selectedConsultantText.includes('Department') || 
+                                    selectedConsultantText.includes('ComputerDepartment') || 
+                                    selectedConsultantText.includes('EngineeringDeparment') || 
+                                    selectedConsultantText.includes('TesdaDepartment') || 
+                                    selectedConsultantText.includes('HmDepartment') || 
+                                    selectedConsultantText.includes('HighSchoolDepartment');
+            
+            const isGuidance = selectedConsultantText.includes('Guidance');
+            
+            // Reset the purpose dropdown
+            purposeSelect.innerHTML = '<option value="">Select Purpose</option>';
+            
+            // Add the appropriate options based on the selected consultant
+            if (isDepartmentHead && !isGuidance) {
+                // Only show Counseling for department heads
+                const option = document.createElement('option');
+                option.value = 'Counseling';
+                option.textContent = 'Counseling';
+                purposeSelect.appendChild(option);
                 purposeSelect.value = 'Counseling';
             } else {
-                Array.from(purposeSelect.options).forEach(function(option) {
-                    option.disabled = false;
+                // Show all options for Guidance
+                const purposes = [
+                    'Transfer Interview',
+                    'Return to Class Interview',
+                    'Academic Problem',
+                    'Graduating Interview and Exit Interview',
+                    'Counseling'
+                ];
+                
+                purposes.forEach(function(purpose) {
+                    const option = document.createElement('option');
+                    option.value = purpose;
+                    option.textContent = purpose;
+                    purposeSelect.appendChild(option);
                 });
             }
 
@@ -317,6 +351,7 @@
 
         dateInput.addEventListener('change', fetchAvailableTimeSlots);
 
+        // Update the fetchAvailableTimeSlots function to include better error handling
         function fetchAvailableTimeSlots() {
             const date = dateInput.value;
             const consultantId = consultantRoleSelect.value;
@@ -330,10 +365,15 @@
             timeSlotSelect.disabled = true;
             timeSlotSelect.innerHTML = '<option value="">Loading time slots...</option>';
 
+            // Get CSRF token from meta tag
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
             fetch(`/api/available-time-slots?date=${date}&consultant_id=${consultantId}`, {
+                method: 'GET',
                 headers: {
+                    'X-CSRF-TOKEN': csrfToken,
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json',
+                    'Accept': 'application/json'
                 }
             })
             .then(response => {
@@ -380,6 +420,49 @@
             date.setHours(date.getHours() + 1);
             return date.toTimeString().slice(0, 5);
         }
+
+        // Pre-fill form for rescheduling
+        @if(isset($rescheduleData))
+            document.addEventListener('DOMContentLoaded', function() {
+                // Set program value first to trigger the course list population
+                const programValue = '{{ explode('/', $rescheduleData->course)[0] }}';
+                document.getElementById('program').value = programValue;
+                
+                // Trigger the change event to populate the course dropdown
+                const programChangeEvent = new Event('change');
+                document.getElementById('program').dispatchEvent(programChangeEvent);
+                
+                // Set the consultant
+                document.getElementById('consultant_role').value = '{{ $rescheduleData->consultant_role }}';
+                
+                // Set purpose and meeting mode
+                document.getElementById('purpose').value = '{{ $rescheduleData->purpose }}';
+                document.getElementById('meeting_mode').value = '{{ $rescheduleData->meeting_mode }}';
+                
+                // Trigger meeting mode change to show/hide meeting preference
+                const meetingModeEvent = new Event('change');
+                document.getElementById('meeting_mode').dispatchEvent(meetingModeEvent);
+                
+                // Set meeting preference if exists
+                @if($rescheduleData->meeting_preference)
+                    document.getElementById('meeting_preference').value = '{{ $rescheduleData->meeting_preference }}';
+                @endif
+                
+                // Set the course after a short delay to ensure the dropdown is populated
+                setTimeout(() => {
+                    document.getElementById('course').value = '{{ $rescheduleData->course }}';
+                    
+                    // Set the date to the original date or today if past
+                    const originalDate = '{{ $rescheduleData->date->format('Y-m-d') }}';
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('date').value = originalDate < today ? today : originalDate;
+                    
+                    // Trigger date change to load time slots
+                    const dateChangeEvent = new Event('change');
+                    document.getElementById('date').dispatchEvent(dateChangeEvent);
+                }, 300);
+            });
+        @endif
     });
     </script>
 
